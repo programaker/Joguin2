@@ -1,5 +1,6 @@
 package joguin.alien
 
+import joguin.alien.Invasion.Status
 import joguin.earth.city.City
 
 /** The result of an alien army attacking a city.
@@ -9,5 +10,11 @@ import joguin.earth.city.City
 case class Invasion(
   terraformDevice: TerraformDevice,
   city: City,
-  alienDominatedCity: Boolean
+  status: Status
 )
+
+object Invasion {
+  sealed trait Status
+  case object InProgress extends Status
+  case object Defeated extends Status
+}

@@ -2,10 +2,10 @@ package joguin.alien
 
 import java.util.concurrent.ThreadLocalRandom
 
-import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import joguin.DefensePower
+import eu.timepit.refined.numeric.Positive
+import joguin.alien.Invasion.InProgress
 import joguin.earth.city.City
 
 /** Attacks a city installing a Terraform Device in it, resulting an invasion.
@@ -14,7 +14,7 @@ object AlienArmy {
   def attack(city: City): Invasion = Invasion(
     TerraformDevice(fillPower(1000, 20000)),
     city,
-    alienDominatedCity = true
+    InProgress
   )
 
   //TODO => find some pure FP random generator

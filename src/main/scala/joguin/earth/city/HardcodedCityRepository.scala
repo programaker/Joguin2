@@ -3,7 +3,7 @@ package joguin.earth.city
 import scalaz.{Id, ~>}
 import eu.timepit.refined.auto._
 
-object HardcodedCityRepository extends (CityRepositoryOps ~> Id.Id) {
+object HardcodedCityRepository extends (CityRepositoryF ~> Id.Id) {
   private val allCities = List(
     City("Berlin", "Germany"),
     City("Juiz de Fora", "Brazil"),
@@ -13,7 +13,7 @@ object HardcodedCityRepository extends (CityRepositoryOps ~> Id.Id) {
     City("Wellington", "New Zealand")
   )
 
-  override def apply[A](fa: CityRepositoryOps[A]): Id.Id[A] = fa match {
+  override def apply[A](fa: CityRepositoryF[A]): Id.Id[A] = fa match {
     case FindAll => allCities
   }
 }
