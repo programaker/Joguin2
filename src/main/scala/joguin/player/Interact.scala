@@ -26,11 +26,11 @@ class Interact[C[_]](implicit i: Inject[InteractF,C]) {
 object Interact {
   implicit def create[C[_]](implicit i: Inject[InteractF,C]): Interact[C] = new Interact
 
-  def ask[C[_],A](message: String)(implicit i: Interact[C]): Free[C,A] = {
+  def ask[C[_],B](message: String)(implicit i: Interact[C]): Free[C,B] = {
     val pa = for {
       _ <- i.writeMessage(message)
       answer <- i.readAnswer
-      parsedAnswer <- i.parseAnswer[A](answer)
+      parsedAnswer <- i.parseAnswer[B](answer)
     } yield parsedAnswer
 
     pa.flatMap {
