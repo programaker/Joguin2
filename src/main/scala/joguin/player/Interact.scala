@@ -27,15 +27,17 @@ object Interact {
   implicit def create[C[_]](implicit i: Inject[InteractF,C]): Interact[C] = new Interact
 
   def ask[C[_],B](message: String)(implicit i: Interact[C]): Free[C,B] = {
-    val pa = for {
-      _ <- i.writeMessage(message)
-      answer <- i.readAnswer
-      parsedAnswer <- i.parseAnswer[B](answer)
+    import i._
+
+    val parsedAnswer = for {
+      _ <- writeMessage(message)
+      answer <- readAnswer
+      parsedAnswer <- parseAnswer[B](answer)
     } yield parsedAnswer
 
-    pa.flatMap {
+    parsedAnswer.flatMap {
       case Right(b) => pure(b)
-      case Left(error) => i.writeMessage(error).flatMap(_ => ask(message))
+      case Left(error) => writeMessage(error).flatMap(_ => ask(message))
     }
   }
 }
