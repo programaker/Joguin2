@@ -1,9 +1,9 @@
 package joguin.earth.city
 
-import scalaz.{Id, ~>}
+import cats.{Id, ~>}
 import eu.timepit.refined.auto._
 
-object HardcodedCityRepository extends (CityRepositoryF ~> Id.Id) {
+object HardcodedCityRepository extends (CityRepositoryF ~> Id) {
   private val allCities = List(
     City("Berlin", "Germany"),
     City("Juiz de Fora", "Brazil"),
@@ -13,7 +13,7 @@ object HardcodedCityRepository extends (CityRepositoryF ~> Id.Id) {
     City("Wellington", "New Zealand")
   )
 
-  override def apply[A](fa: CityRepositoryF[A]): Id.Id[A] = fa match {
+  override def apply[A](fa: CityRepositoryF[A]): Id[A] = fa match {
     case FindAll => allCities
   }
 }
