@@ -4,28 +4,28 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait InteractF[A]
-case class WriteMessage(message: String) extends InteractF[Unit]
-case object ReadAnswer extends InteractF[String]
-case class ParseAnswer[T](value: String) extends InteractF[Either[String,T]]
-case class ValidateAnswer[T](parsed: T) extends InteractF[Either[String,T]]
+sealed trait InteractOp[A]
+case class WriteMessage(message: String) extends InteractOp[Unit]
+case object ReadAnswer extends InteractOp[String]
+case class ParseAnswer[T](value: String) extends InteractOp[Either[String,T]]
+case class ValidateAnswer[T](parsed: T) extends InteractOp[Either[String,T]]
 
-class Interact[F[_]](implicit I: InjectK[InteractF,F]) {
+class Interact[F[_]](implicit I: InjectK[InteractOp,F]) {
   def writeMessage(message: String): Free[F,Unit] =
-    inject[InteractF,F](WriteMessage(message))
+    inject[InteractOp,F](WriteMessage(message))
 
   def readAnswer: Free[F,String] =
-    inject[InteractF,F](ReadAnswer)
+    inject[InteractOp,F](ReadAnswer)
 
   def parseAnswer[T](value: String): Free[F,Either[String,T]] =
-    inject[InteractF,F](ParseAnswer(value))
+    inject[InteractOp,F](ParseAnswer(value))
 
   def validateAnswer[T](parsed: T): Free[F,Either[String,T]] =
-    inject[InteractF,F](ValidateAnswer(parsed))
+    inject[InteractOp,F](ValidateAnswer(parsed))
 }
 
 object Interact {
-  implicit def create[F[_]](implicit I: InjectK[InteractF,F]): Interact[F] = new Interact
+  implicit def create[F[_]](implicit I: InjectK[InteractOp,F]): Interact[F] = new Interact
 
   def ask[F[_],T](message: String)(implicit I: Interact[F]): Free[F,T] = {
     import I._
