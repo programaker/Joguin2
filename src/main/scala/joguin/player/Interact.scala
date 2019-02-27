@@ -17,10 +17,10 @@ class Interact[C[_]](implicit i: Inject[InteractF,C]) {
     liftF(i.inj(ReadAnswer))
 
   def parseAnswer[B](value: String): Free[C,Either[String,B]] =
-    liftF[C, Either[String,B]](i.inj(ParseAnswer(value)))
+    liftF(i.inj(ParseAnswer(value)))
 
   def validateAnswer[B](parsed: B): Free[C,Either[String,B]] =
-    liftF[C, Either[String,B]](i.inj(ValidateAnswer(parsed)))
+    liftF(i.inj(ValidateAnswer(parsed)))
 }
 
 object Interact {
