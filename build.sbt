@@ -3,9 +3,15 @@ version := "2.0"
 
 scalaVersion := "2.12.8"
 scalacOptions ++= Seq(
-  "-P:wartremover:only-warn-traverser:org.wartremover.warts.Unsafe",
+  "-encoding", "utf8",
   "-feature",
+  "-explaintypes",
+  
+  "-P:wartremover:only-warn-traverser:org.wartremover.warts.Unsafe",
   "-Ypartial-unification",
+  
+  "-language:experimental.macros",
+  "-language:postfixOps",
   "-language:existentials",
   "-language:higherKinds"
 )

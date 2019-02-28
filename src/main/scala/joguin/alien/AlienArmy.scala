@@ -1,23 +1,29 @@
 package joguin.alien
 
-import java.util.concurrent.ThreadLocalRandom
-
-import eu.timepit.refined._
-import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.Positive
-import joguin.alien.Invasion.InProgress
+import cats.InjectK
+import cats.free.Free
+import cats.free.Free._
 import joguin.earth.city.City
+import joguin.alien.Invasion.InProgress
+import eu.timepit.refined.auto._
 
-/** Attacks a city installing a Terraform Device in it, resulting an invasion.
-  * The Terraform Devices gain a random defense power to make things more interesting */
+trait AlienArmyOp[A]
+case class Attack(city: City) extends AlienArmyOp[Invasion]
+
+class AlienArmy[F[_]](implicit I: InjectK[AlienArmyOp,F]) {
+  def attack(city: City): Free[F,Invasion] = inject[AlienArmyOp,F](Attack(city))
+}
+
 object AlienArmy {
-  def attack(city: City): Invasion = Invasion(
-    TerraformDevice(fillPower(1000, 20000)),
-    city,
-    InProgress
-  )
+  implicit def create[F[_]](implicit I: InjectK[AlienArmyOp,F]): AlienArmy[F] = new AlienArmy[F]
 
-  //TODO => find some pure FP random generator
-  private def fillPower(minPower: DefensePower, maxPower: DefensePower): DefensePower =
-    refineV[Positive](ThreadLocalRandom.current.nextInt(minPower, maxPower + 1)).getOrElse(minPower)
+  /** Attacks a city installing a Terraform Device in it, resulting an invasion.
+    * The Terraform Devices gain a random defense power to make things more interesting */
+  def attack[F[_]](city: City)(P: PowerGenerator[F]): Free[F,Invasion] = {
+    import P._
+
+    generatePower(min = 1000, max = 20000)
+      .map(TerraformDevice)
+      .map(Invasion(_, city, InProgress))
+  }
 }

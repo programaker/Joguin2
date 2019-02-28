@@ -9,7 +9,7 @@ case class WriteMessage(message: String) extends InteractOp[Unit]
 case object ReadAnswer extends InteractOp[String]
 case class ParseAnswer[T](value: String) extends InteractOp[Either[String,T]]
 case class ValidateAnswer[T](parsed: T) extends InteractOp[Either[String,T]]
-case class Retry[T]() extends InteractOp[T]
+//case class Retry[T]() extends InteractOp[T]
 
 class Interact[F[_]](implicit I: InjectK[InteractOp,F]) {
   def writeMessage(message: String): Free[F,Unit] =
@@ -24,8 +24,8 @@ class Interact[F[_]](implicit I: InjectK[InteractOp,F]) {
   def validateAnswer[T](parsed: T): Free[F,Either[String,T]] =
     inject[InteractOp,F](ValidateAnswer(parsed))
 
-  def retry[T]: Free[F,T] =
-    inject[InteractOp,F](Retry())
+  /*def retry[T]: Free[F,T] =
+    inject[InteractOp,F](Retry())*/
 }
 
 object Interact {
@@ -56,7 +56,7 @@ object Interact {
 
     validatedAnswer.flatMap {
       case Right(t) => pure[F,T](t)
-      case Left(error) => writeMessage(error).flatMap(_ => retry[T])
+      case Left(error) => writeMessage(error).flatMap(_ => ask[F,T](message))
     }
   }
 }
