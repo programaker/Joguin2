@@ -1,14 +1,19 @@
 name := "joguin2"
-
 version := "2.0"
-scalaVersion := "2.12.8"
 
+scalaVersion := "2.12.8"
 scalacOptions += "-Ypartial-unification"
 
+val catsOrg = "org.typelevel"
+val catsVersion = "1.6.0"
+
+val refinedOrg = "eu.timepit"
+val refinedVersion = "0.9.4"
+
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "1.6.0",
-  "org.typelevel" %% "cats-free" % "1.6.0",
+  catsOrg %% "cats-core" % catsVersion,
+  catsOrg %% "cats-free" % catsVersion,
   
-  "eu.timepit" %% "refined" % "0.9.4",
-  "eu.timepit" %% "refined-cats" % "0.9.4"
+  refinedOrg %% "refined" % refinedVersion,
+  refinedOrg %% "refined-cats" % refinedVersion
 )
