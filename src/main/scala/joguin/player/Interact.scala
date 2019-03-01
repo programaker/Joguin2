@@ -1,6 +1,6 @@
 package joguin.player
 
-import cats.InjectK
+import cats.{Functor, InjectK}
 import cats.free.Free
 import cats.free.Free._
 
@@ -9,7 +9,6 @@ case class WriteMessage(message: String) extends InteractOp[Unit]
 case object ReadAnswer extends InteractOp[String]
 case class ParseAnswer[T](value: String) extends InteractOp[Either[String,T]]
 case class ValidateAnswer[T](parsed: T) extends InteractOp[Either[String,T]]
-//case class Retry[T]() extends InteractOp[T]
 
 class Interact[F[_]](implicit I: InjectK[InteractOp,F]) {
   def writeMessage(message: String): Free[F,Unit] =
@@ -23,9 +22,6 @@ class Interact[F[_]](implicit I: InjectK[InteractOp,F]) {
 
   def validateAnswer[T](parsed: T): Free[F,Either[String,T]] =
     inject[InteractOp,F](ValidateAnswer(parsed))
-
-  /*def retry[T]: Free[F,T] =
-    inject[InteractOp,F](Retry())*/
 }
 
 object Interact {
@@ -40,7 +36,7 @@ object Interact {
     * -> Tell player about the error
     * -> Retry until the player give a valid answer
     * */
-  def ask[F[_],T](message: String)(implicit I: Interact[F]): Free[F,T] = {
+  def ask[F[_],T](message: String)(implicit I: Interact[F], F: Functor[F]): Free[F,T] = {
     import I._
 
     val parsedAnswer = for {
