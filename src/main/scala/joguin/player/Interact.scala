@@ -45,14 +45,14 @@ object Interact {
       parsedAnswer <- parseAnswer[T](answer)
     } yield parsedAnswer
 
-    val validatedAnswer = parsedAnswer.flatMap {
-      case Right(t) => validateAnswer[T](t)
-      case left @ Left(_) => pure[F,Either[String,T]](left)
-    }
-
-    validatedAnswer.flatMap {
-      case Right(t) => pure[F,T](t)
-      case Left(error) => writeMessage(error).flatMap(_ => ask[F,T](message))
-    }
+    parsedAnswer
+      .flatMap {
+        case Right(t) => validateAnswer[T](t)
+        case left @ Left(_) => pure[F,Either[String,T]](left)
+      }
+      .flatMap {
+        case Right(t) => pure[F,T](t)
+        case Left(error) => writeMessage(error).flatMap(_ => ask[F,T](message))
+      }
   }
 }
