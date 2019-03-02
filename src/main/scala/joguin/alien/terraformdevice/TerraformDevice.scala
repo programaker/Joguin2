@@ -1,4 +1,6 @@
-package joguin.alien
+package joguin.alien.terraformdevice
+
+import joguin.alien.Power
 
 /** Changes the Earth's environment so that it becomes inhabitable by the aliens.
   * Unfortunately it turns inhospitable for the native life forms.

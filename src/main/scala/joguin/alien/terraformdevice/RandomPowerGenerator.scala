@@ -1,12 +1,11 @@
-package joguin.alien
+package joguin.alien.terraformdevice
 
 import java.util.concurrent.ThreadLocalRandom
 
 import cats.effect.IO
 import cats.~>
-import eu.timepit.refined.refineV
-import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.Positive
+import eu.timepit.refined.refineV
 
 object RandomPowerGenerator extends (PowerGeneratorOp ~> IO) {
   override def apply[A](op: PowerGeneratorOp[A]): IO[A] = op match {

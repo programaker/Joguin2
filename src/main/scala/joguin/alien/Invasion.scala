@@ -1,6 +1,7 @@
 package joguin.alien
 
 import joguin.alien.Invasion.Status
+import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
 
 /** The result of an alien army attacking a city.
