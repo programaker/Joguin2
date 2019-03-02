@@ -1,6 +1,6 @@
 package joguin.player
 
-import cats.{Functor, InjectK}
+import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
