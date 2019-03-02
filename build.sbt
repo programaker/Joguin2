@@ -7,7 +7,6 @@ scalacOptions ++= Seq(
   "-feature",
   "-explaintypes",
   
-  "-P:wartremover:only-warn-traverser:org.wartremover.warts.Unsafe",
   "-Ypartial-unification",
   
   "-language:experimental.macros",
@@ -16,16 +15,11 @@ scalacOptions ++= Seq(
   "-language:higherKinds"
 )
 
-resolvers += Resolver.sonatypeRepo("releases")
-
 val catsOrg = "org.typelevel"
 val catsVersion = "1.6.0"
 
 val refinedOrg = "eu.timepit"
 val refinedVersion = "0.9.4"
-
-val wartremoverOrg = "org.wartremover"
-val wartremoverVersion = "2.4.1"
 
 libraryDependencies ++= Seq(
   catsOrg %% "cats-core" % catsVersion,
@@ -34,5 +28,3 @@ libraryDependencies ++= Seq(
   refinedOrg %% "refined" % refinedVersion,
   refinedOrg %% "refined-cats" % refinedVersion
 )
-
-addCompilerPlugin(wartremoverOrg %% "wartremover" % wartremoverVersion)
