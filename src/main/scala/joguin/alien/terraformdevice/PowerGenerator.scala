@@ -5,7 +5,7 @@ import cats.free.Free
 import cats.free.Free.inject
 import joguin.alien.Power
 
-trait PowerGeneratorOp[A]
+sealed trait PowerGeneratorOp[A]
 case class GeneratePower(min: Power, max: Power) extends PowerGeneratorOp[Power]
 
 class PowerGenerator[F[_]](implicit I: InjectK[PowerGeneratorOp,F]) {
