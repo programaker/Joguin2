@@ -18,6 +18,8 @@ scalacOptions ++= Seq(
 val catsVersion = "1.6.0"
 val catsEffectVersion = "1.2.0"
 val refinedVersion = "0.9.4"
+val commonsIoVersion = "2.6"
+val circeVersion = "0.10.0"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
@@ -25,5 +27,11 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % catsEffectVersion,
 
   "eu.timepit" %% "refined" % refinedVersion,
-  "eu.timepit" %% "refined-cats" % refinedVersion
+  "eu.timepit" %% "refined-cats" % refinedVersion,
+
+  "commons-io" % "commons-io" % commonsIoVersion,
+
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion
 )
