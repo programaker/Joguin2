@@ -1,4 +1,4 @@
-package joguin.playerinteraction
+package joguin.playerinteraction.interaction
 
 import cats.InjectK
 import cats.free.Free
@@ -39,14 +39,14 @@ object Interaction {
     val validatedAnswer = for {
       _ <- writeMessage(message)
       answer <- readAnswer
-      parsedAnswer <- pure(parseAnswer(answer))
+      parsedAnswer <- pure(parseAnswer(answer));
     } yield {
       parsedAnswer.filter(validAnswer)
     }
 
     validatedAnswer.flatMap {
-      case Some(validT) => pure[F,T](validT)
-      case None => ask[F,T](message, errorMessage, parseAnswer, validAnswer)
+      case Some(validT) => pure(validT)
+      case None => ask(message, errorMessage, parseAnswer, validAnswer)
     }
   }
 }
