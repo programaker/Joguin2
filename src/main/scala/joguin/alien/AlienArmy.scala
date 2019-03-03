@@ -2,7 +2,6 @@ package joguin.alien
 
 import cats.free.Free
 import eu.timepit.refined.auto._
-import joguin.alien.Invasion.InProgress
 import joguin.alien.terraformdevice.{PowerGenerator, TerraformDevice}
 import joguin.earth.city.City
 
@@ -15,6 +14,6 @@ object AlienArmy {
 
     generatePower(min = 1000, max = 20000)
       .map(TerraformDevice)
-      .map(Invasion(_, city, InProgress))
+      .map(Invasion(_, city))
   }
 }

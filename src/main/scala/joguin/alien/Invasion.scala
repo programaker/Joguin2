@@ -1,6 +1,5 @@
 package joguin.alien
 
-import joguin.alien.Invasion.Status
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
 
@@ -10,12 +9,5 @@ import joguin.earth.city.City
   * and got a Terraform Device installed in it */
 case class Invasion(
   terraformDevice: TerraformDevice,
-  city: City,
-  status: Status
+  city: City
 )
-
-object Invasion {
-  sealed trait Status
-  case object InProgress extends Status
-  case object Defeated extends Status
-}

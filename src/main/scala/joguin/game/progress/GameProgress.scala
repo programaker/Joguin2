@@ -16,13 +16,17 @@ case class GameProgress(
   mainCharacterExperience: Experience,
 
   invasions: List[Invasion],
-  defeatedInvasions: Count
+  defeatedInvasions: Count,
+  defeatedInvasionsTrack: Set[Index]
 ) {
   def invasionByIndex(selectedInvasion: Index): Option[Invasion] = {
     //1-based index, to match the invasion list as the player sees it
     //and also the player's input when select an invasion to fight
-    Option(invasions(selectedInvasion - 1)) //TODO => O(n)! make it faster
+    Option(invasions(selectedInvasion - 1))
   }
+
+  def isInvasionDefeated(selectedInvasion: Index): Boolean =
+    defeatedInvasionsTrack.contains(selectedInvasion)
 
   def increaseMainCharacterExperience(experiencePoints: Experience): GameProgress =
     refineV[NonNegative](mainCharacterExperience.value + experiencePoints.value)
@@ -30,13 +34,15 @@ case class GameProgress(
       .getOrElse(this)
 
   def allInvasionsDefeated: Boolean =
-    invasions.lengthCompare(defeatedInvasions) == 0 //TODO => this also could be better
+    invasions.lengthCompare(defeatedInvasions) == 0
 
-  /*def defeatInvasion(selectedInvasion: Index): GameProgress = {
-
-
-    this
-  }*/
+  def defeatInvasion(selectedInvasion: Index): GameProgress =
+    refineV[NonNegative](defeatedInvasions.value + 1)
+      .map(updatedCount => copy(
+        defeatedInvasions = updatedCount,
+        defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
+      ))
+      .getOrElse(this)
 }
 
 object GameProgress {
@@ -45,6 +51,7 @@ object GameProgress {
       mainCharacter = mainCharacter,
       mainCharacterExperience = 0,
       invasions = invasions,
-      defeatedInvasions = 0
+      defeatedInvasions = 0,
+      defeatedInvasionsTrack = Set.empty
     )
 }
