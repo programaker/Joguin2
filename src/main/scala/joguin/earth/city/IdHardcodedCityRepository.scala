@@ -3,7 +3,8 @@ package joguin.earth.city
 import cats.{Id, ~>}
 import eu.timepit.refined.auto._
 
-object HardcodedCityRepository extends (CityRepositoryOp ~> Id) {
+/** CityRepositoryOp interpreter for Id that contains a hard-coded list of cities */
+object IdHardcodedCityRepository extends (CityRepositoryOp ~> Id) {
   private val allCities = List(
     City("Berlin", "Germany"),
     City("Juiz de Fora", "Brazil"),

@@ -1,4 +1,4 @@
-package joguin.player
+package joguin.playerinteraction
 
 import cats.InjectK
 import cats.free.Free
@@ -36,7 +36,7 @@ object Interaction {
     * -> Tell player about the error
     * -> Retry until the player give a valid answer
     * */
-  def ask[F[_],T](message: String)(implicit I: Interaction[F]): Free[F,T] = {
+  def ask[F[_],T](message: String, errorMessage: String)(implicit I: Interaction[F]): Free[F,T] = {
     import I._
 
     val parsedAnswer = for {
@@ -47,12 +47,18 @@ object Interaction {
 
     parsedAnswer
       .flatMap {
-        case Right(t) => validateAnswer[T](t)
-        case left @ Left(_) => pure[F,Either[String,T]](left)
+        case Right(parsedT) =>
+          validateAnswer[T](parsedT)
+
+        case left @ Left(_) =>
+          pure[F,Either[String,T]](left)
       }
       .flatMap {
-        case Right(t) => pure[F,T](t)
-        case Left(error) => writeMessage(error).flatMap(_ => ask[F,T](message))
+        case Right(validT) =>
+          pure[F,T](validT)
+
+        case Left(_) =>
+          writeMessage(errorMessage).flatMap(_ => ask[F,T](message, errorMessage))
       }
   }
 }

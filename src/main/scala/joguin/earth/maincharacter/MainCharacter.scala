@@ -1,7 +1,7 @@
 package joguin.earth.maincharacter
 
-import joguin.earth.maincharacter.MainCharacter.Gender
 import joguin.Name
+import joguin.earth.maincharacter.MainCharacter.Gender
 
 case class MainCharacter(
   name: Name,

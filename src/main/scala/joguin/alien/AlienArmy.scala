@@ -7,7 +7,8 @@ import joguin.alien.terraformdevice.{PowerGenerator, TerraformDevice}
 import joguin.earth.city.City
 
 /** Attacks a city installing a Terraform Device in it, resulting an invasion.
-  * The Terraform Devices gain a random defense power to make things more interesting */
+  * Some Terraform Devices are more powerful - and harder to defeat - then others,
+  * to make things more interesting */
 object AlienArmy {
   def attack[F[_]](city: City)(implicit P: PowerGenerator[F]): Free[F,Invasion] = {
     import P._
