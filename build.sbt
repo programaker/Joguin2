@@ -15,18 +15,15 @@ scalacOptions ++= Seq(
   "-language:higherKinds"
 )
 
-val catsOrg = "org.typelevel"
 val catsVersion = "1.6.0"
 val catsEffectVersion = "1.2.0"
-
-val refinedOrg = "eu.timepit"
 val refinedVersion = "0.9.4"
 
 libraryDependencies ++= Seq(
-  catsOrg %% "cats-core" % catsVersion,
-  catsOrg %% "cats-free" % catsVersion,
-  catsOrg %% "cats-effect" % catsEffectVersion,
+  "org.typelevel" %% "cats-core" % catsVersion,
+  "org.typelevel" %% "cats-free" % catsVersion,
+  "org.typelevel" %% "cats-effect" % catsEffectVersion,
 
-  refinedOrg %% "refined" % refinedVersion,
-  refinedOrg %% "refined-cats" % refinedVersion
+  "eu.timepit" %% "refined" % refinedVersion,
+  "eu.timepit" %% "refined-cats" % refinedVersion
 )

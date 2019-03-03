@@ -39,13 +39,11 @@ object Interaction {
     val validatedAnswer = for {
       _ <- writeMessage(message)
       answer <- readAnswer
-      parsedAnswer <- pure(parseAnswer(answer));
-    } yield {
-      parsedAnswer.filter(validAnswer)
-    }
+      parsedAnswer <- pure(parseAnswer(answer))
+    } yield parsedAnswer.filter(validAnswer)
 
     validatedAnswer.flatMap {
-      case Some(validT) => pure(validT)
+      case Some(t) => pure(t)
       case None => ask(message, errorMessage, parseAnswer, validAnswer)
     }
   }
