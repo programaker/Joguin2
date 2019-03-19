@@ -5,15 +5,11 @@ import java.nio.charset.StandardCharsets._
 
 import cats.effect.IO
 import cats.~>
-import eu.timepit.refined.numeric.{NonNegative, Positive}
-import io.circe.Decoder.Result
-import org.apache.commons.io.FileUtils
-import io.circe._
-import io.circe.generic.semiauto._
+import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
-import joguin.alien.Invasion
-import joguin.earth.maincharacter.MainCharacter
+import joguin.game.progress.PersistentGameProgress._
+import org.apache.commons.io.FileUtils
 
 class IOFileGameProgressRepository(val file: File) extends (GameProgressRepositoryOp ~> IO) {
   override def apply[A](op: GameProgressRepositoryOp[A]): IO[A] = op match {
@@ -40,13 +36,15 @@ class IOFileGameProgressRepository(val file: File) extends (GameProgressReposito
   private def mkdirs: IO[Unit] =
     IO(FileUtils.forceMkdirParent(file))
 
-  private def writeToFile(gameProgress: GameProgress): IO[Unit] = ???
-    /*IO.pure(gameProgress)
+  private def writeToFile(gameProgress: GameProgress): IO[Unit] =
+    IO.pure(gameProgress)
+      .map(fromGameProgress)
       .map(_.asJson.noSpaces)
-      .flatMap(json => IO(FileUtils.write(file, json, UTF_8)))*/
+      .flatMap(json => IO(FileUtils.write(file, json, UTF_8)))
 
-  private def readFile: IO[Option[GameProgress]] = ???
-    /*IO(FileUtils.readFileToString(file, UTF_8))
-      .map(decode[GameProgress])
-      .map(_.toOption)*/
+  private def readFile: IO[Option[GameProgress]] =
+    IO(FileUtils.readFileToString(file, UTF_8))
+      .map(decode[PersistentGameProgress])
+      .map(_.map(toGameProgress))
+      .map(_.getOrElse(None))
 }
