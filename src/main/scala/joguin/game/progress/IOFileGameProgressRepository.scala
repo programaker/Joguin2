@@ -23,7 +23,6 @@ class IOFileGameProgressRepository(val file: File) extends (GameProgressReposito
     _ <- writeToFile(gameProgress)
   } yield ()
 
-
   private def savedProgressExists: IO[Boolean] =
     IO(file.exists())
 
