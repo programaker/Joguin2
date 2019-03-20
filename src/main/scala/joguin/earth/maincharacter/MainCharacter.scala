@@ -3,7 +3,7 @@ package joguin.earth.maincharacter
 import joguin.Name
 import joguin.earth.maincharacter.MainCharacter.Gender
 
-case class MainCharacter(
+final case class MainCharacter(
   name: Name,
   gender: Gender,
   age: Age

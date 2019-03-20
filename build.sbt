@@ -35,3 +35,5 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion
 )
+
+wartremoverWarnings ++= Warts.allBut(Wart.Recursion, Wart.Nothing)

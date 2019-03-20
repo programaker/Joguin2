@@ -1,12 +1,13 @@
 package joguin.game.progress
 
+import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.{NonNegative, Positive}
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
 
-case class GameProgress(
+final case class GameProgress(
   mainCharacter: MainCharacter,
 
   //The experience is not in the MainCharacter to enable
@@ -35,7 +36,7 @@ case class GameProgress(
       .getOrElse(this)
 
   def allInvasionsDefeated: Boolean =
-    invasions.lengthCompare(defeatedInvasions) == 0
+    invasions.lengthCompare(defeatedInvasions) === 0
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
     refineV[NonNegative](defeatedInvasions.value + 1)
@@ -62,8 +63,8 @@ object GameProgress {
       mainCharacterExperience: Experience,
       invasions: List[Invasion],
       defeatedInvasions: Count,
-      defeatedInvasionsTrack: Set[Index]): GameProgress = {
-
+      defeatedInvasionsTrack: Set[Index]
+  ): GameProgress = {
     val zero: (Index, Map[Index,Invasion]) = (1, Map.empty)
 
     val indexedInvasions = invasions.foldLeft(zero) { (tuple, invasion) =>

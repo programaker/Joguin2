@@ -12,13 +12,14 @@ import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
 
 
-case class PersistentGameProgress (
+final case class PersistentGameProgress (
   mainCharacter: PersistentMainCharacter,
   mainCharacterExperience: Int,
   invasions: List[PersistentInvasion],
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
 )
+
 object PersistentGameProgress {
   import PersistentMainCharacter._
   import PersistentInvasion._
@@ -35,20 +36,21 @@ object PersistentGameProgress {
     (
       toMainCharacter(pgp.mainCharacter),
       refineV[NonNegative](pgp.mainCharacterExperience).toOption,
-      pgp.invasions.flatMap(toInvasion).some,
+      pgp.invasions.map(toInvasion).sequence[Option,Invasion],
       refineV[NonNegative](pgp.defeatedInvasions).toOption,
-      pgp.defeatedInvasionsTrack.flatMap(refineV[Positive](_).toOption).toSet.some
+      pgp.defeatedInvasionsTrack.flatMap(refineV[Positive](_).toList).toSet.some
     ) mapN { (mc, mcxp, invs, dinvs, track) =>
       GameProgress.of(mc, mcxp, invs, dinvs, track)
     }
 }
 
 
-case class PersistentMainCharacter(
+final case class PersistentMainCharacter(
   name: String,
   gender: Gender,
   age: Int
 )
+
 object PersistentMainCharacter {
   def fromMainCharacter(mc: MainCharacter): PersistentMainCharacter = PersistentMainCharacter(
     name = mc.name,
@@ -67,11 +69,12 @@ object PersistentMainCharacter {
 }
 
 
-case class PersistentInvasion(
+final case class PersistentInvasion(
   terraformDevicePower: Int,
   cityName: String,
   country: String
 )
+
 object PersistentInvasion {
   def fromInvasion(i: Invasion): PersistentInvasion = PersistentInvasion(
     terraformDevicePower = i.terraformDevice.defensePower,

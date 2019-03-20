@@ -5,10 +5,10 @@ import cats.free.Free
 import cats.free.Free._
 
 sealed trait InteractionOp[A]
-case class WriteMessage(message: String) extends InteractionOp[Unit]
+final case class WriteMessage(message: String) extends InteractionOp[Unit]
 case object ReadAnswer extends InteractionOp[String]
 
-class Interaction[F[_]](implicit I: InjectK[InteractionOp,F]) {
+final class Interaction[F[_]](implicit I: InjectK[InteractionOp,F]) {
   def writeMessage(message: String): Free[F,Unit] =
     inject[InteractionOp,F](WriteMessage(message))
 
@@ -32,8 +32,8 @@ object Interaction {
       message: String,
       errorMessage: String,
       parseAnswer: String => Option[T],
-      validAnswer: T => Boolean)(implicit I: Interaction[F]): Free[F,T] = {
-
+      validAnswer: T => Boolean
+  )(implicit I: Interaction[F]): Free[F,T] = {
     import I._
 
     val validatedAnswer = for {
