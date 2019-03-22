@@ -9,6 +9,7 @@ import joguin.playerinteraction.interaction.{Interaction, InteractionOp}
 import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, MessagesOp, ShowIntroMessageSource}
 import joguin.game.step.ShowIntroStep.ShowIntroOp
 import eu.timepit.refined.auto._
+import joguin.game.step.GameStep.NextGameStep
 
 final class ShowIntroStep(
   implicit I: Interaction[ShowIntroOp],
@@ -37,16 +38,16 @@ final class ShowIntroStep(
 
     option.flatMap {
       case "n" =>
-        pure[ShowIntroOp,NextGameStep](NextGameStep(CreateCharacter))
+        pure[ShowIntroOp,NextGameStep](CreateCharacter)
 
       case "r" =>
         restore.flatMap {
           _.map(gameProgress => welcomeBack(gameProgress))
-            .getOrElse(pure[ShowIntroOp,NextGameStep](NextGameStep(CreateCharacter)))
+            .getOrElse(pure[ShowIntroOp,NextGameStep](CreateCharacter))
         }
 
       case _ =>
-        pure[ShowIntroOp,NextGameStep](NextGameStep(GameOver))
+        pure[ShowIntroOp,NextGameStep](GameOver)
     }
   }
 
@@ -55,7 +56,7 @@ final class ShowIntroStep(
     val experience: Int = gp.mainCharacterExperience
 
     message(msrc, "welcome-back", name, experience.toString).flatMap { _ =>
-      pure[ShowIntroOp,NextGameStep](NextGameStep(Explore(gp)))
+      pure[ShowIntroOp,NextGameStep](Explore(gp))
     }
   }
 

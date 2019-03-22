@@ -4,9 +4,7 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 import joguin.game.progress.{GameProgress, Index}
-
-
-final case class NextGameStep(next: GameStepOp[_])
+import joguin.game.step.GameStep.NextGameStep
 
 
 sealed trait GameStepOp[A]
@@ -43,5 +41,6 @@ final class GameStep[F[_]](implicit I: InjectK[GameStepOp,F]) {
 }
 
 object GameStep {
+  type NextGameStep = GameStepOp[_]
   implicit def create[F[_]](implicit I: InjectK[GameStepOp,F]): GameStep[F] = new GameStep[F]
 }
