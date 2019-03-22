@@ -62,11 +62,12 @@ final class ShowIntroStep {
   }
 
   private def validateOptionFn(hasSavedProgress: Boolean): String => Boolean =
-    if (hasSavedProgress) {
-      option => option === "n" || option === "r" || option === "q"
-    } else {
-      option => option === "n" || option === "q"
-    }
+    option =>
+      if (hasSavedProgress) {
+        option === "n" || option === "r" || option === "q"
+      } else {
+        option === "n" || option === "q"
+      }
 
   private val msrc = LocalizedMessageSource.of(ShowIntroMessageSource)
 }
