@@ -10,17 +10,18 @@ import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, Messa
 import eu.timepit.refined.auto._
 
 object ShowIntroStep {
-  type EK[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
-  type ShowIntroOp[A] = EitherK[InteractionOp,EK,A]
+  type Ops1[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
+  type ShowIntroOp[A] = EitherK[InteractionOp,Ops1,A]
 
   def showIntro(
     implicit I: Interaction[ShowIntroOp],
     M: Messages[ShowIntroOp],
     R: GameProgressRepository[ShowIntroOp]
   ): Free[ShowIntroOp,NextGameStep] = {
+
     import I._, M._, R._, Interaction._
 
-    val option = for {
+    val option: Free[ShowIntroOp,String] = for {
       intro <- message(msrc, "intro")
       _ <- writeMessage(intro)
       hasSavedProgress <- savedProgressExists
@@ -39,25 +40,25 @@ object ShowIntroStep {
 
     option.flatMap {
       case "n" =>
-        pure(NextGameStep(CreateCharacter))
+        pure[ShowIntroOp,NextGameStep](NextGameStep(CreateCharacter))
 
       case "r" =>
         restore.flatMap {
-          _.map(gameProgress => welcomeBack(gameProgress))
-            .getOrElse(pure(NextGameStep(CreateCharacter)))
+          _.map(gameProgress => welcomeBack(gameProgress, M))
+            .getOrElse(pure[ShowIntroOp,NextGameStep](NextGameStep(CreateCharacter)))
         }
 
       case _ =>
-        pure(NextGameStep(GameOver))
+        pure[ShowIntroOp,NextGameStep](NextGameStep(GameOver))
     }
   }
 
-  private def welcomeBack(gp: GameProgress)(implicit M: Messages[ShowIntroOp]): Free[ShowIntroOp,NextGameStep] = {
+  private def welcomeBack(gp: GameProgress, M: Messages[ShowIntroOp]): Free[ShowIntroOp,NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
 
     M.message(msrc, "welcome-back", name, experience.toString).flatMap { _ =>
-      pure(NextGameStep(Explore(gp)))
+      pure[ShowIntroOp,NextGameStep](NextGameStep(Explore(gp)))
     }
   }
 
