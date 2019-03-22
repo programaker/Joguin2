@@ -7,20 +7,17 @@ import cats.implicits._
 import joguin.game.progress.{GameProgress, GameProgressRepository, GameProgressRepositoryOp}
 import joguin.playerinteraction.interaction.{Interaction, InteractionOp}
 import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, MessagesOp, ShowIntroMessageSource}
+import joguin.game.step.ShowIntroStep.ShowIntroOp
 import eu.timepit.refined.auto._
 
-object ShowIntroStep {
-  type Ops1[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
-  type ShowIntroOp[A] = EitherK[InteractionOp,Ops1,A]
+final class ShowIntroStep(
+  implicit I: Interaction[ShowIntroOp],
+  M: Messages[ShowIntroOp],
+  R: GameProgressRepository[ShowIntroOp]
+) {
+  import I._, M._, R._, Interaction._
 
-  def showIntro(
-    implicit I: Interaction[ShowIntroOp],
-    M: Messages[ShowIntroOp],
-    R: GameProgressRepository[ShowIntroOp]
-  ): Free[ShowIntroOp,NextGameStep] = {
-
-    import I._, M._, R._, Interaction._
-
+  def start: Free[ShowIntroOp,NextGameStep] = {
     val option: Free[ShowIntroOp,String] = for {
       intro <- message(msrc, "intro")
       _ <- writeMessage(intro)
@@ -44,7 +41,7 @@ object ShowIntroStep {
 
       case "r" =>
         restore.flatMap {
-          _.map(gameProgress => welcomeBack(gameProgress, M))
+          _.map(gameProgress => welcomeBack(gameProgress))
             .getOrElse(pure[ShowIntroOp,NextGameStep](NextGameStep(CreateCharacter)))
         }
 
@@ -53,11 +50,11 @@ object ShowIntroStep {
     }
   }
 
-  private def welcomeBack(gp: GameProgress, M: Messages[ShowIntroOp]): Free[ShowIntroOp,NextGameStep] = {
+  private def welcomeBack(gp: GameProgress): Free[ShowIntroOp,NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
 
-    M.message(msrc, "welcome-back", name, experience.toString).flatMap { _ =>
+    message(msrc, "welcome-back", name, experience.toString).flatMap { _ =>
       pure[ShowIntroOp,NextGameStep](NextGameStep(Explore(gp)))
     }
   }
@@ -71,4 +68,9 @@ object ShowIntroStep {
       }
 
   private val msrc = LocalizedMessageSource.of(ShowIntroMessageSource)
+}
+
+object ShowIntroStep {
+  type Ops1[A] = EitherK[MessagesOp, GameProgressRepositoryOp, A]
+  type ShowIntroOp[A] = EitherK[InteractionOp, Ops1, A]
 }
