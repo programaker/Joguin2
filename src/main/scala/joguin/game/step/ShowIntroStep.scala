@@ -9,11 +9,11 @@ import joguin.playerinteraction.interaction.{Interaction, InteractionOp}
 import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, MessagesOp, ShowIntroMessageSource}
 import eu.timepit.refined.auto._
 
-final class ShowIntroStep {
+object ShowIntroStep {
   type EK[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
   type ShowIntroOp[A] = EitherK[InteractionOp,EK,A]
 
-  def start(
+  def showIntro(
     implicit I: Interaction[ShowIntroOp],
     M: Messages[ShowIntroOp],
     R: GameProgressRepository[ShowIntroOp]
