@@ -11,13 +11,13 @@ import eu.timepit.refined.auto._
 
 final class ShowIntroStep {
   type EK[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
-  type ShowIntroApp[A] = EitherK[InteractionOp,EK,A]
+  type ShowIntroOp[A] = EitherK[InteractionOp,EK,A]
 
   def start(
-    implicit I: Interaction[ShowIntroApp],
-      M: Messages[ShowIntroApp],
-      R: GameProgressRepository[ShowIntroApp]
-  ): Free[ShowIntroApp,NextGameStep] = {
+    implicit I: Interaction[ShowIntroOp],
+    M: Messages[ShowIntroOp],
+    R: GameProgressRepository[ShowIntroOp]
+  ): Free[ShowIntroOp,NextGameStep] = {
     import I._, M._, R._, Interaction._
 
     val option = for {
@@ -52,7 +52,7 @@ final class ShowIntroStep {
     }
   }
 
-  private def welcomeBack(gp: GameProgress)(implicit M: Messages[ShowIntroApp]): Free[ShowIntroApp,NextGameStep] = {
+  private def welcomeBack(gp: GameProgress)(implicit M: Messages[ShowIntroOp]): Free[ShowIntroOp,NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
 
