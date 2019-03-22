@@ -6,7 +6,7 @@ import cats.free.Free._
 import joguin.game.progress.{GameProgress, Index}
 
 
-final case class NextGameStep(gameProgress: GameProgress, next: GameStepOp[_])
+final case class NextGameStep(next: GameStepOp[_])
 
 
 sealed trait GameStepOp[A]

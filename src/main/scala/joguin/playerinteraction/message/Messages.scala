@@ -30,7 +30,7 @@ final case class Read(source: LocalizedMessageSource, key: String, args: Seq[Str
 
 
 final class Messages[F[_]](implicit I: InjectK[MessagesOp,F]) {
-  def read(source: LocalizedMessageSource, key: String, args: String*): Free[F,String] =
+  def message(source: LocalizedMessageSource, key: String, args: String*): Free[F,String] =
     inject[MessagesOp,F](Read(source, key, args))
 }
 

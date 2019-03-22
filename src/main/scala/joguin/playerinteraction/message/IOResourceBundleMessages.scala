@@ -9,15 +9,6 @@ import cats.~>
 
 /** MessagesOp interpreter for IO that uses ResourceBundle to read messages from app resources */
 object IOResourceBundleMessages extends (MessagesOp ~> IO) {
-  private val bundleNamesBySource = Map[MessageSource,String](
-    CreateCharacterMessageSource -> "CreateCharacterMessages",
-    ExploreMessageSource -> "ExploreMessages",
-    QuitMessageSource -> "QuitMessages",
-    ShowIntroMessageSource -> "ShowIntroMessages",
-    FightMessageSource -> "FightMessages",
-    SaveGameMessageSource -> "SaveGameMessages"
-  )
-
   override def apply[A](op: MessagesOp[A]): IO[A] = op match {
     case Read(source, key, args) => read(source, key, args)
   }
@@ -34,4 +25,13 @@ object IOResourceBundleMessages extends (MessagesOp ~> IO) {
 
   private def resourceBundleParams(localizedSource: LocalizedMessageSource): (String,Locale) =
     (bundleNamesBySource.getOrElse(localizedSource.source, "unknown"), localizedSource.locale)
+
+  private val bundleNamesBySource = Map[MessageSource,String](
+    CreateCharacterMessageSource -> "CreateCharacterMessages",
+    ExploreMessageSource -> "ExploreMessages",
+    QuitMessageSource -> "QuitMessages",
+    ShowIntroMessageSource -> "ShowIntroMessages",
+    FightMessageSource -> "FightMessages",
+    SaveGameMessageSource -> "SaveGameMessages"
+  )
 }
