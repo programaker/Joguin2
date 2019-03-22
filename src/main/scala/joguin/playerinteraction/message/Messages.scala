@@ -26,12 +26,12 @@ object LocalizedMessageSource {
 
 
 sealed trait MessagesOp[A]
-final case class Read(source: LocalizedMessageSource, key: String, args: Seq[String]) extends MessagesOp[String]
+final case class Message(source: LocalizedMessageSource, key: String, args: Seq[String]) extends MessagesOp[String]
 
 
 final class Messages[F[_]](implicit I: InjectK[MessagesOp,F]) {
   def message(source: LocalizedMessageSource, key: String, args: String*): Free[F,String] =
-    inject[MessagesOp,F](Read(source, key, args))
+    inject[MessagesOp,F](Message(source, key, args))
 }
 
 object Messages {
