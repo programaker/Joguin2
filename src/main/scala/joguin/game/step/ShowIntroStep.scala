@@ -7,7 +7,7 @@ import cats.implicits._
 import joguin.game.progress.{GameProgress, GameProgressRepository, GameProgressRepositoryOp}
 import joguin.playerinteraction.interaction.{Interaction, InteractionOp}
 import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, MessagesOp, ShowIntroMessageSource}
-import joguin.game.step.ShowIntroStep.ShowIntroOp
+import joguin.game.step.ShowIntroStep._
 import eu.timepit.refined.auto._
 import joguin.game.step.GameStep.NextGameStep
 
@@ -67,11 +67,11 @@ final class ShowIntroStep(
       } else {
         option === "n" || option === "q"
       }
-
-  private val msrc = LocalizedMessageSource.of(ShowIntroMessageSource)
 }
 
 object ShowIntroStep {
-  type Ops1[A] = EitherK[MessagesOp, GameProgressRepositoryOp, A]
-  type ShowIntroOp[A] = EitherK[InteractionOp, Ops1, A]
+  type Ops1[A] = EitherK[MessagesOp,GameProgressRepositoryOp,A]
+  type ShowIntroOp[A] = EitherK[InteractionOp,Ops1,A]
+
+  val msrc: LocalizedMessageSource = LocalizedMessageSource.of(ShowIntroMessageSource)
 }
