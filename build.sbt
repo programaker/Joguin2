@@ -39,5 +39,6 @@ libraryDependencies ++= Seq(
 wartremoverWarnings ++= Warts.allBut(
   Wart.Recursion, 
   Wart.Nothing, 
-  Wart.ImplicitParameter
+  Wart.ImplicitParameter,
+  Wart.Any
 )
