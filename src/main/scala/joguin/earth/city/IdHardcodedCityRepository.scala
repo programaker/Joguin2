@@ -4,8 +4,8 @@ import cats.{Id, ~>}
 import eu.timepit.refined.auto._
 
 /** CityRepositoryOp interpreter for Id that contains a hard-coded list of cities */
-object IdHardcodedCityRepository extends (CityRepositoryOp ~> Id) {
-  override def apply[A](op: CityRepositoryOp[A]): Id[A] = op match {
+object IdHardcodedCityRepository extends (CityRepositoryF ~> Id) {
+  override def apply[A](fa: CityRepositoryF[A]): Id[A] = fa match {
     case FindAll => allCities
   }
 

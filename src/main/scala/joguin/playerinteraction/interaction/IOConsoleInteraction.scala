@@ -5,8 +5,8 @@ import cats.~>
 import scala.io.StdIn.readLine
 
 /** InteractionOp interpreter for IO that interacts with the player through the console */
-object IOConsoleInteraction extends (InteractionOp ~> IO) {
-  override def apply[A](op: InteractionOp[A]): IO[A] = op match {
+object IOConsoleInteraction extends (InteractionF ~> IO) {
+  override def apply[A](fa: InteractionF[A]): IO[A] = fa match {
     case WriteMessage(message) => write(message)
     case ReadAnswer => read()
   }

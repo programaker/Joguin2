@@ -11,8 +11,8 @@ import io.circe.syntax._
 import joguin.game.progress.PersistentGameProgress._
 import org.apache.commons.io.FileUtils
 
-final class IOFileGameProgressRepository(val file: File) extends (GameProgressRepositoryOp ~> IO) {
-  override def apply[A](op: GameProgressRepositoryOp[A]): IO[A] = op match {
+final class IOFileGameProgressRepository(val file: File) extends (GameProgressRepositoryF ~> IO) {
+  override def apply[A](fa: GameProgressRepositoryF[A]): IO[A] = fa match {
     case Save(gameProgress) => save(gameProgress)
     case SavedProgressExists => savedProgressExists
     case Restore => restore

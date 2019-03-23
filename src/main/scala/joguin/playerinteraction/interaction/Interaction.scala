@@ -4,20 +4,20 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait InteractionOp[A]
-final case class WriteMessage(message: String) extends InteractionOp[Unit]
-case object ReadAnswer extends InteractionOp[String]
+sealed trait InteractionF[A]
+final case class WriteMessage(message: String) extends InteractionF[Unit]
+case object ReadAnswer extends InteractionF[String]
 
-final class Interaction[F[_]](implicit I: InjectK[InteractionOp,F]) {
-  def writeMessage(message: String): Free[F,Unit] =
-    inject[InteractionOp,F](WriteMessage(message))
+final class InteractionOps[G[_]](implicit I: InjectK[InteractionF,G]) {
+  def writeMessage(message: String): Free[G,Unit] =
+    inject[InteractionF,G](WriteMessage(message))
 
-  def readAnswer: Free[F,String] =
-    inject[InteractionOp,F](ReadAnswer)
+  def readAnswer: Free[G,String] =
+    inject[InteractionF,G](ReadAnswer)
 }
-
-object Interaction {
-  implicit def create[F[_]](implicit I: InjectK[InteractionOp,F]): Interaction[F] = new Interaction
+object InteractionOps {
+  implicit def create[G[_]](implicit I: InjectK[InteractionF,G]): InteractionOps[G] =
+    new InteractionOps[G]
 
   /** To reuse the following flow in all game steps:
     *
@@ -32,7 +32,7 @@ object Interaction {
       message: String,
       errorMessage: String,
       parseAnswer: String => Option[T]
-  )(implicit I: Interaction[F]): Free[F,T] = {
+  )(implicit I: InteractionOps[F]): Free[F,T] = {
     import I._
 
     val validatedAnswer = for {

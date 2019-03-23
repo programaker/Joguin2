@@ -1,15 +1,14 @@
 package joguin.game.progress
 
 import cats.implicits._
-import joguin.earth.maincharacter.{MainCharacter, Major}
-import joguin.earth.maincharacter.MainCharacter.Gender
-import joguin.NonBlankString
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.{NonNegative, Positive}
+import joguin.NonBlankString
 import joguin.alien.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
+import joguin.earth.maincharacter.{Gender, MainCharacter, Major}
 
 
 final case class PersistentGameProgress (
@@ -19,10 +18,9 @@ final case class PersistentGameProgress (
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
 )
-
 object PersistentGameProgress {
-  import PersistentMainCharacter._
   import PersistentInvasion._
+  import PersistentMainCharacter._
 
   def fromGameProgress(gp: GameProgress): PersistentGameProgress = PersistentGameProgress(
     mainCharacter = fromMainCharacter(gp.mainCharacter),
@@ -50,7 +48,6 @@ final case class PersistentMainCharacter(
   gender: Gender,
   age: Int
 )
-
 object PersistentMainCharacter {
   def fromMainCharacter(mc: MainCharacter): PersistentMainCharacter = PersistentMainCharacter(
     name = mc.name,
@@ -74,7 +71,6 @@ final case class PersistentInvasion(
   cityName: String,
   country: String
 )
-
 object PersistentInvasion {
   def fromInvasion(i: Invasion): PersistentInvasion = PersistentInvasion(
     terraformDevicePower = i.terraformDevice.defensePower,

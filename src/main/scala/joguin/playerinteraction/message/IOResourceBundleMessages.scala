@@ -8,9 +8,9 @@ import cats.effect.IO
 import cats.~>
 
 /** MessagesOp interpreter for IO that uses ResourceBundle to read messages from app resources */
-object IOResourceBundleMessages extends (MessagesOp ~> IO) {
-  override def apply[A](op: MessagesOp[A]): IO[A] = op match {
-    case Message(source, key, args) => message(source, key, args)
+object IOResourceBundleMessages extends (MessagesF ~> IO) {
+  override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
+    case GetMessage(source, key, args) => message(source, key, args)
   }
 
   private def message(source: LocalizedMessageSource, key: String, args: Seq[String]): IO[String] =

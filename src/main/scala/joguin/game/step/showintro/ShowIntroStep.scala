@@ -2,13 +2,14 @@ package joguin.game.step.showintro
 
 import cats.free.Free
 import cats.free.Free._
+import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import joguin.game.progress.{GameProgress, GameProgressRepository}
-import joguin.game.step.GameStep.NextGameStep
+import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
+import joguin.game.step.GameStepOps.NextGameStep
 import joguin.game.step.{CreateCharacter, Explore, GameOver}
-import joguin.playerinteraction.interaction.Interaction
-import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, ShowIntroMessageSource}
+import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
 
 sealed trait ShowIntroAnswer
 case object NewGame extends ShowIntroAnswer
@@ -16,24 +17,29 @@ case object RestoreGame extends ShowIntroAnswer
 case object QuitGame extends ShowIntroAnswer
 
 final class ShowIntroStep(
-  implicit I: Interaction[ShowIntroOp],
-  M: Messages[ShowIntroOp],
-  R: GameProgressRepository[ShowIntroOp]
+  implicit I: InteractionOps[ShowIntroF],
+  M: MessagesOps[ShowIntroF],
+  S: MessageSourceOps[ShowIntroF],
+  R: GameProgressRepositoryOps[ShowIntroF]
 ) {
   import I._
-  import Interaction._
   import M._
+  import S._
   import R._
+  import InteractionOps._
 
-  def start: Free[ShowIntroOp,NextGameStep] = {
+  def start: Free[ShowIntroF,NextGameStep] = {
+    val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
+
     val answer = for {
-      intro <- message(src, "intro")
+      src <- messageSource
+      intro <- getMessage(src, "intro")
       _ <- writeMessage(intro)
       hasSavedProgress <- savedProgressExists
 
       startKey = if (hasSavedProgress) "start-with-resume" else "start"
-      startMessage <- message(src, startKey)
-      errorMessage <- message(src, "error-invalid-option")
+      startMessage <- getMessage(src, startKey)
+      errorMessage <- getMessage(src, "error-invalid-option")
 
       answer <- ask(
         startMessage,
@@ -44,16 +50,20 @@ final class ShowIntroStep(
 
     answer.flatMap {
       case NewGame =>
-        pure[ShowIntroOp,NextGameStep](CreateCharacter)
+        pure[ShowIntroF,NextGameStep](CreateCharacter)
 
       case RestoreGame =>
-        restore.flatMap {
-          _.map(gameProgress => welcomeBack(gameProgress))
-            .getOrElse(pure[ShowIntroOp,NextGameStep](CreateCharacter))
-        }
+        ((
+          messageSource,
+          restore
+        ) mapN { (src, gameProgress) =>
+          gameProgress
+            .map(gp => welcomeBack(gp, src))
+            .getOrElse(pure[ShowIntroF,NextGameStep](CreateCharacter))
+        }).flatMap(identity)
 
       case QuitGame =>
-        pure[ShowIntroOp,NextGameStep](GameOver)
+        pure[ShowIntroF,NextGameStep](GameOver)
     }
   }
 
@@ -74,14 +84,9 @@ final class ShowIntroStep(
     })
   }
 
-  private def welcomeBack(gp: GameProgress): Free[ShowIntroOp,NextGameStep] = {
+  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF,NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
-
-    message(src, "welcome-back", name, experience.toString).flatMap { _ =>
-      pure[ShowIntroOp,NextGameStep](Explore(gp))
-    }
+    getMessage(src, "welcome-back", name, experience.toString).map(_ => Explore(gp))
   }
-
-  private val src: LocalizedMessageSource = LocalizedMessageSource.of(ShowIntroMessageSource)
 }

@@ -1,29 +1,33 @@
 package joguin.game.step.quit
 
 import cats.free.Free
-import cats.free.Free._
 import eu.timepit.refined._
 import joguin.game.progress.GameProgress
-import joguin.game.step.GameStep.NextGameStep
+import joguin.game.step.GameStepOps.NextGameStep
 import joguin.game.step.{GameOver, SaveGame}
-import joguin.playerinteraction.interaction.Interaction
-import joguin.playerinteraction.message.{LocalizedMessageSource, Messages, QuitMessageSource}
+import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMessageSource}
 
 trait QuitAnswer
 case object Yes extends QuitAnswer
 case object No extends QuitAnswer
 
 final class QuitStep(
-  implicit I: Interaction[QuitOp],
-  M: Messages[QuitOp]
+  implicit I: InteractionOps[QuitF],
+  M: MessagesOps[QuitF],
+  S: MessageSourceOps[QuitF],
 ) {
-  import Interaction._
+  import InteractionOps._
   import M._
+  import S._
 
-  def start(gameProgress: GameProgress): Free[QuitOp,NextGameStep] = {
+  def start(gameProgress: GameProgress): Free[QuitF,NextGameStep] = {
+    val messageSource = getLocalizedMessageSource(QuitMessageSource)
+
     val answer = for {
-      wantToSaveGame <- message(src, "want-to-save-game")
-      invalidOption <- message(src, "error-invalid-option")
+      src <- messageSource
+      wantToSaveGame <- getMessage(src, "want-to-save-game")
+      invalidOption <- getMessage(src, "error-invalid-option")
 
       answer <- ask(
         wantToSaveGame,
@@ -32,9 +36,9 @@ final class QuitStep(
       )
     } yield answer
 
-    answer.flatMap {
-      case Yes => pure[QuitOp,NextGameStep](SaveGame(gameProgress))
-      case No => pure[QuitOp,NextGameStep](GameOver)
+    answer.map {
+      case Yes => SaveGame(gameProgress)
+      case No => GameOver
     }
   }
 
@@ -43,6 +47,4 @@ final class QuitStep(
       case "y" => Yes
       case "n" => No
     })
-
-  private val src: LocalizedMessageSource = LocalizedMessageSource.of(QuitMessageSource)
 }

@@ -7,7 +7,4 @@ import joguin.earth.city.City
   *
   * After the invasion, the city is completely dominated by the aliens
   * and got a Terraform Device installed in it */
-final case class Invasion(
-  terraformDevice: TerraformDevice,
-  city: City
-)
+final case class Invasion(terraformDevice: TerraformDevice, city: City)

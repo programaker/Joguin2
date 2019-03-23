@@ -1,7 +1,6 @@
 package joguin.earth.maincharacter
 
 import joguin.Name
-import joguin.earth.maincharacter.MainCharacter.Gender
 
 final case class MainCharacter(
   name: Name,
@@ -9,11 +8,8 @@ final case class MainCharacter(
   age: Age
 )
 
-object MainCharacter {
-  sealed trait Gender
-  object Female extends Gender
-  object Male extends Gender
-  object Other extends Gender
-}
-
+sealed trait Gender
+object Female extends Gender
+object Male extends Gender
+object Other extends Gender
 

@@ -4,13 +4,13 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait CityRepositoryOp[T]
-case object FindAll extends CityRepositoryOp[List[City]]
+sealed trait CityRepositoryF[A]
+case object FindAll extends CityRepositoryF[List[City]]
 
-final class CityRepository[F[_]](implicit I: InjectK[CityRepositoryOp,F]) {
-  def findAll: Free[F,List[City]] = inject[CityRepositoryOp,F](FindAll)
+final class CityRepositoryOps[G[_]](implicit I: InjectK[CityRepositoryF,G]) {
+  def findAll: Free[G,List[City]] = inject[CityRepositoryF,G](FindAll)
 }
-
-object CityRepository {
-  implicit def create[F[_]](implicit I: InjectK[CityRepositoryOp,F]): CityRepository[F] = new CityRepository[F]
+object CityRepositoryOps {
+  implicit def create[G[_]](implicit I: InjectK[CityRepositoryF,G]): CityRepositoryOps[G] =
+    new CityRepositoryOps[G]
 }

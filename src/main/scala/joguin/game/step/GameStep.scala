@@ -4,43 +4,40 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 import joguin.game.progress.{GameProgress, Index}
-import joguin.game.step.GameStep.NextGameStep
+import joguin.game.step.GameStepOps.NextGameStep
 
+sealed trait GameStepF[A]
+case object ShowIntro extends GameStepF[NextGameStep]
+case object CreateCharacter extends GameStepF[NextGameStep]
+final case class Explore(gameProgress: GameProgress) extends GameStepF[NextGameStep]
+final case class Fight(gameProgress: GameProgress, selectedInvasion: Index) extends GameStepF[NextGameStep]
+final case class SaveGame(gameProgress: GameProgress) extends GameStepF[NextGameStep]
+final case class Quit(gameProgress: GameProgress) extends GameStepF[NextGameStep]
+case object GameOver extends GameStepF[NextGameStep]
 
-sealed trait GameStepOp[A]
-case object ShowIntro extends GameStepOp[NextGameStep]
-case object CreateCharacter extends GameStepOp[NextGameStep]
-final case class Explore(gameProgress: GameProgress) extends GameStepOp[NextGameStep]
-final case class Fight(gameProgress: GameProgress, selectedInvasion: Index) extends GameStepOp[NextGameStep]
-final case class SaveGame(gameProgress: GameProgress) extends GameStepOp[NextGameStep]
-final case class Quit(gameProgress: GameProgress) extends GameStepOp[NextGameStep]
-case object GameOver extends GameStepOp[NextGameStep]
+final class GameStepOps[G[_]](implicit I: InjectK[GameStepF,G]) {
+  def showIntro: Free[G,NextGameStep] =
+    inject[GameStepF,G](ShowIntro)
 
+  def createCharacter: Free[G,NextGameStep] =
+    inject[GameStepF,G](CreateCharacter)
 
-final class GameStep[F[_]](implicit I: InjectK[GameStepOp,F]) {
-  def showIntro: Free[F,NextGameStep] =
-    inject[GameStepOp,F](ShowIntro)
+  def explore(gameProgress: GameProgress): Free[G,NextGameStep] =
+    inject[GameStepF,G](Explore(gameProgress))
 
-  def createCharacter: Free[F,NextGameStep] =
-    inject[GameStepOp,F](CreateCharacter)
+  def fight(gameProgress: GameProgress, selectedInvasion: Index): Free[G,NextGameStep] =
+    inject[GameStepF,G](Fight(gameProgress, selectedInvasion))
 
-  def explore(gameProgress: GameProgress): Free[F,NextGameStep] =
-    inject[GameStepOp,F](Explore(gameProgress))
+  def saveGame(gameProgress: GameProgress): Free[G,NextGameStep] =
+    inject[GameStepF,G](SaveGame(gameProgress))
 
-  def fight(gameProgress: GameProgress, selectedInvasion: Index): Free[F,NextGameStep] =
-    inject[GameStepOp,F](Fight(gameProgress, selectedInvasion))
+  def quit(gameProgress: GameProgress): Free[G,NextGameStep] =
+    inject[GameStepF,G](Quit(gameProgress))
 
-  def saveGame(gameProgress: GameProgress): Free[F,NextGameStep] =
-    inject[GameStepOp,F](SaveGame(gameProgress))
-
-  def quit(gameProgress: GameProgress): Free[F,NextGameStep] =
-    inject[GameStepOp,F](Quit(gameProgress))
-
-  def gameOver: Free[F,NextGameStep] =
-    inject[GameStepOp,F](GameOver)
+  def gameOver: Free[G,NextGameStep] =
+    inject[GameStepF,G](GameOver)
 }
-
-object GameStep {
-  type NextGameStep = GameStepOp[_]
-  implicit def create[F[_]](implicit I: InjectK[GameStepOp,F]): GameStep[F] = new GameStep[F]
+object GameStepOps {
+  type NextGameStep = GameStepF[_]
+  implicit def create[G[_]](implicit I: InjectK[GameStepF,G]): GameStepOps[G] = new GameStepOps[G]
 }

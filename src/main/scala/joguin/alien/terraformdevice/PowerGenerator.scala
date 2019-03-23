@@ -5,15 +5,14 @@ import cats.free.Free
 import cats.free.Free.inject
 import joguin.alien.Power
 
-sealed trait PowerGeneratorOp[A]
-final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorOp[Power]
+sealed trait PowerGeneratorF[A]
+final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[Power]
 
-final class PowerGenerator[F[_]](implicit I: InjectK[PowerGeneratorOp,F]) {
-  def generatePower(min: Power, max: Power): Free[F,Power] =
-    inject[PowerGeneratorOp,F](GeneratePower(min, max))
+final class PowerGeneratorOps[G[_]](implicit I: InjectK[PowerGeneratorF,G]) {
+  def generatePower(min: Power, max: Power): Free[G,Power] =
+    inject[PowerGeneratorF,G](GeneratePower(min, max))
 }
-
-object PowerGenerator {
-  implicit def create[F[_]](implicit I: InjectK[PowerGeneratorOp,F]): PowerGenerator[F] =
-    new PowerGenerator[F]
+object PowerGeneratorOps {
+  implicit def create[G[_]](implicit I: InjectK[PowerGeneratorF,G]): PowerGeneratorOps[G] =
+    new PowerGeneratorOps[G]
 }
