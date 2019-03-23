@@ -31,8 +31,7 @@ object Interaction {
   def ask[F[_],T](
       message: String,
       errorMessage: String,
-      parseAnswer: String => Option[T],
-      validAnswer: T => Boolean
+      parseAnswer: String => Option[T]
   )(implicit I: Interaction[F]): Free[F,T] = {
     import I._
 
@@ -40,11 +39,11 @@ object Interaction {
       _ <- writeMessage(message)
       answer <- readAnswer
       parsedAnswer <- pure(parseAnswer(answer))
-    } yield parsedAnswer.filter(validAnswer)
+    } yield parsedAnswer
 
     validatedAnswer.flatMap {
       case Some(t) => pure(t)
-      case None => ask(message, errorMessage, parseAnswer, validAnswer)
+      case None => ask(message, errorMessage, parseAnswer)
     }
   }
 }
