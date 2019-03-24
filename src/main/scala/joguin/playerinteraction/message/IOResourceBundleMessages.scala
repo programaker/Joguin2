@@ -18,15 +18,15 @@ object IOResourceBundleMessages extends (MessagesF ~> IO) {
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
       .flatMap(rb => IO(rb.getString(key)))
-      .map(format(_, args:_*))
+      .map(format(_, args: _*))
 
-  private def resourceBundle(params: (String,Locale)): IO[ResourceBundle] =
-    IO.pure(params).flatMap{ case (name, locale) => IO(getBundle(name, locale)) }
+  private def resourceBundle(params: (String, Locale)): IO[ResourceBundle] =
+    IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
 
-  private def resourceBundleParams(localizedSource: LocalizedMessageSource): (String,Locale) =
+  private def resourceBundleParams(localizedSource: LocalizedMessageSource): (String, Locale) =
     (bundleNamesBySource.getOrElse(localizedSource.source, "unknown"), localizedSource.locale)
 
-  private val bundleNamesBySource = Map[MessageSource,String](
+  private val bundleNamesBySource = Map[MessageSource, String](
     CreateCharacterMessageSource -> "CreateCharacterMessages",
     ExploreMessageSource -> "ExploreMessages",
     QuitMessageSource -> "QuitMessages",

@@ -9,17 +9,15 @@ import joguin.earth.maincharacter.MainCharacter
 
 final case class GameProgress(
   mainCharacter: MainCharacter,
-
   //The experience is not in the MainCharacter to enable
   //the possibility of reuse the same character in a new game,
   //with 0 experience, and at the same time resume a game with
   //the same character, more experienced
   mainCharacterExperience: Experience,
-
   invasions: List[Invasion],
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index],
-  indexedInvasions: Map[Index,Invasion]
+  indexedInvasions: Map[Index, Invasion]
 ) {
   def invasionByIndex(selectedInvasion: Index): Option[Invasion] = {
     //1-based index, to match the invasion list as the player sees it
@@ -40,10 +38,12 @@ final case class GameProgress(
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
     refineV[NonNegative](defeatedInvasions.value + 1)
-      .map(updatedCount => copy(
-        defeatedInvasions = updatedCount,
-        defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
-      ))
+      .map(
+        updatedCount =>
+          copy(
+            defeatedInvasions = updatedCount,
+            defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
+        ))
       .getOrElse(this)
 }
 object GameProgress {
@@ -58,13 +58,13 @@ object GameProgress {
   }
 
   def of(
-      mainCharacter: MainCharacter,
-      mainCharacterExperience: Experience,
-      invasions: List[Invasion],
-      defeatedInvasions: Count,
-      defeatedInvasionsTrack: Set[Index]
+    mainCharacter: MainCharacter,
+    mainCharacterExperience: Experience,
+    invasions: List[Invasion],
+    defeatedInvasions: Count,
+    defeatedInvasionsTrack: Set[Index]
   ): GameProgress = {
-    val zero: (Index, Map[Index,Invasion]) = (1, Map.empty)
+    val zero: (Index, Map[Index, Invasion]) = (1, Map.empty)
 
     val indexedInvasions = invasions.foldLeft(zero) { (tuple, invasion) =>
       val (index, map) = tuple

@@ -23,12 +23,12 @@ final class ShowIntroStep(
   R: GameProgressRepositoryOps[ShowIntroF]
 ) {
   import I._
-  import M._
-  import S._
-  import R._
   import InteractionOps._
+  import M._
+  import R._
+  import S._
 
-  def start: Free[ShowIntroF,NextGameStep] = {
+  def start: Free[ShowIntroF, NextGameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
     val answer = for {
@@ -50,20 +50,19 @@ final class ShowIntroStep(
 
     answer.flatMap {
       case NewGame =>
-        pure[ShowIntroF,NextGameStep](CreateCharacter)
+        pure[ShowIntroF, NextGameStep](CreateCharacter)
 
       case RestoreGame =>
-        ((
-          messageSource,
-          restore
-        ) mapN { (src, gameProgress) =>
-          gameProgress
-            .map(gp => welcomeBack(gp, src))
-            .getOrElse(pure[ShowIntroF,NextGameStep](CreateCharacter))
-        }).flatMap(identity)
+        (messageSource, restore)
+          .mapN { (src, gameProgress) =>
+            gameProgress
+              .map(gp => welcomeBack(gp, src))
+              .getOrElse(pure[ShowIntroF, NextGameStep](CreateCharacter))
+          }
+          .flatMap(identity)
 
       case QuitGame =>
-        pure[ShowIntroF,NextGameStep](GameOver)
+        pure[ShowIntroF, NextGameStep](GameOver)
     }
   }
 
@@ -84,7 +83,7 @@ final class ShowIntroStep(
     })
   }
 
-  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF,NextGameStep] = {
+  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
     getMessage(src, "welcome-back", name, experience.toString).map(_ => Explore(gp))

@@ -12,4 +12,3 @@ sealed trait Gender
 object Female extends Gender
 object Male extends Gender
 object Other extends Gender
-

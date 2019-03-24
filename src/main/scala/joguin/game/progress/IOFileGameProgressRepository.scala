@@ -13,15 +13,13 @@ import org.apache.commons.io.FileUtils
 
 final class IOFileGameProgressRepository(val file: File) extends (GameProgressRepositoryF ~> IO) {
   override def apply[A](fa: GameProgressRepositoryF[A]): IO[A] = fa match {
-    case Save(gameProgress) => save(gameProgress)
+    case Save(gameProgress)  => save(gameProgress)
     case SavedProgressExists => savedProgressExists
-    case Restore => restore
+    case Restore             => restore
   }
 
-  private def save(gameProgress: GameProgress): IO[Unit] = for {
-    _ <- mkdirs
-    _ <- writeToFile(gameProgress)
-  } yield ()
+  private def save(gameProgress: GameProgress): IO[Boolean] =
+    mkdirs.flatMap(_ => writeToFile(gameProgress))
 
   private def savedProgressExists: IO[Boolean] =
     IO(file.exists())
@@ -29,17 +27,19 @@ final class IOFileGameProgressRepository(val file: File) extends (GameProgressRe
   private def restore: IO[Option[GameProgress]] =
     savedProgressExists.flatMap {
       case false => IO.pure(None)
-      case true => readFile
+      case true  => readFile
     }
 
   private def mkdirs: IO[Unit] =
     IO(FileUtils.forceMkdirParent(file))
 
-  private def writeToFile(gameProgress: GameProgress): IO[Unit] =
+  private def writeToFile(gameProgress: GameProgress): IO[Boolean] =
     IO.pure(gameProgress)
       .map(fromGameProgress)
       .map(_.asJson.noSpaces)
       .flatMap(json => IO(FileUtils.write(file, json, UTF_8)))
+      .map(_ => true)
+      .handleErrorWith(_ => IO.pure(false))
 
   private def readFile: IO[Option[GameProgress]] =
     IO(FileUtils.readFileToString(file, UTF_8))

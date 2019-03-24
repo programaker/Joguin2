@@ -21,7 +21,7 @@ final class QuitStep(
   import M._
   import S._
 
-  def start(gameProgress: GameProgress): Free[QuitF,NextGameStep] = {
+  def start(gameProgress: GameProgress): Free[QuitF, NextGameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
     val answer = for {
@@ -38,7 +38,7 @@ final class QuitStep(
 
     answer.map {
       case Yes => SaveGame(gameProgress)
-      case No => GameOver
+      case No  => GameOver
     }
   }
 
