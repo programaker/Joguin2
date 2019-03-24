@@ -17,7 +17,7 @@ class SaveGameStep(
   import R._
   import S._
 
-  def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] = {
+  def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] =
     for {
       success <- save(gameProgress)
 
@@ -30,5 +30,4 @@ class SaveGameStep(
 
       _ <- writeMessage(message)
     } yield GameOver
-  }
 }
