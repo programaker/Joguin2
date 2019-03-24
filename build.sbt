@@ -20,6 +20,7 @@ val catsEffectVersion = "1.2.0"
 val refinedVersion = "0.9.4"
 val commonsIoVersion = "2.6"
 val circeVersion = "0.10.0"
+val betterMonadicForVersion = "0.3.0-M4"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
@@ -42,3 +43,5 @@ wartremoverWarnings ++= Warts.allBut(
   Wart.ImplicitParameter,
   Wart.Any
 )
+
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)

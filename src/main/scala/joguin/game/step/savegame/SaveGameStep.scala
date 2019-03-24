@@ -18,7 +18,7 @@ class SaveGameStep(
   import S._
 
   def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] = {
-    val res = for {
+    for {
       success <- save(gameProgress)
 
       src <- getLocalizedMessageSource(SaveGameMessageSource)
@@ -29,8 +29,6 @@ class SaveGameStep(
       }
 
       _ <- writeMessage(message)
-    } yield ()
-
-    res.map(_ => GameOver)
+    } yield GameOver
   }
 }
