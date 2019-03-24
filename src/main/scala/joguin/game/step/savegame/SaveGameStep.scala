@@ -1,6 +1,5 @@
 package joguin.game.step.savegame
 import cats.free.Free
-import cats.free.Free._
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
 import joguin.game.step.GameOver
 import joguin.game.step.GameStepOps.NextGameStep
@@ -19,10 +18,10 @@ class SaveGameStep(
   import S._
 
   def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] = {
-    for {
-      src <- getLocalizedMessageSource(SaveGameMessageSource)
+    val res = for {
       success <- save(gameProgress)
 
+      src <- getLocalizedMessageSource(SaveGameMessageSource)
       message <- if (success) {
         getMessage(src, "success")
       } else {
@@ -32,6 +31,6 @@ class SaveGameStep(
       _ <- writeMessage(message)
     } yield ()
 
-    pure(GameOver)
+    res.map(_ => GameOver)
   }
 }
