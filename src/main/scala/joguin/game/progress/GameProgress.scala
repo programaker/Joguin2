@@ -38,16 +38,16 @@ final case class GameProgress(
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
     refineV[NonNegative](defeatedInvasions.value + 1)
-      .map(
-        updatedCount =>
-          copy(
-            defeatedInvasions = updatedCount,
-            defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
-        ))
+      .map { updatedCount =>
+        copy(
+          defeatedInvasions = updatedCount,
+          defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
+        )
+      }
       .getOrElse(this)
 }
 object GameProgress {
-  def start(mainCharacter: MainCharacter, invasions: List[Invasion]): GameProgress = {
+  def start(mainCharacter: MainCharacter, invasions: List[Invasion]): GameProgress =
     of(
       mainCharacter = mainCharacter,
       mainCharacterExperience = 0,
@@ -55,7 +55,6 @@ object GameProgress {
       defeatedInvasions = 0,
       defeatedInvasionsTrack = Set.empty
     )
-  }
 
   def of(
     mainCharacter: MainCharacter,

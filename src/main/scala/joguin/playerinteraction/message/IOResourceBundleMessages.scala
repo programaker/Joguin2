@@ -10,10 +10,11 @@ import cats.~>
 /** MessagesOp interpreter for IO that uses ResourceBundle to read messages from app resources */
 object IOResourceBundleMessages extends (MessagesF ~> IO) {
   override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
-    case GetMessage(source, key, args) => message(source, key, args)
+    case GetMessage(source, key)          => message(source, key, Nil)
+    case GetMessageFmt(source, key, args) => message(source, key, args)
   }
 
-  private def message(source: LocalizedMessageSource, key: String, args: Seq[String]): IO[String] =
+  private def message(source: LocalizedMessageSource, key: String, args: List[String]): IO[String] =
     IO.pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)

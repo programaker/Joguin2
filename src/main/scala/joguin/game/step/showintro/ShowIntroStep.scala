@@ -86,6 +86,6 @@ final class ShowIntroStep(
   private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, NextGameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
-    getMessage(src, "welcome-back", name, experience.toString).map(_ => Explore(gp))
+    getMessageFmt(src, "welcome-back", List(name, experience.toString)).map(_ => Explore(gp))
   }
 }
