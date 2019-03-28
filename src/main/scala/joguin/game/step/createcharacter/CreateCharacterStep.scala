@@ -16,18 +16,17 @@ import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
 import joguin.{Name, NonBlankString}
 
-class CreateCharacterStep(
-  implicit S: MessageSourceOps[CreateCharacterF],
-  M: MessagesOps[CreateCharacterF],
-  I: InteractionOps[CreateCharacterF],
-  C: CityRepositoryOps[CreateCharacterF],
-  P: PowerGeneratorOps[CreateCharacterF]
+final class CreateCharacterStep(
+  implicit s: MessageSourceOps[CreateCharacterF],
+  m: MessagesOps[CreateCharacterF],
+  i: InteractionOps[CreateCharacterF],
+  c: CityRepositoryOps[CreateCharacterF],
+  p: PowerGeneratorOps[CreateCharacterF]
 ) {
-  import C._
-  import I._
-  import InteractionOps._
-  import M._
-  import S._
+  import c._
+  import i._
+  import m._
+  import s._
 
   def start: Free[CreateCharacterF, NextGameStep] =
     for {

@@ -7,7 +7,7 @@ import scala.concurrent.duration.FiniteDuration
 
 object IOThreadSleepWait extends (WaitF ~> IO) {
   override def apply[A](fa: WaitF[A]): IO[A] = fa match {
-    case Wait(duration) => sleep(duration)
+    case WaitFor(duration) => sleep(duration)
   }
 
   private def sleep(duration: FiniteDuration): IO[Unit] =

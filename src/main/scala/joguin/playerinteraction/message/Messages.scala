@@ -17,7 +17,7 @@ final case class GetMessageFmt(
   args: List[String]
 ) extends MessagesF[String]
 
-final class MessagesOps[G[_]](implicit I: InjectK[MessagesF, G]) {
+final class MessagesOps[G[_]](implicit i: InjectK[MessagesF, G]) {
   def getMessage(source: LocalizedMessageSource, key: String): Free[G, String] =
     inject[MessagesF, G](GetMessage(source, key))
 
@@ -25,5 +25,5 @@ final class MessagesOps[G[_]](implicit I: InjectK[MessagesF, G]) {
     inject[MessagesF, G](GetMessageFmt(source, key, args))
 }
 object MessagesOps {
-  implicit def create[G[_]](implicit I: InjectK[MessagesF, G]): MessagesOps[G] = new MessagesOps[G]
+  implicit def create[G[_]](implicit i: InjectK[MessagesF, G]): MessagesOps[G] = new MessagesOps[G]
 }

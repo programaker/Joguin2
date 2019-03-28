@@ -17,16 +17,15 @@ case object RestoreGame extends ShowIntroAnswer
 case object QuitGame extends ShowIntroAnswer
 
 final class ShowIntroStep(
-  implicit I: InteractionOps[ShowIntroF],
-  M: MessagesOps[ShowIntroF],
-  S: MessageSourceOps[ShowIntroF],
-  R: GameProgressRepositoryOps[ShowIntroF]
+  implicit i: InteractionOps[ShowIntroF],
+  m: MessagesOps[ShowIntroF],
+  s: MessageSourceOps[ShowIntroF],
+  r: GameProgressRepositoryOps[ShowIntroF]
 ) {
-  import I._
-  import InteractionOps._
-  import M._
-  import R._
-  import S._
+  import i._
+  import m._
+  import r._
+  import s._
 
   def start: Free[ShowIntroF, NextGameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)

@@ -13,13 +13,13 @@ case object Yes extends QuitAnswer
 case object No extends QuitAnswer
 
 final class QuitStep(
-  implicit I: InteractionOps[QuitF],
-  M: MessagesOps[QuitF],
-  S: MessageSourceOps[QuitF],
+  implicit i: InteractionOps[QuitF],
+  m: MessagesOps[QuitF],
+  s: MessageSourceOps[QuitF],
 ) {
-  import InteractionOps._
-  import M._
-  import S._
+  import m._
+  import s._
+  import i._
 
   def start(gameProgress: GameProgress): Free[QuitF, NextGameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
@@ -38,7 +38,7 @@ final class QuitStep(
 
     answer.map {
       case Yes => SaveGame(gameProgress)
-      case No  => GameOver
+      case No => GameOver
     }
   }
 

@@ -8,11 +8,11 @@ import joguin.alien.Power
 sealed trait PowerGeneratorF[A]
 final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[Power]
 
-final class PowerGeneratorOps[G[_]](implicit I: InjectK[PowerGeneratorF, G]) {
+final class PowerGeneratorOps[G[_]](implicit i: InjectK[PowerGeneratorF, G]) {
   def generatePower(min: Power, max: Power): Free[G, Power] =
     inject[PowerGeneratorF, G](GeneratePower(min, max))
 }
 object PowerGeneratorOps {
-  implicit def create[G[_]](implicit I: InjectK[PowerGeneratorF, G]): PowerGeneratorOps[G] =
+  implicit def create[G[_]](implicit i: InjectK[PowerGeneratorF, G]): PowerGeneratorOps[G] =
     new PowerGeneratorOps[G]
 }

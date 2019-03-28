@@ -6,16 +6,16 @@ import joguin.game.step.GameStepOps.NextGameStep
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, SaveGameMessageSource}
 
-class SaveGameStep(
-  implicit I: InteractionOps[SaveGameF],
-  M: MessagesOps[SaveGameF],
-  S: MessageSourceOps[SaveGameF],
-  R: GameProgressRepositoryOps[SaveGameF]
+final class SaveGameStep(
+  implicit i: InteractionOps[SaveGameF],
+  m: MessagesOps[SaveGameF],
+  s: MessageSourceOps[SaveGameF],
+  r: GameProgressRepositoryOps[SaveGameF]
 ) {
-  import I._
-  import M._
-  import R._
-  import S._
+  import i._
+  import m._
+  import r._
+  import s._
 
   def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] =
     for {

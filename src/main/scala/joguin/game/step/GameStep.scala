@@ -15,7 +15,7 @@ final case class SaveGame(gameProgress: GameProgress) extends GameStepF[NextGame
 final case class Quit(gameProgress: GameProgress) extends GameStepF[NextGameStep]
 case object GameOver extends GameStepF[NextGameStep]
 
-final class GameStepOps[G[_]](implicit I: InjectK[GameStepF, G]) {
+final class GameStepOps[G[_]](implicit i: InjectK[GameStepF, G]) {
   def showIntro: Free[G, NextGameStep] =
     inject[GameStepF, G](ShowIntro)
 
@@ -39,5 +39,5 @@ final class GameStepOps[G[_]](implicit I: InjectK[GameStepF, G]) {
 }
 object GameStepOps {
   type NextGameStep = GameStepF[_]
-  implicit def create[G[_]](implicit I: InjectK[GameStepF, G]): GameStepOps[G] = new GameStepOps[G]
+  implicit def create[G[_]](implicit i: InjectK[GameStepF, G]): GameStepOps[G] = new GameStepOps[G]
 }
