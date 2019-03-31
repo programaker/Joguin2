@@ -4,6 +4,7 @@ import cats.free.Free
 import cats.free.Free._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
+import eu.timepit.refined.numeric.Positive
 import joguin.alien.Invasion
 import joguin.game.progress.{GameProgress, Index}
 import joguin.game.step.GameStepOps.NextGameStep
@@ -34,7 +35,7 @@ final class ExploreStep(
       _ <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
 
-      _ <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, 1)
+      _ <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
 
       nextStep <- if (gameProgress.allInvasionsDefeated) {
         missionAcomplished(src)
@@ -48,18 +49,24 @@ final class ExploreStep(
     invasions: List[Invasion],
     defeatedInvasions: Set[Index],
     src: LocalizedMessageSource,
-    index: Index
-  ): Free[ExploreF, Unit] = invasions match {
-    case Nil =>
+    index: Option[Index]
+  ): Free[ExploreF, Unit] = (invasions, index) match {
+    case (Nil, _) =>
       pure(())
 
-    case head :: tail =>
+    case (_, None) =>
+      pure(()) //A very improbable refinement error happened
+
+    case (head :: tail, Some(idx)) =>
       showInvasion(
         head,
-        defeatedInvasions.contains(index),
+        defeatedInvasions.contains(idx),
         src,
-        index
-      ).flatMap(_ => showInvasions(tail, defeatedInvasions, src, index + 1))
+        idx
+      ).flatMap { _ =>
+        val nextIndex = refineV[Positive](idx.value + 1).toOption
+        showInvasions(tail, defeatedInvasions, src, nextIndex)
+      }
   }
 
   private def showInvasion(
@@ -88,10 +95,10 @@ final class ExploreStep(
 
   private def chooseYourDestiny(src: LocalizedMessageSource, gp: GameProgress): Free[ExploreF, NextGameStep] = {
     //TODO -> store the size as a GameProgress state
-    val invasionCount: Index = gp.invasions.size
+    val invasionCount = gp.invasions.size
 
     for {
-      message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.value.toString))
+      message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.toString))
       errorMessage <- getMessage(src, "error-invalid-option")
 
       answer <- ask(
@@ -106,13 +113,18 @@ final class ExploreStep(
       }
   }
 
-  private def parseAnswer(answer: String, invasionCount: Index): Option[ExploreAnswer] =
+  private def parseAnswer(answer: String, invasionCount: Int): Option[ExploreAnswer] =
     refineV[IndexOrQuit](answer).toOption
       .map(_.value.toLowerCase)
       .flatMap {
         case "q" =>
           Some(QuitGame)
+
         case index =>
-          Some(index.toInt).filter(_ <= invasionCount).map(GoToInvasion(_))
+          Some(index.toInt)
+            .filter(_ <= invasionCount)
+            .map(refineV[Positive](_))
+            .flatMap(_.toOption)
+            .map(GoToInvasion)
       }
 }
