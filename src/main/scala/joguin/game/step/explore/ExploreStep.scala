@@ -38,7 +38,7 @@ final class ExploreStep(
       _ <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
 
       nextStep <- if (gameProgress.allInvasionsDefeated) {
-        missionAcomplished(src)
+        missionAccomplished(src)
       } else {
         chooseYourDestiny(src, gameProgress)
       }
@@ -86,7 +86,7 @@ final class ExploreStep(
     getMessageFmt(src, key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
-  private def missionAcomplished(src: LocalizedMessageSource): Free[ExploreF, NextGameStep] =
+  private def missionAccomplished(src: LocalizedMessageSource): Free[ExploreF, NextGameStep] =
     for {
       message <- getMessage(src, "mission-accomplished")
       _ <- writeMessage(message)
