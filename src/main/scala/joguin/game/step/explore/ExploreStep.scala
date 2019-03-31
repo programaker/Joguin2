@@ -6,7 +6,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.Positive
 import joguin.alien.Invasion
-import joguin.game.progress.{GameProgress, Index}
+import joguin.game.progress.{Count, GameProgress, Index}
 import joguin.game.step.GameStepOps.NextGameStep
 import joguin.game.step.{Fight, GameOver, Quit}
 import joguin.playerinteraction.interaction.InteractionOps
@@ -94,11 +94,10 @@ final class ExploreStep(
     } yield GameOver
 
   private def chooseYourDestiny(src: LocalizedMessageSource, gp: GameProgress): Free[ExploreF, NextGameStep] = {
-    //TODO -> store the size as a GameProgress state
-    val invasionCount = gp.invasions.size
+    val invasionCount = gp.invasionCount
 
     for {
-      message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.toString))
+      message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.value.toString))
       errorMessage <- getMessage(src, "error-invalid-option")
 
       answer <- ask(
@@ -113,7 +112,7 @@ final class ExploreStep(
       }
   }
 
-  private def parseAnswer(answer: String, invasionCount: Int): Option[ExploreAnswer] =
+  private def parseAnswer(answer: String, invasionCount: Count): Option[ExploreAnswer] =
     refineV[IndexOrQuit](answer).toOption
       .map(_.value.toLowerCase)
       .flatMap {
@@ -122,9 +121,9 @@ final class ExploreStep(
 
         case index =>
           Some(index.toInt)
-            .filter(_ <= invasionCount)
             .map(refineV[Positive](_))
             .flatMap(_.toOption)
+            .filter(_ <= invasionCount.value)
             .map(GoToInvasion)
       }
 }

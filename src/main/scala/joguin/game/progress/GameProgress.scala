@@ -17,7 +17,8 @@ final case class GameProgress(
   invasions: List[Invasion],
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index],
-  indexedInvasions: Map[Index, Invasion]
+  indexedInvasions: Map[Index, Invasion],
+  invasionCount: Count
 ) {
   def invasionByIndex(selectedInvasion: Index): Option[Invasion] = {
     //1-based index, to match the invasion list as the player sees it
@@ -63,13 +64,15 @@ object GameProgress {
     defeatedInvasions: Count,
     defeatedInvasionsTrack: Set[Index]
   ): GameProgress = {
-    val zero: (Index, Map[Index, Invasion]) = (1, Map.empty)
+    val zero: (Index, Map[Index, Invasion], Count) = (1, Map.empty, 0)
 
     val indexedInvasions = invasions.foldLeft(zero) { (tuple, invasion) =>
-      val (index, map) = tuple
+      val (index, map, count) = tuple
 
-      refineV[Positive](index + 1)
-        .map(nextIndex => (nextIndex, map + (index -> invasion)))
+      (refineV[Positive](index + 1), refineV[NonNegative](count + 1))
+        .mapN { (nextIndex, inc) =>
+          (nextIndex, map + (index -> invasion), inc)
+        }
         .getOrElse(tuple)
     }
 
@@ -79,7 +82,8 @@ object GameProgress {
       invasions,
       defeatedInvasions,
       defeatedInvasionsTrack,
-      indexedInvasions._2
+      indexedInvasions._2,
+      indexedInvasions._3,
     )
   }
 }
