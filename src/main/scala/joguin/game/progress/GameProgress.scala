@@ -6,6 +6,7 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.{NonNegative, Positive}
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
+import joguin._
 
 final case class GameProgress(
   mainCharacter: MainCharacter,
@@ -35,10 +36,10 @@ final case class GameProgress(
       .getOrElse(this)
 
   def allInvasionsDefeated: Boolean =
-    invasions.lengthCompare(defeatedInvasions) === 0
+    defeatedInvasions === invasionCount
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
-    refineV[NonNegative](defeatedInvasions.value + 1)
+    refineV[NonNegative](defeatedInvasions + 1)
       .map { updatedCount =>
         copy(
           defeatedInvasions = updatedCount,

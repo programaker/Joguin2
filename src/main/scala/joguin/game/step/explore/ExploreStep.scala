@@ -64,7 +64,7 @@ final class ExploreStep(
         src,
         idx
       ).flatMap { _ =>
-        val nextIndex = refineV[Positive](idx.value + 1).toOption
+        val nextIndex = refineV[Positive](idx + 1).toOption
         showInvasions(tail, defeatedInvasions, src, nextIndex)
       }
   }
