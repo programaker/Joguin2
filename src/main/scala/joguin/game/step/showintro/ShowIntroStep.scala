@@ -52,13 +52,11 @@ final class ShowIntroStep(
         pure[ShowIntroF, NextGameStep](CreateCharacter)
 
       case RestoreGame =>
-        (messageSource, restore)
-          .mapN { (src, gameProgress) =>
-            gameProgress
-              .map(gp => welcomeBack(gp, src))
-              .getOrElse(pure[ShowIntroF, NextGameStep](CreateCharacter))
-          }
-          .flatMap(identity)
+        (messageSource, restore).mapN { (src, gameProgress) =>
+          gameProgress
+            .map(gp => welcomeBack(gp, src))
+            .getOrElse(pure[ShowIntroF, NextGameStep](CreateCharacter))
+        }.flatten
 
       case QuitGame =>
         pure[ShowIntroF, NextGameStep](GameOver)
