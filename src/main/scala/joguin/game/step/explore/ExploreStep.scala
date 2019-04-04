@@ -34,7 +34,6 @@ final class ExploreStep(
     for {
       _ <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
-
       _ <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
 
       nextStep <- if (gameProgress.allInvasionsDefeated) {
@@ -51,22 +50,18 @@ final class ExploreStep(
     src: LocalizedMessageSource,
     index: Option[Index]
   ): Free[ExploreF, Unit] = (invasions, index) match {
+
     case (Nil, _) =>
       pure(())
 
     case (_, None) =>
       pure(()) //A very improbable refinement error happened
 
-    case (head :: tail, Some(idx)) =>
-      showInvasion(
-        head,
-        defeatedInvasions.contains(idx),
-        src,
-        idx
-      ).flatMap { _ =>
-        val nextIndex = refineV[Positive](idx + 1).toOption
-        showInvasions(tail, defeatedInvasions, src, nextIndex)
-      }
+    case (invasion :: otherInvasions, Some(idx)) =>
+      showInvasion(invasion, defeatedInvasions.contains(idx), src, idx)
+        .flatMap { _ =>
+          showInvasions(otherInvasions, defeatedInvasions, src, refineV[Positive](idx + 1).toOption)
+        }
   }
 
   private def showInvasion(
@@ -75,7 +70,6 @@ final class ExploreStep(
     src: LocalizedMessageSource,
     index: Index
   ): Free[ExploreF, Unit] = {
-    val city = invasion.city
 
     val key = if (invasionDefeated) {
       "human-dominated-city"
@@ -83,6 +77,7 @@ final class ExploreStep(
       "alien-dominated-city"
     }
 
+    val city = invasion.city
     getMessageFmt(src, key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
