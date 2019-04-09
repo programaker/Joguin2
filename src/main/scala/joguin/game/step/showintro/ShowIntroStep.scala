@@ -11,11 +11,6 @@ import joguin.game.step.{CreateCharacter, Explore, GameOver}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
 
-sealed trait ShowIntroAnswer
-case object NewGame extends ShowIntroAnswer
-case object RestoreGame extends ShowIntroAnswer
-case object QuitGame extends ShowIntroAnswer
-
 final class ShowIntroStep(
   implicit i: InteractionOps[ShowIntroF],
   m: MessagesOps[ShowIntroF],
@@ -43,7 +38,7 @@ final class ShowIntroStep(
       answer <- ask(
         startMessage,
         errorMessage,
-        parseAnswer(_, hasSavedProgress)
+        ShowIntroOption.parse(_, hasSavedProgress)
       )
     } yield answer
 
@@ -63,14 +58,27 @@ final class ShowIntroStep(
     }
   }
 
-  private def parseAnswer(answer: String, hasSavedProgress: Boolean): Option[ShowIntroAnswer] = {
-    val sanitizedAnswer = answer.toLowerCase()
+  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, NextGameStep] = {
+    val name: String = gp.mainCharacter.name
+    val experience: Int = gp.mainCharacterExperience
+    getMessageFmt(src, "welcome-back", List(name, experience.toString)).map(_ => Explore(gp))
+  }
+}
+
+sealed trait ShowIntroOption
+case object NewGame extends ShowIntroOption
+case object RestoreGame extends ShowIntroOption
+case object QuitGame extends ShowIntroOption
+
+object ShowIntroOption {
+  def parse(s: String, hasSavedProgress: Boolean): Option[ShowIntroOption] = {
+    val sanitizedS = s.toLowerCase()
 
     val refAnswer =
       if (hasSavedProgress) {
-        refineV[ShowIntroAnswers](sanitizedAnswer)
+        refineV[ShowIntroOptions](sanitizedS)
       } else {
-        refineV[ShowIntroAnswersNoRestore](sanitizedAnswer)
+        refineV[ShowIntroOptionsNoRestore](sanitizedS)
       }
 
     refAnswer.toOption.map(_.value match {
@@ -78,11 +86,5 @@ final class ShowIntroStep(
       case "q" => QuitGame
       case "r" => RestoreGame
     })
-  }
-
-  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, NextGameStep] = {
-    val name: String = gp.mainCharacter.name
-    val experience: Int = gp.mainCharacterExperience
-    getMessageFmt(src, "welcome-back", List(name, experience.toString)).map(_ => Explore(gp))
   }
 }

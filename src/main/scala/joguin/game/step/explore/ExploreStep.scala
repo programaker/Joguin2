@@ -15,10 +15,6 @@ import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._
 
-sealed trait ExploreAnswer
-object QuitGame extends ExploreAnswer
-final case class GoToInvasion(index: Index) extends ExploreAnswer
-
 final class ExploreStep(
   implicit s: MessageSourceOps[ExploreF],
   m: MessagesOps[ExploreF],
@@ -94,26 +90,26 @@ final class ExploreStep(
     for {
       message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.value.toString))
       errorMessage <- getMessage(src, "error-invalid-option")
-
-      answer <- ask(
-        message,
-        errorMessage,
-        parseAnswer(_, invasionCount)
-      )
+      option <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
     } yield
-      answer match {
+      option match {
         case QuitGame => Quit(gp)
         case GoToInvasion(index) => Fight(gp, index)
       }
   }
+}
 
-  private def parseAnswer(answer: String, invasionCount: Count): Option[ExploreAnswer] =
-    refineV[IndexOrQuit](answer).toOption
-      .map(_.value.toLowerCase)
+sealed trait ExploreOption
+object QuitGame extends ExploreOption
+final case class GoToInvasion(index: Index) extends ExploreOption
+
+object ExploreOption {
+  def parse(s: String, invasionCount: Count): Option[ExploreOption] =
+    refineV[IndexOrQuit](s.toLowerCase).toOption
+      .map(_.value)
       .flatMap {
         case "q" =>
           Some(QuitGame)
-
         case index =>
           Some(index.toInt)
             .map(refineV[Positive](_))

@@ -8,10 +8,6 @@ import joguin.game.step.{GameOver, SaveGame}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMessageSource}
 
-trait QuitAnswer
-case object Yes extends QuitAnswer
-case object No extends QuitAnswer
-
 final class QuitStep(
   implicit i: InteractionOps[QuitF],
   m: MessagesOps[QuitF],
@@ -28,12 +24,7 @@ final class QuitStep(
       src <- messageSource
       wantToSaveGame <- getMessage(src, "want-to-save-game")
       invalidOption <- getMessage(src, "error-invalid-option")
-
-      answer <- ask(
-        wantToSaveGame,
-        invalidOption,
-        parseAnswer
-      )
+      answer <- ask(wantToSaveGame, invalidOption, QuitOption.parse)
     } yield answer
 
     answer.map {
@@ -41,9 +32,15 @@ final class QuitStep(
       case No => GameOver
     }
   }
+}
 
-  private def parseAnswer(answer: String): Option[QuitAnswer] =
-    refineV[QuitAnswers](answer.toLowerCase).toOption.map(_.value match {
+trait QuitOption
+case object Yes extends QuitOption
+case object No extends QuitOption
+
+object QuitOption {
+  def parse(s: String): Option[QuitOption] =
+    refineV[YesNo](s.toLowerCase).toOption.map(_.value match {
       case "y" => Yes
       case "n" => No
     })
