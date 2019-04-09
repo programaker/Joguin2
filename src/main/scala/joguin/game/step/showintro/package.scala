@@ -8,10 +8,8 @@ import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 
 package object showintro {
-  type F1[A] = EitherK[MessagesF, GameProgressRepositoryF, A]
-  type F2[A] = EitherK[F1, MessageSourceF, A]
-  type ShowIntroF[A] = EitherK[InteractionF, F2, A]
+  type ShowIntroF[A] = EitherK[MessageSourceF, EitherK[MessagesF, GameProgressRepositoryF, ?], A]
 
-  type ShowIntroAnswers = MatchesRegex[W.`"""^[nqr]$"""`.T]
-  type ShowIntroAnswersNoRestore = MatchesRegex[W.`"""^[nq]$"""`.T]
+  type ShowIntroOptions = MatchesRegex[W.`"""^[nqr]$"""`.T]
+  type ShowIntroOptionsNoRestore = MatchesRegex[W.`"""^[nq]$"""`.T]
 }

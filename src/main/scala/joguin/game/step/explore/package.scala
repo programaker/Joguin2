@@ -10,9 +10,6 @@ import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 import joguin.playerinteraction.wait.WaitF
 
 package object explore {
-  type F1[A] = EitherK[MessageSourceF, MessagesF, A]
-  type F2[A] = EitherK[F1, InteractionF, A]
-  type ExploreF[A] = EitherK[F2, WaitF, A]
-
+  type ExploreF[A] = EitherK[MessageSourceF, EitherK[MessagesF, EitherK[InteractionF, WaitF, ?], ?], A]
   type IndexOrQuit = MatchesRegex[W.`"""^[1-9][0-9]+$"""`.T] Or Equal[W.`"q"`.T]
 }
