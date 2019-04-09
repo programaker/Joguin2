@@ -7,8 +7,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.numeric.NonNegative
 import joguin.alien.Invasion
 import joguin.game.progress.{GameProgress, Index}
-import joguin.game.step.GameStepOps.NextGameStep
-import joguin.game.step.{Explore, GameOver}
+import joguin.game.step.{Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{FightMessageSource, LocalizedMessageSource, MessageSourceOps, MessagesOps}
 import joguin.playerinteraction.wait.WaitOps
@@ -26,7 +25,7 @@ final class FightStep(
   import s._
   import w._
 
-  def start(gameProgress: GameProgress, selectedInvasion: Index): Free[FightF, NextGameStep] =
+  def start(gameProgress: GameProgress, selectedInvasion: Index): Free[FightF, GameStep] =
     gameProgress
       .invasionByIndex(selectedInvasion)
       .map { invasion =>
@@ -38,7 +37,7 @@ final class FightStep(
           } else {
             fightOrRetreat(gameProgress, invasion, selectedInvasion, src)
           }
-        } yield Explore(updatedProgress): NextGameStep
+        } yield Explore(updatedProgress): GameStep
       }
       .getOrElse(pure(GameOver))
 

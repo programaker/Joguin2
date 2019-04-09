@@ -7,8 +7,7 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.Positive
 import joguin.alien.Invasion
 import joguin.game.progress.{Count, GameProgress, Index}
-import joguin.game.step.GameStepOps.NextGameStep
-import joguin.game.step.{Fight, GameOver, Quit}
+import joguin.game.step.{Fight, GameOver, GameStep, Quit}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{ExploreMessageSource, LocalizedMessageSource, MessageSourceOps, MessagesOps}
 import joguin.playerinteraction.wait.WaitOps
@@ -26,7 +25,7 @@ final class ExploreStep(
   import s._
   import w._
 
-  def start(gameProgress: GameProgress): Free[ExploreF, NextGameStep] = {
+  def start(gameProgress: GameProgress): Free[ExploreF, GameStep] = {
     for {
       _ <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
@@ -77,14 +76,14 @@ final class ExploreStep(
     getMessageFmt(src, key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
-  private def missionAccomplished(src: LocalizedMessageSource): Free[ExploreF, NextGameStep] =
+  private def missionAccomplished(src: LocalizedMessageSource): Free[ExploreF, GameStep] =
     for {
       message <- getMessage(src, "mission-accomplished")
       _ <- writeMessage(message)
       _ <- waitFor(10.seconds)
     } yield GameOver
 
-  private def chooseYourDestiny(src: LocalizedMessageSource, gp: GameProgress): Free[ExploreF, NextGameStep] = {
+  private def chooseYourDestiny(src: LocalizedMessageSource, gp: GameProgress): Free[ExploreF, GameStep] = {
     val invasionCount = gp.invasionCount
 
     for {

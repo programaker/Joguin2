@@ -3,8 +3,7 @@ package joguin.game.step.quit
 import cats.free.Free
 import eu.timepit.refined._
 import joguin.game.progress.GameProgress
-import joguin.game.step.GameStepOps.NextGameStep
-import joguin.game.step.{GameOver, SaveGame}
+import joguin.game.step.{GameOver, GameStep, SaveGame}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMessageSource}
 
@@ -13,11 +12,11 @@ final class QuitStep(
   m: MessagesOps[QuitF],
   s: MessageSourceOps[QuitF],
 ) {
+  import i._
   import m._
   import s._
-  import i._
 
-  def start(gameProgress: GameProgress): Free[QuitF, NextGameStep] = {
+  def start(gameProgress: GameProgress): Free[QuitF, GameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
     val answer = for {

@@ -6,8 +6,7 @@ import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
-import joguin.game.step.GameStepOps.NextGameStep
-import joguin.game.step.{CreateCharacter, Explore, GameOver}
+import joguin.game.step.{CreateCharacter, Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
 
@@ -22,7 +21,7 @@ final class ShowIntroStep(
   import r._
   import s._
 
-  def start: Free[ShowIntroF, NextGameStep] = {
+  def start: Free[ShowIntroF, GameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
     val answer = for {
@@ -44,21 +43,21 @@ final class ShowIntroStep(
 
     answer.flatMap {
       case NewGame =>
-        pure[ShowIntroF, NextGameStep](CreateCharacter)
+        pure[ShowIntroF, GameStep](CreateCharacter)
 
       case RestoreGame =>
         (messageSource, restore).mapN { (src, gameProgress) =>
           gameProgress
             .map(gp => welcomeBack(gp, src))
-            .getOrElse(pure[ShowIntroF, NextGameStep](CreateCharacter))
+            .getOrElse(pure[ShowIntroF, GameStep](CreateCharacter))
         }.flatten
 
       case QuitGame =>
-        pure[ShowIntroF, NextGameStep](GameOver)
+        pure[ShowIntroF, GameStep](GameOver)
     }
   }
 
-  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, NextGameStep] = {
+  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, GameStep] = {
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
     getMessageFmt(src, "welcome-back", List(name, experience.toString)).map(_ => Explore(gp))

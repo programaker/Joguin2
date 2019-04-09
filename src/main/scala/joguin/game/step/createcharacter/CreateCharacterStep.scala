@@ -10,8 +10,7 @@ import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
 import joguin.earth.maincharacter.{Age, Gender, MainCharacter, Major}
 import joguin.game.progress.GameProgress
-import joguin.game.step.Explore
-import joguin.game.step.GameStepOps.NextGameStep
+import joguin.game.step.{Explore, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
 import joguin.{Name, NonBlankString}
@@ -28,7 +27,7 @@ final class CreateCharacterStep(
   import m._
   import s._
 
-  def start: Free[CreateCharacterF, NextGameStep] =
+  def start: Free[CreateCharacterF, GameStep] =
     for {
       src <- getLocalizedMessageSource(CreateCharacterMessageSource)
       message <- pure(getMessage(src, _))

@@ -1,8 +1,7 @@
 package joguin.game.step.savegame
 import cats.free.Free
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
-import joguin.game.step.GameOver
-import joguin.game.step.GameStepOps.NextGameStep
+import joguin.game.step.{GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, SaveGameMessageSource}
 
@@ -17,7 +16,7 @@ final class SaveGameStep(
   import r._
   import s._
 
-  def start(gameProgress: GameProgress): Free[SaveGameF, NextGameStep] =
+  def start(gameProgress: GameProgress): Free[SaveGameF, GameStep] =
     for {
       success <- save(gameProgress)
 
