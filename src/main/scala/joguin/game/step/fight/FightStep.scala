@@ -128,33 +128,33 @@ final class FightStep(
   }
 
   private def showAttack(attacker: String, weapon: String, strike: String): Free[FightF, Unit] = {
-    def loop(weapon: String, start: Int, end: Int): Free[FightF, Unit] = {
-      if (start <= end) {
-        val res = for {
-          _ <- if (start % 2 === 0) {
-            writeMessage(weapon)
-          } else {
-            writeMessage(" ")
-          }
-
-          _ <- waitFor(50.milliseconds)
-        } yield ()
-
-        res.flatMap(_ => loop(weapon, start + 1, end))
-      } else {
-        pure(())
-      }
-    }
-
     for {
       _ <- writeMessage("\n")
       _ <- writeMessage(attacker)
 
-      _ <- loop(weapon, 1, 31)
+      _ <- showWeaponUse(weapon, 1, 31)
 
       _ <- writeMessage(strike)
       _ <- writeMessage("\n")
     } yield ()
+  }
+
+  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[FightF, Unit] = {
+    if (start <= end) {
+      val res = for {
+        _ <- if (start % 2 === 0) {
+          writeMessage(weapon)
+        } else {
+          writeMessage(" ")
+        }
+
+        _ <- waitFor(50.milliseconds)
+      } yield ()
+
+      res.flatMap(_ => showWeaponUse(weapon, start + 1, end))
+    } else {
+      pure(())
+    }
   }
 }
 
