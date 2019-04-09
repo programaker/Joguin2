@@ -90,11 +90,10 @@ final class ExploreStep(
       message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.value.toString))
       errorMessage <- getMessage(src, "error-invalid-option")
       option <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield
-      option match {
-        case QuitGame => Quit(gp)
-        case GoToInvasion(index) => Fight(gp, index)
-      }
+    } yield option match {
+      case QuitGame => Quit(gp)
+      case GoToInvasion(index) => Fight(gp, index)
+    }
   }
 }
 

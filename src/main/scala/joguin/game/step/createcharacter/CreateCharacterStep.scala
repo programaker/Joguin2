@@ -38,27 +38,15 @@ final class CreateCharacterStep(
 
       informName <- message("inform-character-name")
       informNameError <- message("error-invalid-name")
-      name: Name <- ask(
-        informName,
-        informNameError,
-        parseName
-      )
+      name: Name <- ask(informName, informNameError, parseName)
 
       informGender <- message("inform-character-gender")
       informGenderError <- message("error-invalid-gender")
-      gender: Gender <- ask(
-        informGender,
-        informGenderError,
-        parseGender
-      )
+      gender: Gender <- ask(informGender, informGenderError, parseGender)
 
       informAge <- message("inform-character-age")
       informAgeError <- message("error-invalid-age")
-      age: Age <- ask(
-        informAge,
-        informAgeError,
-        parseAge
-      )
+      age: Age <- ask(informAge, informAgeError, parseAge)
 
       mc <- pure(MainCharacter(name, gender, age))
 

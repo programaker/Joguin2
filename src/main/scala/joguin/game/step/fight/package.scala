@@ -9,6 +9,11 @@ import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 import joguin.playerinteraction.wait.WaitF
 
 package object fight {
-  type FightF[A] = EitherK[MessageSourceF, EitherK[MessagesF, EitherK[InteractionF, WaitF, ?], ?], A]
+  type FightF[A] =
+    EitherK[MessageSourceF,
+      EitherK[MessagesF,
+        EitherK[InteractionF,
+          WaitF, ?], ?], A]
+
   type FightAliensOrRetreat = Equal[W.`"f"`.T] Or Equal[W.`"r"`.T]
 }

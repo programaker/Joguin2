@@ -3,8 +3,7 @@ version := "2.0"
 
 scalaVersion := "2.12.8"
 scalacOptions ++= Seq(
-  "-encoding",
-  "utf8",
+  "-encoding", "utf8",
   "-feature",
   "-explaintypes",
   "-Ypartial-unification",

@@ -48,7 +48,7 @@ final class ShowIntroStep(
       case RestoreGame =>
         (messageSource, restore).mapN { (src, gameProgress) =>
           gameProgress
-            .map(gp => welcomeBack(gp, src))
+            .map(welcomeBack(_, src))
             .getOrElse(pure[ShowIntroF, GameStep](CreateCharacter))
         }.flatten
 

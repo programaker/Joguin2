@@ -8,5 +8,8 @@ import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 
 package object createcharacter {
   type CreateCharacterF[A] =
-    EitherK[MessageSourceF, EitherK[MessagesF, EitherK[InteractionF, PowerGeneratorF, ?], ?], A]
+    EitherK[MessageSourceF,
+      EitherK[MessagesF,
+        EitherK[InteractionF,
+          PowerGeneratorF, ?], ?], A]
 }

@@ -19,8 +19,8 @@ final class SaveGameStep(
   def start(gameProgress: GameProgress): Free[SaveGameF, GameStep] =
     for {
       success <- save(gameProgress)
-
       src <- getLocalizedMessageSource(SaveGameMessageSource)
+
       message <- if (success) {
         getMessage(src, "success")
       } else {

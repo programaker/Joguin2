@@ -6,5 +6,8 @@ import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 
 package object savegame {
-  type SaveGameF[A] = EitherK[MessageSourceF, EitherK[MessagesF, GameProgressRepositoryF, ?], A]
+  type SaveGameF[A] =
+    EitherK[MessageSourceF,
+      EitherK[MessagesF,
+        GameProgressRepositoryF, ?], A]
 }
