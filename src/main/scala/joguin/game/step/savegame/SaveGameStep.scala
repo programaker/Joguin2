@@ -15,6 +15,7 @@ final class SaveGameStep(
   import m._
   import r._
   import s._
+  import SaveGameMessageSource._
 
   def start(gameProgress: GameProgress): Free[SaveGameF, GameStep] =
     for {
@@ -22,9 +23,9 @@ final class SaveGameStep(
       src <- getLocalizedMessageSource(SaveGameMessageSource)
 
       message <- if (success) {
-        getMessage(src, "success")
+        getMessage(src)(save_game_success)
       } else {
-        getMessage(src, "error")
+        getMessage(src)(save_game_error)
       }
 
       _ <- writeMessage(message)

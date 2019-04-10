@@ -24,6 +24,7 @@ final class ExploreStep(
   import m._
   import s._
   import w._
+  import ExploreMessageSource._
 
   def start(gameProgress: GameProgress): Free[ExploreF, GameStep] = {
     for {
@@ -42,7 +43,7 @@ final class ExploreStep(
   private def showInvasions(
     invasions: List[Invasion],
     defeatedInvasions: Set[Index],
-    src: LocalizedMessageSource,
+    src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
   ): Free[ExploreF, Unit] = (invasions, index) match {
 
@@ -62,33 +63,37 @@ final class ExploreStep(
   private def showInvasion(
     invasion: Invasion,
     invasionDefeated: Boolean,
-    src: LocalizedMessageSource,
+    src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Index
   ): Free[ExploreF, Unit] = {
 
     val key = if (invasionDefeated) {
-      "human-dominated-city"
+      human_dominated_city
     } else {
-      "alien-dominated-city"
+      alien_dominated_city
     }
 
     val city = invasion.city
-    getMessageFmt(src, key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
+    getMessageFmt(src)(key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
-  private def missionAccomplished(src: LocalizedMessageSource): Free[ExploreF, GameStep] =
+  private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[ExploreF, GameStep] =
     for {
-      message <- getMessage(src, "mission-accomplished")
+      message <- getMessage(src)(mission_accomplished)
       _ <- writeMessage(message)
       _ <- waitFor(10.seconds)
     } yield GameOver
 
-  private def chooseYourDestiny(src: LocalizedMessageSource, gp: GameProgress): Free[ExploreF, GameStep] = {
+  private def chooseYourDestiny(
+    src: LocalizedMessageSource[ExploreMessageSource.type],
+    gp: GameProgress
+  ): Free[ExploreF, GameStep] = {
+
     val invasionCount = gp.invasionCount
 
     for {
-      message <- getMessageFmt(src, "where-do-you-want-to-go", List("1", invasionCount.value.toString))
-      errorMessage <- getMessage(src, "error-invalid-option")
+      message <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.value.toString))
+      errorMessage <- getMessage(src)(error_invalid_option)
       option <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
     } yield option match {
       case QuitGame => Quit(gp)

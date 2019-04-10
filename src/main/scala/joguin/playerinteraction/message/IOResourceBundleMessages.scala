@@ -10,11 +10,11 @@ import cats.~>
 /** MessagesOp interpreter for IO that uses ResourceBundle to read messages from app resources */
 object IOResourceBundleMessages extends (MessagesF ~> IO) {
   override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
-    case GetMessage(source, key)          => message(source, key, Nil)
+    case GetMessage(source, key) => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
   }
 
-  private def message(source: LocalizedMessageSource, key: String, args: List[String]): IO[String] =
+  private def message[T <: MessageSource](source: LocalizedMessageSource[T], key: T#Key, args: List[String]): IO[String] =
     IO.pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
@@ -24,7 +24,7 @@ object IOResourceBundleMessages extends (MessagesF ~> IO) {
   private def resourceBundle(params: (String, Locale)): IO[ResourceBundle] =
     IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
 
-  private def resourceBundleParams(localizedSource: LocalizedMessageSource): (String, Locale) =
+  private def resourceBundleParams[T <: MessageSource](localizedSource: LocalizedMessageSource[T]): (String, Locale) =
     (bundleNamesBySource.getOrElse(localizedSource.source, "unknown"), localizedSource.locale)
 
   private val bundleNamesBySource = Map[MessageSource, String](

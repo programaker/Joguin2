@@ -24,6 +24,7 @@ final class FightStep(
   import m._
   import s._
   import w._
+  import FightMessageSource._
 
   def start(gameProgress: GameProgress, selectedInvasion: Index): Free[FightF, GameStep] =
     gameProgress
@@ -44,10 +45,10 @@ final class FightStep(
   private def cityAlreadySaved(
     gameProgress: GameProgress,
     invasion: Invasion,
-    src: LocalizedMessageSource
+    src: LocalizedMessageSource[FightMessageSource.type]
   ): Free[FightF, GameProgress] = {
 
-    getMessageFmt(src, "city-already-saved", List(invasion.city.name.value))
+    getMessageFmt(src)(city_already_saved, List(invasion.city.name.value))
       .flatMap(writeMessage)
       .map(_ => gameProgress)
   }
@@ -56,7 +57,7 @@ final class FightStep(
     gameProgress: GameProgress,
     invasion: Invasion,
     invasionIndex: Index,
-    src: LocalizedMessageSource
+    src: LocalizedMessageSource[FightMessageSource.type]
   ): Free[FightF, GameProgress] = {
 
     val device = invasion.terraformDevice.defensePower.value.toString
@@ -64,11 +65,11 @@ final class FightStep(
     val city = invasion.city.name.value
 
     val option = for {
-      report <- getMessageFmt(src, "report", List(character, city, device))
+      report <- getMessageFmt(src)(report, List(character, city, device))
       _ <- writeMessage(report)
 
-      giveOrder <- getMessage(src, "give-order")
-      errorMessage <- getMessage(src, "error-invalid-option")
+      giveOrder <- getMessage(src)(give_order)
+      errorMessage <- getMessage(src)(error_invalid_option)
       option <- ask(giveOrder, errorMessage, FightOption.parse)
     } yield option
 
@@ -82,7 +83,7 @@ final class FightStep(
     gameProgress: GameProgress,
     invasion: Invasion,
     invasionIndex: Index,
-    src: LocalizedMessageSource
+    src: LocalizedMessageSource[FightMessageSource.type]
   ): Free[FightF, GameProgress] = {
 
     val characterExperience = gameProgress.mainCharacterExperience.value
@@ -99,24 +100,24 @@ final class FightStep(
 
       val (up2, fightOutCome) =
         if (deviceDestroyed) {
-          (up1.defeatInvasion(invasionIndex), getMessageFmt(src, "earth-won", List(newExperience)))
+          (up1.defeatInvasion(invasionIndex), getMessageFmt(src)(earth_won, List(newExperience)))
         } else {
-          (up1, getMessageFmt(src, "aliens-won", List(city, newExperience)))
+          (up1, getMessageFmt(src)(aliens_won, List(city, newExperience)))
         }
 
       fightOutCome.flatMap(writeMessage).map(_ => up2)
     }
   }
 
-  private def showFightAnimation(src: LocalizedMessageSource): Free[FightF, Unit] = {
+  private def showFightAnimation(src: LocalizedMessageSource[FightMessageSource.type]): Free[FightF, Unit] = {
     val time = 100.milliseconds
 
     for {
-      earth <- getMessage(src, "animation-earth")
-      earthWeapon <- getMessage(src, "animation-earth-weapon")
-      alien <- getMessage(src, "animation-alien")
-      alienWeapon <- getMessage(src, "animation-alien-weapon")
-      strike <- getMessage(src, "animation-strike")
+      earth <- getMessage(src)(animation_earth)
+      earthWeapon <- getMessage(src)(animation_earth_weapon)
+      alien <- getMessage(src)(animation_alien)
+      alienWeapon <- getMessage(src)(animation_alien_weapon)
+      strike <- getMessage(src)(animation_strike)
 
       _ <- showAttack(earth, earthWeapon, strike)
       _ <- waitFor(time)

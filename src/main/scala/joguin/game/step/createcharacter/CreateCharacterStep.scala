@@ -26,31 +26,32 @@ final class CreateCharacterStep(
   import i._
   import m._
   import s._
+  import CreateCharacterMessageSource._
 
   def start: Free[CreateCharacterF, GameStep] =
     for {
       src <- getLocalizedMessageSource(CreateCharacterMessageSource)
-      message <- pure(getMessage(src, _))
-      messageFmt <- pure(getMessageFmt(src, _, _))
+      message <- pure(getMessage(src)(_))
+      messageFmt <- pure(getMessageFmt(src)(_, _))
 
-      createCharacterMessage <- message("create-character")
+      createCharacterMessage <- message(create_character)
       _ <- writeMessage(createCharacterMessage)
 
-      informName <- message("inform-character-name")
-      informNameError <- message("error-invalid-name")
+      informName <- message(inform_character_name)
+      informNameError <- message(error_invalid_name)
       name: Name <- ask(informName, informNameError, parseName)
 
-      informGender <- message("inform-character-gender")
-      informGenderError <- message("error-invalid-gender")
+      informGender <- message(inform_character_gender)
+      informGenderError <- message(error_invalid_gender)
       gender: Gender <- ask(informGender, informGenderError, parseGender)
 
-      informAge <- message("inform-character-age")
-      informAgeError <- message("error-invalid-age")
+      informAge <- message(inform_character_age)
+      informAgeError <- message(error_invalid_age)
       age: Age <- ask(informAge, informAgeError, parseAge)
 
       mc <- pure(MainCharacter(name, gender, age))
 
-      characterCreated <- messageFmt("character-created", List(name.value))
+      characterCreated <- messageFmt(character_created, List(name.value))
       _ <- writeMessage(characterCreated)
 
       gameProgress <- initGameProgress(mc)

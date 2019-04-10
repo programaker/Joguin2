@@ -15,14 +15,15 @@ final class QuitStep(
   import i._
   import m._
   import s._
+  import QuitMessageSource._
 
   def start(gameProgress: GameProgress): Free[QuitF, GameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
     val answer = for {
       src <- messageSource
-      wantToSaveGame <- getMessage(src, "want-to-save-game")
-      invalidOption <- getMessage(src, "error-invalid-option")
+      wantToSaveGame <- getMessage(src)(want_to_save_game)
+      invalidOption <- getMessage(src)(error_invalid_option)
       answer <- ask(wantToSaveGame, invalidOption, QuitOption.parse)
     } yield answer
 

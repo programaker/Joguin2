@@ -8,7 +8,7 @@ import eu.timepit.refined.auto._
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
 import joguin.game.step.{CreateCharacter, Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
+import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
 
 final class ShowIntroStep(
   implicit i: InteractionOps[ShowIntroF],
@@ -20,19 +20,20 @@ final class ShowIntroStep(
   import m._
   import r._
   import s._
+  import ShowIntroMessageSource._
 
   def start: Free[ShowIntroF, GameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
     val answer = for {
       src <- messageSource
-      intro <- getMessage(src, "intro")
-      _ <- writeMessage(intro)
+      introMessage <- getMessage(src)(intro)
+      _ <- writeMessage(introMessage)
       hasSavedProgress <- savedProgressExists
 
-      startKey = if (hasSavedProgress) "start-with-resume" else "start"
-      startMessage <- getMessage(src, startKey)
-      errorMessage <- getMessage(src, "error-invalid-option")
+      startKey = if (hasSavedProgress) start_with_resume else start_no_resume
+      startMessage <- getMessage(src)(startKey)
+      errorMessage <- getMessage(src)(error_invalid_option)
 
       answer <- ask(
         startMessage,
@@ -57,10 +58,14 @@ final class ShowIntroStep(
     }
   }
 
-  private def welcomeBack(gp: GameProgress, src: LocalizedMessageSource): Free[ShowIntroF, GameStep] = {
+  private def welcomeBack(
+    gp: GameProgress,
+    src: LocalizedMessageSource[ShowIntroMessageSource.type]
+  ): Free[ShowIntroF, GameStep] = {
+
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacterExperience
-    getMessageFmt(src, "welcome-back", List(name, experience.toString)).map(_ => Explore(gp))
+    getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }
 
