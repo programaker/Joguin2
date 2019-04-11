@@ -10,6 +10,7 @@ import cats.free.Free._
 sealed trait MessageSource {
   type Key
 }
+
 case object CreateCharacterMessageSource extends MessageSource {
   type Key = CreateCharacterKey
 
@@ -23,6 +24,7 @@ case object CreateCharacterMessageSource extends MessageSource {
   object error_invalid_age extends CreateCharacterKey
   object character_created extends CreateCharacterKey
 }
+
 case object ExploreMessageSource extends MessageSource {
   type Key = ExploreKey
 
@@ -33,6 +35,7 @@ case object ExploreMessageSource extends MessageSource {
   object where_do_you_want_to_go extends ExploreKey
   object error_invalid_option extends ExploreKey
 }
+
 case object QuitMessageSource extends MessageSource {
   type Key = QuitKey
 
@@ -40,6 +43,7 @@ case object QuitMessageSource extends MessageSource {
   object want_to_save_game extends QuitKey
   object error_invalid_option extends QuitKey
 }
+
 case object ShowIntroMessageSource extends MessageSource {
   type Key = ShowIntroKey
 
@@ -50,6 +54,7 @@ case object ShowIntroMessageSource extends MessageSource {
   object error_invalid_option extends ShowIntroKey
   object welcome_back extends ShowIntroKey
 }
+
 case object FightMessageSource extends MessageSource {
   type Key = FightKey
 
@@ -66,6 +71,7 @@ case object FightMessageSource extends MessageSource {
   object animation_alien_weapon extends FightKey
   object animation_strike extends FightKey
 }
+
 case object SaveGameMessageSource extends MessageSource {
   type Key = SaveGameKey
 

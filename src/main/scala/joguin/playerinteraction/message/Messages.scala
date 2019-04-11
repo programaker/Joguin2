@@ -20,12 +20,18 @@ final case class GetMessageFmt[T <: MessageSource](
 
 final class MessagesOps[G[_]](implicit i: InjectK[MessagesF, G]) {
   def getMessage[T <: MessageSource]
-    (source: LocalizedMessageSource[T])(key: T#Key): Free[G, String] =
-      inject[MessagesF, G](GetMessage(source, key))
+      (source: LocalizedMessageSource[T])
+      (key: T#Key): Free[G, String] = {
+
+    inject[MessagesF, G](GetMessage(source, key))
+  }
 
   def getMessageFmt[T <: MessageSource]
-    (source: LocalizedMessageSource[T])(key: T#Key, args: List[String]): Free[G, String] =
-      inject[MessagesF, G](GetMessageFmt(source, key, args))
+      (source: LocalizedMessageSource[T])
+      (key: T#Key, args: List[String]): Free[G, String] = {
+
+    inject[MessagesF, G](GetMessageFmt(source, key, args))
+  }
 }
 object MessagesOps {
   implicit def create[G[_]](implicit i: InjectK[MessagesF, G]): MessagesOps[G] = new MessagesOps[G]
