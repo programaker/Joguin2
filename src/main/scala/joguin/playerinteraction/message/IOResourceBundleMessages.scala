@@ -14,12 +14,18 @@ object IOResourceBundleMessages extends (MessagesF ~> IO) {
     case GetMessageFmt(source, key, args) => message(source, key, args)
   }
 
-  private def message[T <: MessageSource](source: LocalizedMessageSource[T], key: T#Key, args: List[String]): IO[String] =
+  private def message[T <: MessageSource](
+    source: LocalizedMessageSource[T], 
+    key: T#Key, 
+    args: List[String]
+  ): IO[String] = {
+   
     IO.pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
       .flatMap(rb => IO(rb.getString(s"$key"))) //too lazy to map all keys to String
       .map(format(_, args: _*))
+  }    
 
   private def resourceBundle(params: (String, Locale)): IO[ResourceBundle] =
     IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
