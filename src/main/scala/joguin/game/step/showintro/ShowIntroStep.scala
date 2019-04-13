@@ -8,7 +8,12 @@ import eu.timepit.refined.auto._
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
 import joguin.game.step.{CreateCharacter, Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
+import joguin.playerinteraction.message.{
+  LocalizedMessageSource, 
+  MessageSourceOps, 
+  MessagesOps, 
+  ShowIntroMessageSource
+}
 
 final class ShowIntroStep(
   implicit i: InteractionOps[ShowIntroF],

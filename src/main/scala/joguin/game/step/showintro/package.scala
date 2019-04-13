@@ -4,7 +4,6 @@ import cats.data.EitherK
 import eu.timepit.refined.W
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgressRepositoryF
-import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 
 package object showintro {

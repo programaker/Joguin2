@@ -6,11 +6,22 @@ scalacOptions ++= Seq(
   "-encoding", "utf8",
   "-feature",
   "-explaintypes",
-  "-Ypartial-unification",
+  "-deprecation",
+  
   "-language:experimental.macros",
   "-language:postfixOps",
   "-language:existentials",
-  "-language:higherKinds"
+  "-language:higherKinds",
+
+  "-Ywarn-dead-code",
+  "-Ypartial-unification",
+  "-Ywarn-value-discard", 
+  "-Ywarn-unused:imports",
+  "-Ywarn-unused:implicits",
+  "-Ywarn-unused:locals",
+  "-Ywarn-unused:params",
+  "-Ywarn-unused:patvars",
+  "-Ywarn-unused:privates"
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
