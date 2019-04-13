@@ -33,14 +33,18 @@ val commonsIoVersion = "2.6"
 val circeVersion = "0.10.0"
 val betterMonadicForVersion = "0.3.0-M4"
 val kindProjectorVersion = "0.9.9"
+val linterVersion = "0.1.17"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "org.typelevel" %% "cats-free" % catsVersion,
   "org.typelevel" %% "cats-effect" % catsEffectVersion,
+
   "eu.timepit" %% "refined" % refinedVersion,
   "eu.timepit" %% "refined-cats" % refinedVersion,
+  
   "commons-io" % "commons-io" % commonsIoVersion,
+  
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion
@@ -55,3 +59,4 @@ wartremoverWarnings ++= Warts.allBut(
 
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
 addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorVersion)
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterVersion)
