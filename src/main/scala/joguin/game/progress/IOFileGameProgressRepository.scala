@@ -25,9 +25,12 @@ final class IOFileGameProgressRepository(val file: File) extends (GameProgressRe
     IO(file.exists())
 
   private def restore: IO[Option[GameProgress]] =
-    savedProgressExists.flatMap {
-      case false => IO.pure(None)
-      case true  => readFile
+    savedProgressExists.flatMap { exists =>
+      if (exists) {
+        readFile
+      } else {
+        IO.pure(None)
+      }
     }
 
   private def mkdirs: IO[Unit] =
