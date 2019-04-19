@@ -13,7 +13,7 @@ import joguin.game.progress.GameProgress
 import joguin.game.step.{Explore, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
-import joguin.{Name, NameR, NonBlankString}
+import joguin.{Name, NameR}
 
 final class CreateCharacterStep(
   implicit s: MessageSourceOps[CreateCharacterF],
@@ -22,11 +22,11 @@ final class CreateCharacterStep(
   c: CityRepositoryOps[CreateCharacterF],
   p: PowerGeneratorOps[CreateCharacterF]
 ) {
+  import CreateCharacterMessageSource._
   import c._
   import i._
   import m._
   import s._
-  import CreateCharacterMessageSource._
 
   def start: Free[CreateCharacterF, GameStep] =
     for {

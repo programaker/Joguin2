@@ -8,12 +8,7 @@ import eu.timepit.refined.auto._
 import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
 import joguin.game.step.{CreateCharacter, Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{
-  LocalizedMessageSource, 
-  MessageSourceOps, 
-  MessagesOps, 
-  ShowIntroMessageSource
-}
+import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
 
 final class ShowIntroStep(
   implicit i: InteractionOps[ShowIntroF],
@@ -21,11 +16,11 @@ final class ShowIntroStep(
   s: MessageSourceOps[ShowIntroF],
   r: GameProgressRepositoryOps[ShowIntroF]
 ) {
+  import ShowIntroMessageSource._
   import i._
   import m._
   import r._
   import s._
-  import ShowIntroMessageSource._
 
   def start: Free[ShowIntroF, GameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)

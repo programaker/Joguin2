@@ -1,11 +1,10 @@
 package joguin.game.step.fight
 
-import cats.implicits._
 import cats.free.Free
 import cats.free.Free._
+import cats.implicits._
 import eu.timepit.refined._
-import eu.timepit.refined.numeric.NonNegative
-import joguin.alien.{Invasion, PowerR}
+import joguin.alien.Invasion
 import joguin.game.progress.{ExperienceR, GameProgress, Index}
 import joguin.game.step.{Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
@@ -20,11 +19,11 @@ final class FightStep(
   i: InteractionOps[FightF],
   w: WaitOps[FightF]
 ) {
+  import FightMessageSource._
   import i._
   import m._
   import s._
   import w._
-  import FightMessageSource._
 
   def start(gameProgress: GameProgress, selectedInvasion: Index): Free[FightF, GameStep] =
     gameProgress

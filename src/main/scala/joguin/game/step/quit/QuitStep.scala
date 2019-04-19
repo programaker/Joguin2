@@ -12,10 +12,10 @@ final class QuitStep(
   m: MessagesOps[QuitF],
   s: MessageSourceOps[QuitF],
 ) {
+  import QuitMessageSource._
   import i._
   import m._
   import s._
-  import QuitMessageSource._
 
   def start(gameProgress: GameProgress): Free[QuitF, GameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)

@@ -11,11 +11,11 @@ final class SaveGameStep(
   s: MessageSourceOps[SaveGameF],
   r: GameProgressRepositoryOps[SaveGameF]
 ) {
+  import SaveGameMessageSource._
   import i._
   import m._
   import r._
   import s._
-  import SaveGameMessageSource._
 
   def start(gameProgress: GameProgress): Free[SaveGameF, GameStep] =
     for {
