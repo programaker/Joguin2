@@ -13,11 +13,12 @@ import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._
 
-final class FightStep(
-  implicit s: MessageSourceOps[FightF],
-  m: MessagesOps[FightF],
-  i: InteractionOps[FightF],
-  w: WaitOps[FightF]
+final class FightStep[F[_]](
+  implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    w: WaitOps[F]
 ) {
   import FightMessageSource._
   import i._
@@ -25,7 +26,7 @@ final class FightStep(
   import s._
   import w._
 
-  def start(gameProgress: GameProgress, selectedInvasion: Index): Free[FightF, GameStep] =
+  def start(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =
     gameProgress
       .invasionByIndex(selectedInvasion)
       .map { invasion =>
@@ -45,7 +46,7 @@ final class FightStep(
     gameProgress: GameProgress,
     invasion: Invasion,
     src: LocalizedMessageSource[FightMessageSource.type]
-  ): Free[FightF, GameProgress] = {
+  ): Free[F, GameProgress] = {
 
     getMessageFmt(src)(city_already_saved, List(invasion.city.name.value))
       .flatMap(writeMessage)
@@ -57,7 +58,7 @@ final class FightStep(
     invasion: Invasion,
     invasionIndex: Index,
     src: LocalizedMessageSource[FightMessageSource.type]
-  ): Free[FightF, GameProgress] = {
+  ): Free[F, GameProgress] = {
 
     val device = invasion.terraformDevice.defensePower.value.toString
     val character = gameProgress.mainCharacter.name.value
@@ -83,7 +84,7 @@ final class FightStep(
     invasion: Invasion,
     invasionIndex: Index,
     src: LocalizedMessageSource[FightMessageSource.type]
-  ): Free[FightF, GameProgress] = {
+  ): Free[F, GameProgress] = {
 
     val characterExperience = gameProgress.mainCharacterExperience.value
     val deviceDefensePower = invasion.terraformDevice.defensePower.value
@@ -108,7 +109,7 @@ final class FightStep(
     }
   }
 
-  private def showFightAnimation(src: LocalizedMessageSource[FightMessageSource.type]): Free[FightF, Unit] = {
+  private def showFightAnimation(src: LocalizedMessageSource[FightMessageSource.type]): Free[F, Unit] = {
     val time = 100.milliseconds
 
     for {
@@ -126,7 +127,7 @@ final class FightStep(
     } yield ()
   }
 
-  private def showAttack(attacker: String, weapon: String, strike: String): Free[FightF, Unit] = {
+  private def showAttack(attacker: String, weapon: String, strike: String): Free[F, Unit] = {
     for {
       _ <- writeMessage("\n")
       _ <- writeMessage(attacker)
@@ -138,7 +139,7 @@ final class FightStep(
     } yield ()
   }
 
-  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[FightF, Unit] = {
+  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[F, Unit] = {
     if (start <= end) {
       val res = for {
         _ <- if (start % 2 === 0) {

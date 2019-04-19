@@ -7,17 +7,18 @@ import joguin.game.step.{GameOver, GameStep, SaveGame}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMessageSource}
 
-final class QuitStep(
-  implicit i: InteractionOps[QuitF],
-  m: MessagesOps[QuitF],
-  s: MessageSourceOps[QuitF],
+final class QuitStep[F[_]](
+  implicit
+    i: InteractionOps[F],
+    m: MessagesOps[F],
+    s: MessageSourceOps[F],
 ) {
   import QuitMessageSource._
   import i._
   import m._
   import s._
 
-  def start(gameProgress: GameProgress): Free[QuitF, GameStep] = {
+  def start(gameProgress: GameProgress): Free[F, GameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
     val answer = for {

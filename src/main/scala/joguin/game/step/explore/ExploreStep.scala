@@ -13,11 +13,12 @@ import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._
 
-final class ExploreStep(
-  implicit s: MessageSourceOps[ExploreF],
-  m: MessagesOps[ExploreF],
-  i: InteractionOps[ExploreF],
-  w: WaitOps[ExploreF]
+final class ExploreStep[F[_]](
+  implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    w: WaitOps[F]
 ) {
   import ExploreMessageSource._
   import i._
@@ -25,7 +26,7 @@ final class ExploreStep(
   import s._
   import w._
 
-  def start(gameProgress: GameProgress): Free[ExploreF, GameStep] = {
+  def start(gameProgress: GameProgress): Free[F, GameStep] = {
     for {
       _ <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
@@ -44,7 +45,7 @@ final class ExploreStep(
     defeatedInvasions: Set[Index],
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
-  ): Free[ExploreF, Unit] = (invasions, index) match {
+  ): Free[F, Unit] = (invasions, index) match {
 
     case (Nil, _) =>
       pure(())
@@ -64,7 +65,7 @@ final class ExploreStep(
     invasionDefeated: Boolean,
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Index
-  ): Free[ExploreF, Unit] = {
+  ): Free[F, Unit] = {
 
     val key = if (invasionDefeated) {
       human_dominated_city
@@ -76,7 +77,7 @@ final class ExploreStep(
     getMessageFmt(src)(key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
-  private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[ExploreF, GameStep] =
+  private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
     for {
       message <- getMessage(src)(mission_accomplished)
       _ <- writeMessage(message)
@@ -86,7 +87,7 @@ final class ExploreStep(
   private def chooseYourDestiny(
     src: LocalizedMessageSource[ExploreMessageSource.type],
     gp: GameProgress
-  ): Free[ExploreF, GameStep] = {
+  ): Free[F, GameStep] = {
 
     val invasionCount = gp.invasionCount
 

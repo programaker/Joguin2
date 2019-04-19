@@ -5,11 +5,12 @@ import joguin.game.step.{GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, SaveGameMessageSource}
 
-final class SaveGameStep(
-  implicit i: InteractionOps[SaveGameF],
-  m: MessagesOps[SaveGameF],
-  s: MessageSourceOps[SaveGameF],
-  r: GameProgressRepositoryOps[SaveGameF]
+final class SaveGameStep[F[_]](
+  implicit
+    i: InteractionOps[F],
+    m: MessagesOps[F],
+    s: MessageSourceOps[F],
+    r: GameProgressRepositoryOps[F]
 ) {
   import SaveGameMessageSource._
   import i._
@@ -17,7 +18,7 @@ final class SaveGameStep(
   import r._
   import s._
 
-  def start(gameProgress: GameProgress): Free[SaveGameF, GameStep] =
+  def start(gameProgress: GameProgress): Free[F, GameStep] =
     for {
       success <- save(gameProgress)
       src <- getLocalizedMessageSource(SaveGameMessageSource)

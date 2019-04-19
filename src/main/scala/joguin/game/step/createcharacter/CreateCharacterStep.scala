@@ -15,12 +15,13 @@ import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
 import joguin.{Name, NameR}
 
-final class CreateCharacterStep(
-  implicit s: MessageSourceOps[CreateCharacterF],
-  m: MessagesOps[CreateCharacterF],
-  i: InteractionOps[CreateCharacterF],
-  c: CityRepositoryOps[CreateCharacterF],
-  p: PowerGeneratorOps[CreateCharacterF]
+final class CreateCharacterStep[F[_]](
+  implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    c: CityRepositoryOps[F],
+    p: PowerGeneratorOps[F]
 ) {
   import CreateCharacterMessageSource._
   import c._
@@ -28,7 +29,7 @@ final class CreateCharacterStep(
   import m._
   import s._
 
-  def start: Free[CreateCharacterF, GameStep] =
+  def start: Free[F, GameStep] =
     for {
       src <- getLocalizedMessageSource(CreateCharacterMessageSource)
       message <- pure(getMessage(src)(_))
@@ -69,7 +70,7 @@ final class CreateCharacterStep(
       .flatMap(refineV[AgeR](_))
       .toOption
 
-  private def initGameProgress(mainCharacter: MainCharacter): Free[CreateCharacterF, GameProgress] =
+  private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
       .flatMap(_.map(city => AlienArmy.attack(city)).sequence)
       .map(GameProgress.start(mainCharacter, _))
