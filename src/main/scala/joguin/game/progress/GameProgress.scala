@@ -3,10 +3,9 @@ package joguin.game.progress
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.{NonNegative, Positive}
+import joguin._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
-import joguin._
 
 final case class GameProgress(
   mainCharacter: MainCharacter,
@@ -33,7 +32,7 @@ final case class GameProgress(
     defeatedInvasionsTrack.contains(selectedInvasion)
 
   def increaseMainCharacterExperience(experiencePoints: Experience): GameProgress =
-    refineV[NonNegative](mainCharacterExperience.value + experiencePoints.value)
+    refineV[ExperienceR](mainCharacterExperience.value + experiencePoints.value)
       .map(updatedXp => copy(mainCharacterExperience = updatedXp))
       .getOrElse(this)
 
@@ -41,7 +40,7 @@ final case class GameProgress(
     defeatedInvasions === invasionCount
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
-    refineV[NonNegative](defeatedInvasions + 1)
+    refineV[CountR](defeatedInvasions + 1)
       .map { updatedCount =>
         copy(
           defeatedInvasions = updatedCount,
@@ -72,7 +71,7 @@ object GameProgress {
     val indexedInvasions = invasions.foldLeft(zero) { (tuple, invasion) =>
       val (index, map, count) = tuple
 
-      (refineV[Positive](index + 1), refineV[NonNegative](count + 1))
+      (refineV[IndexR](index + 1), refineV[CountR](count + 1))
         .mapN { (nextIndex, inc) =>
           (nextIndex, map + (index -> invasion), inc)
         }

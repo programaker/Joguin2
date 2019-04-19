@@ -8,12 +8,12 @@ import eu.timepit.refined.string.ValidInt
 import joguin.alien.AlienArmy
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
-import joguin.earth.maincharacter.{Age, Gender, MainCharacter, Major}
+import joguin.earth.maincharacter.{Age, AgeR, Gender, MainCharacter}
 import joguin.game.progress.GameProgress
 import joguin.game.step.{Explore, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
-import joguin.{Name, NonBlankString}
+import joguin.{Name, NameR, NonBlankString}
 
 final class CreateCharacterStep(
   implicit s: MessageSourceOps[CreateCharacterF],
@@ -58,7 +58,7 @@ final class CreateCharacterStep(
     } yield Explore(gameProgress)
 
   private def parseName(name: String): Option[Name] =
-    refineV[NonBlankString](name).toOption
+    refineV[NameR](name).toOption
 
   private def parseGender(gender: String): Option[Gender] =
     Gender.byCode(gender)
@@ -66,7 +66,7 @@ final class CreateCharacterStep(
   private def parseAge(age: String): Option[Age] =
     refineV[ValidInt](age)
       .map(_.value.toInt)
-      .flatMap(refineV[Major](_))
+      .flatMap(refineV[AgeR](_))
       .toOption
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[CreateCharacterF, GameProgress] =

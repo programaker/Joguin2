@@ -5,8 +5,8 @@ import cats.free.Free
 import cats.free.Free._
 import eu.timepit.refined._
 import eu.timepit.refined.numeric.NonNegative
-import joguin.alien.Invasion
-import joguin.game.progress.{GameProgress, Index}
+import joguin.alien.{Invasion, PowerR}
+import joguin.game.progress.{ExperienceR, GameProgress, Index}
 import joguin.game.step.{Explore, GameOver, GameStep}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{FightMessageSource, LocalizedMessageSource, MessageSourceOps, MessagesOps}
@@ -92,7 +92,7 @@ final class FightStep(
     val deviceDestroyed = characterExperience >= deviceDefensePower
 
     showFightAnimation(src).flatMap { _ =>
-      val up1 = refineV[NonNegative](deviceDefensePower / 2)
+      val up1 = refineV[ExperienceR](deviceDefensePower / 2)
         .map(gameProgress.increaseMainCharacterExperience)
         .getOrElse(gameProgress)
 
@@ -164,7 +164,7 @@ case object Retreat extends FightOption
 
 object FightOption {
   def parse(s: String): Option[FightOption] =
-    refineV[FightAliensOrRetreat](s.toLowerCase).toOption
+    refineV[FightOptionR](s.toLowerCase).toOption
       .map(_.value)
       .map {
         case "f" => FightAliens

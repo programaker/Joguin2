@@ -8,7 +8,9 @@ import cats.implicits._
 
 package object joguin {
   type NonBlankString = MinSize[W.`1`.T] And Not[MatchesRegex[W.`"""^\\s+$"""`.T]]
-  type Name = String Refined NonBlankString
+
+  type NameR = NonBlankString
+  type Name = String Refined NameR
 
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value

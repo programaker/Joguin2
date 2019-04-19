@@ -6,9 +6,8 @@ import cats.effect.IO
 import cats.implicits._
 import cats.~>
 import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.refineV
-import joguin.alien.Power
+import joguin.alien.{Power, PowerR}
 
 /** PowerGeneratorF root interpreter to IO that produces random numbers between min and max */
 object PowerGeneratorIORandom extends (PowerGeneratorF ~> IO) {
@@ -18,7 +17,7 @@ object PowerGeneratorIORandom extends (PowerGeneratorF ~> IO) {
 
   private def randomPowerBetween(min: Power, max: Power): IO[Power] =
     IO(ThreadLocalRandom.current.nextInt(min, max + 1))
-      .map(refineV[Positive](_))
+      .map(refineV[PowerR](_))
       .map(_.leftMap(validationErrorToException))
       .flatMap(IO.fromEither)
 

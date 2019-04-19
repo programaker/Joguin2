@@ -4,7 +4,12 @@ import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.{NonNegative, Positive}
 
 package object progress {
-  type Experience = Int Refined NonNegative
-  type Count = Int Refined NonNegative
-  type Index = Int Refined Positive
+  type ExperienceR = NonNegative
+  type Experience = Int Refined ExperienceR
+
+  type CountR = NonNegative
+  type Count = Int Refined CountR
+
+  type IndexR = Positive
+  type Index = Int Refined IndexR
 }

@@ -85,9 +85,9 @@ object ShowIntroOption {
 
     val refAnswer =
       if (hasSavedProgress) {
-        refineV[ShowIntroOptions](sanitizedS)
+        refineV[ShowIntroOptionR](sanitizedS)
       } else {
-        refineV[ShowIntroOptionsNoRestore](sanitizedS)
+        refineV[ShowIntroOptionNoRestoreR](sanitizedS)
       }
 
     refAnswer.toOption.map(_.value match {

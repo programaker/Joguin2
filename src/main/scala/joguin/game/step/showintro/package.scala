@@ -7,7 +7,7 @@ import joguin.game.progress.GameProgressRepositoryF
 import joguin.playerinteraction.message.MessagesAndSourceF
 
 package object showintro {
-  type ShowIntroOptions = MatchesRegex[W.`"""^[nqr]$"""`.T]
-  type ShowIntroOptionsNoRestore = MatchesRegex[W.`"""^[nq]$"""`.T]
+  type ShowIntroOptionR = MatchesRegex[W.`"""^[nqr]$"""`.T]
+  type ShowIntroOptionNoRestoreR = MatchesRegex[W.`"""^[nq]$"""`.T]
   type ShowIntroF[A] = EitherK[MessagesAndSourceF, GameProgressRepositoryF, A]
 }

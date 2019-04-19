@@ -4,9 +4,8 @@ import cats.free.Free
 import cats.free.Free._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.Positive
 import joguin.alien.Invasion
-import joguin.game.progress.{Count, GameProgress, Index}
+import joguin.game.progress.{Count, GameProgress, Index, IndexR}
 import joguin.game.step.{Fight, GameOver, GameStep, Quit}
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.{ExploreMessageSource, LocalizedMessageSource, MessageSourceOps, MessagesOps}
@@ -20,11 +19,11 @@ final class ExploreStep(
   i: InteractionOps[ExploreF],
   w: WaitOps[ExploreF]
 ) {
+  import ExploreMessageSource._
   import i._
   import m._
   import s._
   import w._
-  import ExploreMessageSource._
 
   def start(gameProgress: GameProgress): Free[ExploreF, GameStep] = {
     for {
@@ -56,7 +55,7 @@ final class ExploreStep(
     case (invasion :: otherInvasions, Some(idx)) =>
       showInvasion(invasion, defeatedInvasions.contains(idx), src, idx)
         .flatMap { _ =>
-          showInvasions(otherInvasions, defeatedInvasions, src, refineV[Positive](idx + 1).toOption)
+          showInvasions(otherInvasions, defeatedInvasions, src, refineV[IndexR](idx + 1).toOption)
         }
   }
 
@@ -108,14 +107,14 @@ final case class GoToInvasion(index: Index) extends ExploreOption
 
 object ExploreOption {
   def parse(s: String, invasionCount: Count): Option[ExploreOption] =
-    refineV[IndexOrQuit](s.toLowerCase).toOption
+    refineV[ExploreOptionR](s.toLowerCase).toOption
       .map(_.value)
       .flatMap {
         case "q" =>
           Some(QuitGame)
         case index =>
           Some(index.toInt)
-            .map(refineV[Positive](_))
+            .map(refineV[IndexR](_))
             .flatMap(_.toOption)
             .filter(_ <= invasionCount.value)
             .map(GoToInvasion)

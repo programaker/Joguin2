@@ -3,12 +3,11 @@ package joguin.game.progress
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.{NonNegative, Positive}
-import joguin.NonBlankString
-import joguin.alien.Invasion
+import joguin.NameR
 import joguin.alien.terraformdevice.TerraformDevice
+import joguin.alien.{Invasion, PowerR}
 import joguin.earth.city.City
-import joguin.earth.maincharacter.{Gender, MainCharacter, Major}
+import joguin.earth.maincharacter.{AgeR, Gender, MainCharacter}
 
 final case class PersistentGameProgress(
   mainCharacter: PersistentMainCharacter,
@@ -32,10 +31,10 @@ object PersistentGameProgress {
   def toGameProgress(pgp: PersistentGameProgress): Option[GameProgress] =
     (
       toMainCharacter(pgp.mainCharacter),
-      refineV[NonNegative](pgp.mainCharacterExperience).toOption,
+      refineV[ExperienceR](pgp.mainCharacterExperience).toOption,
       pgp.invasions.map(toInvasion).sequence[Option, Invasion],
-      refineV[NonNegative](pgp.defeatedInvasions).toOption,
-      pgp.defeatedInvasionsTrack.flatMap(refineV[Positive](_).toList).toSet.some
+      refineV[CountR](pgp.defeatedInvasions).toOption,
+      pgp.defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
     ) mapN { (mc, mcxp, invs, dinvs, track) =>
       GameProgress.of(mc, mcxp, invs, dinvs, track)
     }
@@ -55,9 +54,9 @@ object PersistentMainCharacter {
 
   def toMainCharacter(pmc: PersistentMainCharacter): Option[MainCharacter] =
     (
-      refineV[NonBlankString](pmc.name).toOption,
+      refineV[NameR](pmc.name).toOption,
       pmc.gender.some,
-      refineV[Major](pmc.age).toOption
+      refineV[AgeR](pmc.age).toOption
     ) mapN { (name, gender, age) =>
       MainCharacter(name, gender, age)
     }
@@ -77,9 +76,9 @@ object PersistentInvasion {
 
   def toInvasion(pi: PersistentInvasion): Option[Invasion] =
     (
-      refineV[Positive](pi.terraformDevicePower).toOption,
-      refineV[NonBlankString](pi.cityName).toOption,
-      refineV[NonBlankString](pi.country).toOption
+      refineV[PowerR](pi.terraformDevicePower).toOption,
+      refineV[NameR](pi.cityName).toOption,
+      refineV[NameR](pi.country).toOption
     ) mapN { (power, cityName, country) =>
       Invasion(TerraformDevice(power), City(cityName, country))
     }
