@@ -89,11 +89,11 @@ final case class GetLocalizedMessageSource[T <: MessageSource](source: T)
   extends MessageSourceF[LocalizedMessageSource[T]]
 
 
-final class MessageSourceOps[G[_]](implicit i: InjectK[MessageSourceF, G]) {
-  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[G, LocalizedMessageSource[T]] =
-    inject[MessageSourceF, G](GetLocalizedMessageSource(source))
+final class MessageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]) {
+  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =
+    inject[MessageSourceF, C](GetLocalizedMessageSource(source))
 }
 object MessageSourceOps {
-  implicit def create[G[_]](implicit i: InjectK[MessageSourceF, G]): MessageSourceOps[G] =
-    new MessageSourceOps[G]
+  implicit def create[C[_]](implicit i: InjectK[MessageSourceF, C]): MessageSourceOps[C] =
+    new MessageSourceOps[C]
 }

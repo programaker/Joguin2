@@ -8,12 +8,12 @@ sealed trait InteractionF[A]
 final case class WriteMessage(message: String) extends InteractionF[Unit]
 case object ReadAnswer extends InteractionF[String]
 
-final class InteractionOps[G[_]](implicit i: InjectK[InteractionF, G]) {
-  def writeMessage(message: String): Free[G, Unit] =
-    inject[InteractionF, G](WriteMessage(message))
+final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
+  def writeMessage(message: String): Free[C, Unit] =
+    inject[InteractionF, C](WriteMessage(message))
 
-  def readAnswer: Free[G, String] =
-    inject[InteractionF, G](ReadAnswer)
+  def readAnswer: Free[C, String] =
+    inject[InteractionF, C](ReadAnswer)
 
   /** To reuse the following flow in all game steps:
    *
@@ -28,7 +28,7 @@ final class InteractionOps[G[_]](implicit i: InjectK[InteractionF, G]) {
     message: String,
     errorMessage: String,
     parseAnswer: String => Option[T]
-  ): Free[G, T] = {
+  ): Free[C, T] = {
     val validatedAnswer = for {
       _ <- writeMessage(message)
       answer <- readAnswer
@@ -42,6 +42,6 @@ final class InteractionOps[G[_]](implicit i: InjectK[InteractionF, G]) {
   }
 }
 object InteractionOps {
-  implicit def create[G[_]](implicit i: InjectK[InteractionF, G]): InteractionOps[G] =
-    new InteractionOps[G]
+  implicit def create[C[_]](implicit i: InjectK[InteractionF, C]): InteractionOps[C] =
+    new InteractionOps[C]
 }
