@@ -12,10 +12,10 @@ import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOp
 
 final class ShowIntroStep[F[_]](
   implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F],
-    r: GameProgressRepositoryOps[F]
+  i: InteractionOps[F],
+  m: MessagesOps[F],
+  s: MessageSourceOps[F],
+  r: GameProgressRepositoryOps[F]
 ) {
   import ShowIntroMessageSource._
   import i._
@@ -69,12 +69,24 @@ final class ShowIntroStep[F[_]](
     getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }
+object ShowIntroStep {
+  implicit def create[F[_]](
+    implicit
+    i: InteractionOps[F],
+    m: MessagesOps[F],
+    s: MessageSourceOps[F],
+    r: GameProgressRepositoryOps[F]
+  ): ShowIntroStep[F] = {
+
+    new ShowIntroStep[F]
+  }
+}
+
 
 sealed trait ShowIntroOption
 case object NewGame extends ShowIntroOption
 case object RestoreGame extends ShowIntroOption
 case object QuitGame extends ShowIntroOption
-
 object ShowIntroOption {
   def parse(s: String, hasSavedProgress: Boolean): Option[ShowIntroOption] = {
     val sanitizedS = s.toLowerCase()

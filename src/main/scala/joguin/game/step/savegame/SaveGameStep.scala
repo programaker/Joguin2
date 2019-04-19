@@ -7,10 +7,10 @@ import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, SaveGame
 
 final class SaveGameStep[F[_]](
   implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F],
-    r: GameProgressRepositoryOps[F]
+  i: InteractionOps[F],
+  m: MessagesOps[F],
+  s: MessageSourceOps[F],
+  r: GameProgressRepositoryOps[F]
 ) {
   import SaveGameMessageSource._
   import i._
@@ -31,4 +31,16 @@ final class SaveGameStep[F[_]](
 
       _ <- writeMessage(message)
     } yield GameOver
+}
+object SaveGameStep {
+  implicit def create[F[_]](
+    implicit
+    i: InteractionOps[F],
+    m: MessagesOps[F],
+    s: MessageSourceOps[F],
+    r: GameProgressRepositoryOps[F]
+  ): SaveGameStep[F] = {
+
+    new SaveGameStep[F]
+  }
 }

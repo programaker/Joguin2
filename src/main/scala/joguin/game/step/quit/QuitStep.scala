@@ -9,9 +9,9 @@ import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMess
 
 final class QuitStep[F[_]](
   implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F],
+  i: InteractionOps[F],
+  m: MessagesOps[F],
+  s: MessageSourceOps[F],
 ) {
   import QuitMessageSource._
   import i._
@@ -34,11 +34,22 @@ final class QuitStep[F[_]](
     }
   }
 }
+object QuitStep {
+  implicit def create[F[_]](
+    implicit
+    i: InteractionOps[F],
+    m: MessagesOps[F],
+    s: MessageSourceOps[F],
+  ): QuitStep[F] = {
+
+    new QuitStep[F]
+  }
+}
+
 
 trait QuitOption
 case object Yes extends QuitOption
 case object No extends QuitOption
-
 object QuitOption {
   def parse(s: String): Option[QuitOption] =
     refineV[QuitOptionR](s.toLowerCase).toOption.map(_.value match {

@@ -15,10 +15,10 @@ import scala.concurrent.duration._
 
 final class FightStep[F[_]](
   implicit
-    s: MessageSourceOps[F],
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    w: WaitOps[F]
+  s: MessageSourceOps[F],
+  m: MessagesOps[F],
+  i: InteractionOps[F],
+  w: WaitOps[F]
 ) {
   import FightMessageSource._
   import i._
@@ -157,11 +157,23 @@ final class FightStep[F[_]](
     }
   }
 }
+object FightStep {
+  implicit def create[F[_]](
+    implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    w: WaitOps[F]
+  ): FightStep[F] = {
+
+    new FightStep[F]
+  }
+}
+
 
 sealed trait FightOption
 case object FightAliens extends FightOption
 case object Retreat extends FightOption
-
 object FightOption {
   def parse(s: String): Option[FightOption] =
     refineV[FightOptionR](s.toLowerCase).toOption

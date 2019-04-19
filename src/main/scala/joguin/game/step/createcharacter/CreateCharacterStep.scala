@@ -17,11 +17,11 @@ import joguin.{Name, NameR}
 
 final class CreateCharacterStep[F[_]](
   implicit
-    s: MessageSourceOps[F],
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    c: CityRepositoryOps[F],
-    p: PowerGeneratorOps[F]
+  s: MessageSourceOps[F],
+  m: MessagesOps[F],
+  i: InteractionOps[F],
+  c: CityRepositoryOps[F],
+  p: PowerGeneratorOps[F]
 ) {
   import CreateCharacterMessageSource._
   import c._
@@ -74,4 +74,17 @@ final class CreateCharacterStep[F[_]](
     findAllCities
       .flatMap(_.map(city => AlienArmy.attack(city)).sequence)
       .map(GameProgress.start(mainCharacter, _))
+}
+object CreateCharacterStep {
+  implicit def create[F[_]](
+    implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    c: CityRepositoryOps[F],
+    p: PowerGeneratorOps[F]
+  ): CreateCharacterStep[F] = {
+
+    new CreateCharacterStep[F]
+  }
 }

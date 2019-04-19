@@ -15,10 +15,10 @@ import scala.concurrent.duration._
 
 final class ExploreStep[F[_]](
   implicit
-    s: MessageSourceOps[F],
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    w: WaitOps[F]
+  s: MessageSourceOps[F],
+  m: MessagesOps[F],
+  i: InteractionOps[F],
+  w: WaitOps[F]
 ) {
   import ExploreMessageSource._
   import i._
@@ -101,11 +101,23 @@ final class ExploreStep[F[_]](
     }
   }
 }
+object ExploreStep {
+  implicit def create[F[_]](
+    implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    w: WaitOps[F]
+  ): ExploreStep[F] = {
+
+    new ExploreStep[F]
+  }
+}
+
 
 sealed trait ExploreOption
 object QuitGame extends ExploreOption
 final case class GoToInvasion(index: Index) extends ExploreOption
-
 object ExploreOption {
   def parse(s: String, invasionCount: Count): Option[ExploreOption] =
     refineV[ExploreOptionR](s.toLowerCase).toOption
