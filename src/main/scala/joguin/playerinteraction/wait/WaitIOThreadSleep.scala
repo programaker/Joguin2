@@ -5,7 +5,8 @@ import cats.~>
 
 import scala.concurrent.duration.FiniteDuration
 
-object IOThreadSleepWait extends (WaitF ~> IO) {
+/** WaitF root interpreter to IO that uses Thread.sleep for waiting */
+object WaitIOThreadSleep extends (WaitF ~> IO) {
   override def apply[A](fa: WaitF[A]): IO[A] = fa match {
     case WaitFor(duration) => sleep(duration)
   }

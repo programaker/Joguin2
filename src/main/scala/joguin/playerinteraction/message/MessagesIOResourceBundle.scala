@@ -7,8 +7,8 @@ import java.util.{Locale, ResourceBundle}
 import cats.effect.IO
 import cats.~>
 
-/** MessagesOp interpreter for IO that uses ResourceBundle to read messages from app resources */
-object IOResourceBundleMessages extends (MessagesF ~> IO) {
+/** MessagesF root interpreter to IO that uses ResourceBundle to read messages from app resources */
+object MessagesIOResourceBundle extends (MessagesF ~> IO) {
   override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
     case GetMessage(source, key) => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
@@ -30,7 +30,7 @@ object IOResourceBundleMessages extends (MessagesF ~> IO) {
   private def resourceBundle(params: (String, Locale)): IO[ResourceBundle] =
     IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
 
-  private def resourceBundleParams[T <: MessageSource](localizedSource: LocalizedMessageSource[T]): (String, Locale) =
+  private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
     //too lazy to map all sources to String
-    (s"${localizedSource.source}", localizedSource.locale)
+    (s"${lms.source}", lms.locale)
 }

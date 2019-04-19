@@ -10,8 +10,8 @@ import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.refineV
 import joguin.alien.Power
 
-/** PowerGeneratorOp interpreter for IO that produces a random numbers between min and max */
-object IORandomPowerGenerator extends (PowerGeneratorF ~> IO) {
+/** PowerGeneratorF root interpreter to IO that produces random numbers between min and max */
+object PowerGeneratorIORandom extends (PowerGeneratorF ~> IO) {
   override def apply[A](fa: PowerGeneratorF[A]): IO[A] = fa match {
     case GeneratePower(min, max) => randomPowerBetween(min, max)
   }
