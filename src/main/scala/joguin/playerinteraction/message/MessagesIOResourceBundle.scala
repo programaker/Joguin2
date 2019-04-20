@@ -23,7 +23,7 @@ object MessagesIOResourceBundle extends (MessagesF ~> IO) {
     IO.pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
-      .flatMap(rb => IO(rb.getString(s"$key"))) //too lazy to map all keys to String
+      .flatMap(rb => IO(rb.getString(keyName(key))))
       .map(format(_, args: _*))
   }    
 
@@ -31,6 +31,18 @@ object MessagesIOResourceBundle extends (MessagesF ~> IO) {
     IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
 
   private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
-    //too lazy to map all sources to String
-    (s"${lms.source}", lms.locale)
+    (sourceName(lms.source), lms.locale)
+
+  private def sourceName(src: MessageSource): String = src match {
+    case CreateCharacterMessageSource => "CreateCharacterMessageSource"
+    case ExploreMessageSource => "ExploreMessageSource"
+    case QuitMessageSource => "QuitMessageSource"
+    case ShowIntroMessageSource => "ShowIntroMessageSource"
+    case FightMessageSource => "FightMessageSource"
+    case SaveGameMessageSource => "SaveGameMessageSource"
+  }
+
+  private def keyName[T <: MessageSource](key: T#Key): String =
+    //too lazy to map all keys to String
+    s"${key.getClass.getSimpleName.replaceAll("\\$", "")}"
 }
