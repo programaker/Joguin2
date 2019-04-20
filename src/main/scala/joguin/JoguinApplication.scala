@@ -22,12 +22,12 @@ import joguin.playerinteraction.wait.WaitOps._
 object JoguinApplication extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
 
-    implicit val i1: MessagesOps[GameF] = messagesOps[GameF]
-    implicit val i2: MessageSourceOps[GameF] = messageSourceOps[GameF]
-    implicit val i3: InteractionOps[GameF] = interactionOps[GameF]
+    //implicit val i1: MessagesOps[GameF] = messagesOps[GameF]
+    //implicit val i2: MessageSourceOps[GameF] = messageSourceOps[GameF]
+    //implicit val i3: InteractionOps[GameF] = interactionOps[GameF]
     implicit val i4: GameProgressRepositoryOps[GameF] = gameProgressRepositoryOps[GameF]
-    implicit val i5: CityRepositoryOps[GameF] = cityRepositoryOps[GameF]
-    implicit val i6: PowerGeneratorOps[GameF] = powerGeneratorOps[GameF]
+    //implicit val i5: CityRepositoryOps[GameF] = cityRepositoryOps[GameF]
+    //implicit val i6: PowerGeneratorOps[GameF] = powerGeneratorOps[GameF]
     //implicit val i7: WaitOps[GameF] = waitOps[GameF]
 
     val gameProgressRepository = GameProgressRepositoryIOFile(new File("saved-game/last-progress.prog"))
