@@ -12,6 +12,6 @@ object InteractionIOConsole extends (InteractionF ~> IO) {
     case ReadAnswer => read()
   }
 
-  private def write(message: String): IO[Unit] = IO(println(message))
+  private def write(message: String): IO[Unit] = IO(print(message))
   private def read(): IO[String] = IO(readLine())
 }
