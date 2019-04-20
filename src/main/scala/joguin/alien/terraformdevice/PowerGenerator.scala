@@ -13,6 +13,6 @@ final class PowerGeneratorOps[C[_]](implicit i: InjectK[PowerGeneratorF, C]) {
     inject[PowerGeneratorF, C](GeneratePower(min, max))
 }
 object PowerGeneratorOps {
-  implicit def create[C[_]](implicit i: InjectK[PowerGeneratorF, C]): PowerGeneratorOps[C] =
+  implicit def powerGeneratorOps[C[_]](implicit i: InjectK[PowerGeneratorF, C]): PowerGeneratorOps[C] =
     new PowerGeneratorOps[C]
 }

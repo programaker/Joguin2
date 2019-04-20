@@ -70,14 +70,13 @@ final class ShowIntroStep[F[_]](
   }
 }
 object ShowIntroStep {
-  implicit def create[F[_]](
+  implicit def showIntroStep[F[_]](
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],
     s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
   ): ShowIntroStep[F] = {
-
     new ShowIntroStep[F]
   }
 }

@@ -102,14 +102,13 @@ final class ExploreStep[F[_]](
   }
 }
 object ExploreStep {
-  implicit def create[F[_]](
+  implicit def exploreStep[F[_]](
     implicit
     s: MessageSourceOps[F],
     m: MessagesOps[F],
     i: InteractionOps[F],
     w: WaitOps[F]
   ): ExploreStep[F] = {
-
     new ExploreStep[F]
   }
 }

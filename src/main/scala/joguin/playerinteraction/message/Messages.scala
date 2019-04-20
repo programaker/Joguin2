@@ -34,5 +34,5 @@ final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
   }
 }
 object MessagesOps {
-  implicit def create[C[_]](implicit i: InjectK[MessagesF, C]): MessagesOps[C] = new MessagesOps[C]
+  implicit def messagesOps[C[_]](implicit i: InjectK[MessagesF, C]): MessagesOps[C] = new MessagesOps[C]
 }

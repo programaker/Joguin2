@@ -12,14 +12,16 @@ import joguin.game.step.showintro.ShowIntroStep
 
 final class Game(
   implicit
-    showIntro: ShowIntroStep[GameF],
-    createCharacter: CreateCharacterStep[GameF],
-    explore: ExploreStep[GameF],
-    fight: FightStep[GameF],
-    saveGame: SaveGameStep[GameF],
-    quit: QuitStep[GameF]
+  showIntro: ShowIntroStep[GameF],
+  createCharacter: CreateCharacterStep[GameF],
+  explore: ExploreStep[GameF],
+  fight: FightStep[GameF],
+  saveGame: SaveGameStep[GameF],
+  quit: QuitStep[GameF]
 ) {
-  def play(step: GameStep): Free[GameF, Unit] = step match {
+  def play: Free[GameF, Unit] = play(ShowIntro)
+
+  private def play(step: GameStep): Free[GameF, Unit] = step match {
     case ShowIntro =>
       showIntro.start.flatMap(play)
 
@@ -42,3 +44,17 @@ final class Game(
       pure(())
   }
 }
+object Game {
+  def play(
+    implicit
+    showIntro: ShowIntroStep[GameF],
+    createCharacter: CreateCharacterStep[GameF],
+    explore: ExploreStep[GameF],
+    fight: FightStep[GameF],
+    saveGame: SaveGameStep[GameF],
+    quit: QuitStep[GameF]
+  ): Free[GameF, Unit] = {
+    new Game().play
+  }
+}
+

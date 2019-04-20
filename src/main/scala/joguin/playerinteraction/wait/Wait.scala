@@ -14,5 +14,5 @@ final class WaitOps[C[_]](implicit i: InjectK[WaitF, C]) {
     inject[WaitF, C](WaitFor(duration))
 }
 object WaitOps {
-  implicit def create[C[_]](implicit i: InjectK[WaitF, C]): WaitOps[C] = new WaitOps[C]
+  implicit def waitOps[C[_]](implicit i: InjectK[WaitF, C]): WaitOps[C] = new WaitOps[C]
 }

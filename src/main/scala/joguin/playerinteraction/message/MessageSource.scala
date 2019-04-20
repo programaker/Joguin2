@@ -94,6 +94,6 @@ final class MessageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]) {
     inject[MessageSourceF, C](GetLocalizedMessageSource(source))
 }
 object MessageSourceOps {
-  implicit def create[C[_]](implicit i: InjectK[MessageSourceF, C]): MessageSourceOps[C] =
+  implicit def messageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]): MessageSourceOps[C] =
     new MessageSourceOps[C]
 }

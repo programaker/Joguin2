@@ -12,6 +12,7 @@ scalacOptions ++= Seq(
   "-language:postfixOps",
   "-language:existentials",
   "-language:higherKinds",
+  "-language:implicitConversions",
 
   "-Ywarn-dead-code",
   "-Ypartial-unification",

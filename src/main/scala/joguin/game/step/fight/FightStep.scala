@@ -158,14 +158,13 @@ final class FightStep[F[_]](
   }
 }
 object FightStep {
-  implicit def create[F[_]](
+  implicit def fightStep[F[_]](
     implicit
     s: MessageSourceOps[F],
     m: MessagesOps[F],
     i: InteractionOps[F],
     w: WaitOps[F]
   ): FightStep[F] = {
-
     new FightStep[F]
   }
 }
