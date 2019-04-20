@@ -37,7 +37,7 @@ final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
 
     validatedAnswer.flatMap {
       case Some(t) => pure(t)
-      case None => ask(message, errorMessage, parseAnswer)
+      case None => writeMessage(errorMessage).flatMap(_ => ask(message, errorMessage, parseAnswer))
     }
   }
 }
