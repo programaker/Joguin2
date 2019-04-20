@@ -10,9 +10,9 @@ import joguin.playerinteraction.wait.WaitF
 
 package object game {
   type F1[A] = EitherK[MessagesF, MessageSourceF, A]
-  type F2[A] = EitherK[F1, InteractionF, A]
-  type F3[A] = EitherK[F2, CityRepositoryF, A]
-  type F4[A] = EitherK[F3, GameProgressRepositoryF, A]
-  type F5[A] = EitherK[F4, PowerGeneratorF, A]
-  type GameF[A] = EitherK[F5, WaitF, A]
+  type F2[A] = EitherK[InteractionF, F1, A]
+  type F3[A] = EitherK[CityRepositoryF, F2, A]
+  type F4[A] = EitherK[GameProgressRepositoryF, F3, A]
+  type F5[A] = EitherK[PowerGeneratorF, F4, A]
+  type GameF[A] = EitherK[WaitF, F5, A]
 }

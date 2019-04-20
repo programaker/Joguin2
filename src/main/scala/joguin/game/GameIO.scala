@@ -13,11 +13,11 @@ import joguin.playerinteraction.wait.WaitIOThreadSleep
 object GameIO {
   def composite(gameProgressRepository: GameProgressRepositoryF ~> IO): GameF ~> IO = {
     val f1 = MessagesIOResourceBundle or MessageSourceIOHardcoded
-    val f2 = f1 or InteractionIOConsole
-    val f3 = f2 or CityRepositoryIOHardcoded
-    val f4 = f3 or gameProgressRepository
-    val f5 = f4 or PowerGeneratorIORandom
-    f5 or WaitIOThreadSleep
+    val f2 = InteractionIOConsole or f1
+    val f3 = CityRepositoryIOHardcoded or f2
+    val f4 = gameProgressRepository or f3
+    val f5 = PowerGeneratorIORandom or f4
+    WaitIOThreadSleep or f5
 
     /*MessagesIOResourceBundle or
       MessageSourceIOHardcoded or
