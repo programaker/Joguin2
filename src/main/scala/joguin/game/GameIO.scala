@@ -11,7 +11,7 @@ import joguin.playerinteraction.wait.WaitIOThreadSleep
 
 /** GameF composite interpreter to IO */
 object GameIO {
-  def composite(gameProgressRepository: GameProgressRepositoryF ~> IO): GameF ~> IO = {
+  def interpreter(gameProgressRepository: GameProgressRepositoryF ~> IO): GameF ~> IO = {
     val i1 = MessagesIOResourceBundle or MessageSourceIOHardcoded
     val i2 = InteractionIOConsole or i1
     val i3 = CityRepositoryIOHardcoded or i2

@@ -17,7 +17,7 @@ import joguin.playerinteraction.wait.WaitOps._
 object JoguinApplication extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
     val gameProgressRepository = GameProgressRepositoryIOFile(new File("saved-game/last-progress.prog"))
-    val gameIO = GameIO.composite(gameProgressRepository)
+    val gameIO = GameIO.interpreter(gameProgressRepository)
 
     Game.play
       .foldMap(gameIO)
