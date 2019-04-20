@@ -15,7 +15,7 @@ final class GameProgressRepositoryOps[C[_]](implicit i: InjectK[GameProgressRepo
   def restore: Free[C, Option[GameProgress]] = inject(Restore)
 }
 object GameProgressRepositoryOps {
-  def gameProgressRepositoryOps[C[_]](
+  implicit def gameProgressRepositoryOps[C[_]](
     implicit i: InjectK[GameProgressRepositoryF, C]
   ): GameProgressRepositoryOps[C] = {
     new GameProgressRepositoryOps[C]
