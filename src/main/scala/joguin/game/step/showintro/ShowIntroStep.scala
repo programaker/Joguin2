@@ -69,6 +69,7 @@ final class ShowIntroStep[F[_]](
     getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }
+
 object ShowIntroStep {
   def apply[F[_]](
     implicit
@@ -86,6 +87,7 @@ sealed trait ShowIntroOption
 case object NewGame extends ShowIntroOption
 case object RestoreGame extends ShowIntroOption
 case object QuitGame extends ShowIntroOption
+
 object ShowIntroOption {
   def parse(s: String, hasSavedProgress: Boolean): Option[ShowIntroOption] = {
     val sanitizedS = s.toLowerCase()

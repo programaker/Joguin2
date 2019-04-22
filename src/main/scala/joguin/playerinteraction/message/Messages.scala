@@ -33,6 +33,7 @@ final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
     inject[MessagesF, C](GetMessageFmt(source, key, args))
   }
 }
+
 object MessagesOps {
   implicit def messagesOps[C[_]](implicit i: InjectK[MessagesF, C]): MessagesOps[C] = new MessagesOps[C]
 }

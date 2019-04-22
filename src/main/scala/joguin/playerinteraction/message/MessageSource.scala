@@ -80,6 +80,7 @@ case object SaveGameMessageSource extends MessageSource {
   object save_game_error extends SaveGameKey
 }
 
+
 final case class LocalizedMessageSource[T <: MessageSource](source: T, locale: Locale)
 
 
@@ -93,6 +94,7 @@ final class MessageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]) {
   def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =
     inject[MessageSourceF, C](GetLocalizedMessageSource(source))
 }
+
 object MessageSourceOps {
   implicit def messageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]): MessageSourceOps[C] =
     new MessageSourceOps[C]

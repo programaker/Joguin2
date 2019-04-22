@@ -51,6 +51,7 @@ final class GameProgressRepositoryIOFile(val file: File) extends (GameProgressRe
       .map(_.map(toGameProgress))
       .map(_.getOrElse(None))
 }
+
 object GameProgressRepositoryIOFile {
   def apply(file: File): GameProgressRepositoryIOFile = new GameProgressRepositoryIOFile(file)
 }

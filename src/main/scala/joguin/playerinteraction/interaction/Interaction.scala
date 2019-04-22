@@ -41,6 +41,7 @@ final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
     }
   }
 }
+
 object InteractionOps {
   implicit def interactionOps[C[_]](implicit i: InjectK[InteractionF, C]): InteractionOps[C] =
     new InteractionOps[C]

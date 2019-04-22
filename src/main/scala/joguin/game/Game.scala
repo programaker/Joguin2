@@ -49,6 +49,7 @@ final class Game(
       pure(())
   }
 }
+
 object Game {
   def play(
     implicit

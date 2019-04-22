@@ -49,6 +49,7 @@ final case class GameProgress(
       }
       .getOrElse(this)
 }
+
 object GameProgress {
   def start(mainCharacter: MainCharacter, invasions: List[Invasion]): GameProgress =
     of(

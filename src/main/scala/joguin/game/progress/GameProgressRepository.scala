@@ -14,6 +14,7 @@ final class GameProgressRepositoryOps[C[_]](implicit i: InjectK[GameProgressRepo
   def savedProgressExists: Free[C, Boolean] = inject(SavedProgressExists)
   def restore: Free[C, Option[GameProgress]] = inject(Restore)
 }
+
 object GameProgressRepositoryOps {
   implicit def gameProgressRepositoryOps[C[_]](
     implicit i: InjectK[GameProgressRepositoryF, C]

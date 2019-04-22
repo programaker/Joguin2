@@ -16,6 +16,7 @@ final case class PersistentGameProgress(
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
 )
+
 object PersistentGameProgress {
   import PersistentInvasion._
   import PersistentMainCharacter._
@@ -40,11 +41,13 @@ object PersistentGameProgress {
     }
 }
 
+
 final case class PersistentMainCharacter(
   name: String,
   gender: Gender,
   age: Int
 )
+
 object PersistentMainCharacter {
   def fromMainCharacter(mc: MainCharacter): PersistentMainCharacter = PersistentMainCharacter(
     name = mc.name,
@@ -62,11 +65,13 @@ object PersistentMainCharacter {
     }
 }
 
+
 final case class PersistentInvasion(
   terraformDevicePower: Int,
   cityName: String,
   country: String
 )
+
 object PersistentInvasion {
   def fromInvasion(i: Invasion): PersistentInvasion = PersistentInvasion(
     terraformDevicePower = i.terraformDevice.defensePower,

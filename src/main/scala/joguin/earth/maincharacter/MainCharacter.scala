@@ -8,6 +8,7 @@ final case class MainCharacter(
   age: Age
 )
 
+
 sealed trait Gender
 object Female extends Gender
 object Male extends Gender

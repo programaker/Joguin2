@@ -13,6 +13,7 @@ final class WaitOps[C[_]](implicit i: InjectK[WaitF, C]) {
   def waitFor(duration: FiniteDuration): Free[C, Unit] =
     inject[WaitF, C](WaitFor(duration))
 }
+
 object WaitOps {
   implicit def waitOps[C[_]](implicit i: InjectK[WaitF, C]): WaitOps[C] = new WaitOps[C]
 }
