@@ -102,7 +102,7 @@ final class ExploreStep[F[_]](
   }
 }
 object ExploreStep {
-  implicit def exploreStep[F[_]](
+  def apply[F[_]](
     implicit
     s: MessageSourceOps[F],
     m: MessagesOps[F],

@@ -76,7 +76,7 @@ final class CreateCharacterStep[F[_]](
       .map(GameProgress.start(mainCharacter, _))
 }
 object CreateCharacterStep {
-  implicit def createCharacterStep[F[_]](
+  def apply[F[_]](
     implicit
     s: MessageSourceOps[F],
     m: MessagesOps[F],

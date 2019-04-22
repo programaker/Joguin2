@@ -3,7 +3,6 @@ package joguin
 import java.io.File
 
 import cats.effect.{ExitCode, IO, IOApp}
-import cats.implicits._
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.CityRepositoryOps._
 import joguin.game._
@@ -21,6 +20,7 @@ object JoguinApplication extends IOApp {
 
     Game.play
       .foldMap(gameIO)
-      .as(ExitCode.Success)
+      .handleErrorWith(_ => IO.pure(ExitCode.Error))
+      .map(_ => ExitCode.Success)
   }
 }

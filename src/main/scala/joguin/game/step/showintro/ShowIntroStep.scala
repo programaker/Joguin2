@@ -70,7 +70,7 @@ final class ShowIntroStep[F[_]](
   }
 }
 object ShowIntroStep {
-  implicit def showIntroStep[F[_]](
+  def apply[F[_]](
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],

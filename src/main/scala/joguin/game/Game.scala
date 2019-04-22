@@ -17,7 +17,6 @@ import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps}
 import joguin.playerinteraction.wait.WaitOps
 
 final class Game(
-  implicit
   showIntro: ShowIntroStep[GameF],
   createCharacter: CreateCharacterStep[GameF],
   explore: ExploreStep[GameF],
@@ -25,26 +24,26 @@ final class Game(
   saveGame: SaveGameStep[GameF],
   quit: QuitStep[GameF]
 ) {
-  def play: Free[GameF, Unit] = play(ShowIntro)
+  def play: Free[GameF, Unit] = gameLoop(ShowIntro)
 
-  private def play(step: GameStep): Free[GameF, Unit] = step match {
+  private def gameLoop(step: GameStep): Free[GameF, Unit] = step match {
     case ShowIntro =>
-      showIntro.start.flatMap(play)
+      showIntro.start.flatMap(gameLoop)
 
     case CreateCharacter =>
-      createCharacter.start.flatMap(play)
+      createCharacter.start.flatMap(gameLoop)
 
     case Explore(gameProgress) =>
-      explore.start(gameProgress).flatMap(play)
+      explore.start(gameProgress).flatMap(gameLoop)
 
     case Fight(gameProgress, selectedInvasion) =>
-      fight.start(gameProgress, selectedInvasion).flatMap(play)
+      fight.start(gameProgress, selectedInvasion).flatMap(gameLoop)
 
     case SaveGame(gameProgress) =>
-      saveGame.start(gameProgress).flatMap(play)
+      saveGame.start(gameProgress).flatMap(gameLoop)
 
     case Quit(gameProgress) =>
-      quit.start(gameProgress).flatMap(play)
+      quit.start(gameProgress).flatMap(gameLoop)
 
     case GameOver =>
       pure(())
@@ -62,14 +61,14 @@ object Game {
     waitOps: WaitOps[GameF]
   ): Free[GameF, Unit] = {
 
-    implicit val showIntro: ShowIntroStep[GameF] = ShowIntroStep.showIntroStep[GameF]
-    implicit val createCharacter: CreateCharacterStep[GameF] = CreateCharacterStep.createCharacterStep[GameF]
-    implicit val explore: ExploreStep[GameF] = ExploreStep.exploreStep[GameF]
-    implicit val fight: FightStep[GameF] = FightStep.fightStep[GameF]
-    implicit val saveGame: SaveGameStep[GameF] = SaveGameStep.saveGameStep[GameF]
-    implicit val quit: QuitStep[GameF] = QuitStep.quitStep[GameF]
-
-    new Game().play
+    new Game(
+      ShowIntroStep[GameF],
+      CreateCharacterStep[GameF],
+      ExploreStep[GameF],
+      FightStep[GameF],
+      SaveGameStep[GameF],
+      QuitStep[GameF]
+    ).play
   }
 }
 

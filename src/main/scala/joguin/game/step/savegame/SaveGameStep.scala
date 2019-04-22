@@ -33,7 +33,7 @@ final class SaveGameStep[F[_]](
     } yield GameOver
 }
 object SaveGameStep {
-  implicit def saveGameStep[F[_]](
+  def apply[F[_]](
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],
