@@ -101,6 +101,7 @@ final class ExploreStep[F[_]](
     }
   }
 }
+
 object ExploreStep {
   def apply[F[_]](
     implicit
@@ -109,6 +110,7 @@ object ExploreStep {
     i: InteractionOps[F],
     w: WaitOps[F]
   ): ExploreStep[F] = {
+
     new ExploreStep[F]
   }
 }
@@ -117,6 +119,7 @@ object ExploreStep {
 sealed trait ExploreOption
 object QuitGame extends ExploreOption
 final case class GoToInvasion(index: Index) extends ExploreOption
+
 object ExploreOption {
   def parse(s: String, invasionCount: Count): Option[ExploreOption] =
     refineV[ExploreOptionR](s.toLowerCase).toOption

@@ -72,4 +72,3 @@ object Game {
     ).play
   }
 }
-

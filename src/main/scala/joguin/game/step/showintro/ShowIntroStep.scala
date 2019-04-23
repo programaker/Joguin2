@@ -78,6 +78,7 @@ object ShowIntroStep {
     s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
   ): ShowIntroStep[F] = {
+    
     new ShowIntroStep[F]
   }
 }

@@ -75,6 +75,7 @@ final class CreateCharacterStep[F[_]](
       .flatMap(_.map(city => AlienArmy.attack(city)).sequence)
       .map(GameProgress.start(mainCharacter, _))
 }
+
 object CreateCharacterStep {
   def apply[F[_]](
     implicit
@@ -84,6 +85,7 @@ object CreateCharacterStep {
     c: CityRepositoryOps[F],
     p: PowerGeneratorOps[F]
   ): CreateCharacterStep[F] = {
+    
     new CreateCharacterStep[F]
   }
 }

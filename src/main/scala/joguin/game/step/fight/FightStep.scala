@@ -157,6 +157,7 @@ final class FightStep[F[_]](
     }
   }
 }
+
 object FightStep {
   def apply[F[_]](
     implicit
@@ -165,6 +166,7 @@ object FightStep {
     i: InteractionOps[F],
     w: WaitOps[F]
   ): FightStep[F] = {
+
     new FightStep[F]
   }
 }
@@ -173,6 +175,7 @@ object FightStep {
 sealed trait FightOption
 case object FightAliens extends FightOption
 case object Retreat extends FightOption
+
 object FightOption {
   def parse(s: String): Option[FightOption] =
     refineV[FightOptionR](s.toLowerCase).toOption

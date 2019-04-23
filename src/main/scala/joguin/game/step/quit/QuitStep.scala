@@ -34,6 +34,7 @@ final class QuitStep[F[_]](
     }
   }
 }
+
 object QuitStep {
   def apply[F[_]](
     implicit
@@ -41,6 +42,7 @@ object QuitStep {
     m: MessagesOps[F],
     s: MessageSourceOps[F],
   ): QuitStep[F] = {
+    
     new QuitStep[F]
   }
 }
@@ -49,6 +51,7 @@ object QuitStep {
 trait QuitOption
 case object Yes extends QuitOption
 case object No extends QuitOption
+
 object QuitOption {
   def parse(s: String): Option[QuitOption] =
     refineV[QuitOptionR](s.toLowerCase).toOption.map(_.value match {
