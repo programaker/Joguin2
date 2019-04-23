@@ -6,7 +6,7 @@ import cats.effect.IO
 import cats.~>
 
 /** MessageSourceF root interpreter to IO that uses a hardcoded LocalizedMessageSource */
-object IOHardcodedMessageSource extends (MessageSourceF ~> IO) {
+object MessageSourceIOInterpreter extends (MessageSourceF ~> IO) {
   override def apply[A](fa: MessageSourceF[A]): IO[A] = fa match {
     case GetLocalizedMessageSource(source) => getLocalizedMessageSource(source)
   }

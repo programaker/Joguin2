@@ -8,7 +8,7 @@ import cats.effect.IO
 import cats.~>
 
 /** MessagesF root interpreter to IO that uses ResourceBundle to read messages from app resources */
-object IOResourceBundleMessages extends (MessagesF ~> IO) {
+object MessagesIOInterpreter extends (MessagesF ~> IO) {
   override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
     case GetMessage(source, key) => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
