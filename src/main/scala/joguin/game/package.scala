@@ -9,6 +9,9 @@ import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
 import joguin.playerinteraction.wait.WaitF
 
 package object game {
+  //Starting from the "F2" alias, new algebras must be "prepended"
+  //to the new Coproduct, to match the InjectK[MyAlgebraF, C] declaration,
+  //otherwise, the implicit InjectK instances won't be provided
   type F1[A] = EitherK[MessagesF, MessageSourceF, A]
   type F2[A] = EitherK[InteractionF, F1, A]
   type F3[A] = EitherK[CityRepositoryF, F2, A]

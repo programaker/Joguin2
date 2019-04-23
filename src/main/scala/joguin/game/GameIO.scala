@@ -14,6 +14,13 @@ import joguin.playerinteraction.wait.WaitIOThreadSleep
 /** GameF composite interpreter to IO */
 object GameIO {
   def interpreter: GameF ~> IO = {
+    //The interpreter composition was written this way (with variables)
+    //to match the Coproduct composition (see the game package object) and
+    //make the order easier to see.
+    //
+    //This is important, as the interpreter composition must be
+    //in the same order of the Coproduct composition and, without the
+    //variables, it would be "upside-down" in relation to the Coproduct
     val i1 = MessagesIOResourceBundle or MessageSourceIOHardcoded
     val i2 = InteractionIOConsole or i1
     val i3 = CityRepositoryIOHardcoded or i2

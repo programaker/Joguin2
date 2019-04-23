@@ -14,7 +14,7 @@ object JoguinApplication extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
     Game.play
       .foldMap(GameIO.interpreter)
-      .handleErrorWith(_ => IO.pure(ExitCode.Error))
       .map(_ => ExitCode.Success)
+      .handleErrorWith(_ => IO.pure(ExitCode.Error))
   }
 }
