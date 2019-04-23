@@ -18,7 +18,7 @@ final class QuitStep[F[_]](
   import m._
   import s._
 
-  def start(gameProgress: GameProgress): Free[F, GameStep] = {
+  def play(gameProgress: GameProgress): Free[F, GameStep] = {
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
     val answer = for {

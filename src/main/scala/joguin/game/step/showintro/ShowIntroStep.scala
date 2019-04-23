@@ -23,7 +23,7 @@ final class ShowIntroStep[F[_]](
   import r._
   import s._
 
-  def start: Free[F, GameStep] = {
+  def play: Free[F, GameStep] = {
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
     val answer = for {

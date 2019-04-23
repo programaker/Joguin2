@@ -26,7 +26,7 @@ final class ExploreStep[F[_]](
   import s._
   import w._
 
-  def start(gameProgress: GameProgress): Free[F, GameStep] = {
+  def play(gameProgress: GameProgress): Free[F, GameStep] = {
     for {
       _ <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)

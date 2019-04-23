@@ -28,22 +28,22 @@ final class Game(
 
   private def gameLoop(step: GameStep): Free[GameF, Unit] = step match {
     case ShowIntro =>
-      showIntro.start.flatMap(gameLoop)
+      showIntro.play.flatMap(gameLoop)
 
     case CreateCharacter =>
       createCharacter.start.flatMap(gameLoop)
 
     case Explore(gameProgress) =>
-      explore.start(gameProgress).flatMap(gameLoop)
+      explore.play(gameProgress).flatMap(gameLoop)
 
     case Fight(gameProgress, selectedInvasion) =>
-      fight.start(gameProgress, selectedInvasion).flatMap(gameLoop)
+      fight.play(gameProgress, selectedInvasion).flatMap(gameLoop)
 
     case SaveGame(gameProgress) =>
-      saveGame.start(gameProgress).flatMap(gameLoop)
+      saveGame.play(gameProgress).flatMap(gameLoop)
 
     case Quit(gameProgress) =>
-      quit.start(gameProgress).flatMap(gameLoop)
+      quit.play(gameProgress).flatMap(gameLoop)
 
     case GameOver =>
       pure(())

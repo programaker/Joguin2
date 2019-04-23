@@ -18,7 +18,7 @@ final class SaveGameStep[F[_]](
   import r._
   import s._
 
-  def start(gameProgress: GameProgress): Free[F, GameStep] =
+  def play(gameProgress: GameProgress): Free[F, GameStep] =
     for {
       success <- save(gameProgress)
       src <- getLocalizedMessageSource(SaveGameMessageSource)

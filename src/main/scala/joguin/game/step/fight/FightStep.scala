@@ -26,7 +26,7 @@ final class FightStep[F[_]](
   import s._
   import w._
 
-  def start(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =
+  def play(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =
     gameProgress
       .invasionByIndex(selectedInvasion)
       .map { invasion =>
