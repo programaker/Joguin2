@@ -1,7 +1,23 @@
 name := "joguin2"
 version := "2.0"
-
 scalaVersion := "2.12.8"
+
+val catsVersion = "1.6.0"
+val catsEffectVersion = "1.2.0"
+val refinedVersion = "0.9.4"
+val commonsIoVersion = "2.6"
+val circeVersion = "0.10.0"
+val betterMonadicForVersion = "0.3.0-M4"
+val kindProjectorVersion = "0.9.9"
+val linterVersion = "0.1.17"
+val scalatestVersion = "3.0.5"
+
+resolvers += Resolver.sonatypeRepo("releases")
+
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
+addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorVersion)
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterVersion)
+
 scalacOptions ++= Seq(
   "-encoding", "utf8",
   "-feature",
@@ -25,17 +41,6 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:privates"
 )
 
-resolvers += Resolver.sonatypeRepo("releases")
-
-val catsVersion = "1.6.0"
-val catsEffectVersion = "1.2.0"
-val refinedVersion = "0.9.4"
-val commonsIoVersion = "2.6"
-val circeVersion = "0.10.0"
-val betterMonadicForVersion = "0.3.0-M4"
-val kindProjectorVersion = "0.9.9"
-val linterVersion = "0.1.17"
-
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "org.typelevel" %% "cats-free" % catsVersion,
@@ -48,7 +53,9 @@ libraryDependencies ++= Seq(
   
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion
+  "io.circe" %% "circe-parser" % circeVersion,
+
+  "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
@@ -59,7 +66,3 @@ wartremoverWarnings ++= Warts.allBut(
 )
 
 mainClass in assembly := Some("joguin.JoguinApplication")
-
-addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
-addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorVersion)
-addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterVersion)
