@@ -58,6 +58,8 @@ wartremoverWarnings ++= Warts.allBut(
   Wart.Any
 )
 
+mainClass in assembly := Some("joguin.JoguinApplication")
+
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
 addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorVersion)
 addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterVersion)
