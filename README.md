@@ -14,7 +14,7 @@ and save the world.
 
 ## Requirements
 
-* Java 9+
+* Java 8+
 * Scala 2.12.8+
 * SBT 1.2.8+
 * A command line interface
@@ -22,9 +22,9 @@ and save the world.
 ## Building
 
 From the root directory, execute:
-**[dunno yet]**
+**./build.sh**
 
 ## Running
 
 From the root directory, execute:
-**[dunno yet]**
+**./run.sh**
