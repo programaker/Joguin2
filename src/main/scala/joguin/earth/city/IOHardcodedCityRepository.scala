@@ -5,7 +5,7 @@ import cats.~>
 import eu.timepit.refined.auto._
 
 /** CityRepositoryF interpreter to IO that contains a hard-coded list of cities */
-object CityRepositoryIOHardcoded extends (CityRepositoryF ~> IO) {
+object IOHardcodedCityRepository extends (CityRepositoryF ~> IO) {
   override def apply[A](fa: CityRepositoryF[A]): IO[A] = fa match {
     case FindAllCities => allCities
   }

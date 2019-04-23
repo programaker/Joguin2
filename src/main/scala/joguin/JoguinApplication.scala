@@ -13,7 +13,7 @@ import joguin.playerinteraction.wait.WaitOps._
 object JoguinApplication extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
     Game.play
-      .foldMap(GameIO.interpreter)
+      .foldMap(IOGame.interpreter)
       .map(_ => ExitCode.Success)
       .handleErrorWith(_ => IO.pure(ExitCode.Error))
   }
