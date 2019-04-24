@@ -5,7 +5,7 @@ import java.io.File
 import cats.effect.IO
 import cats.~>
 import joguin.alien.terraformdevice.PowerGeneratorIOInterpreter
-import joguin.earth.city.CityRepositoryIOInterpreter
+import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryIOInterpreter
 import joguin.playerinteraction.interaction.InteractionIOInterpreter
 import joguin.playerinteraction.message.{MessageSourceIOInterpreter, MessagesIOInterpreter}
@@ -23,7 +23,7 @@ object GameIOInterpreter {
     //variables, it would be "upside-down" in relation to the Coproduct
     val i1 = MessagesIOInterpreter or MessageSourceIOInterpreter
     val i2 = InteractionIOInterpreter or i1
-    val i3 = CityRepositoryIOInterpreter or i2
+    val i3 = cityRepositoryInterpreter or i2
     val i4 = gameProgressRepositoryIOInterpreter or i3
     val i5 = PowerGeneratorIOInterpreter or i4
     WaitIOInterpreter or i5
@@ -31,4 +31,7 @@ object GameIOInterpreter {
 
   private val gameProgressRepositoryIOInterpreter =
     GameProgressRepositoryIOInterpreter(new File("saved-game/last-progress.prog"))
+
+  private val cityRepositoryInterpreter =
+    CityRepositoryInterpreter[IO]
 }
