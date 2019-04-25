@@ -11,6 +11,7 @@ val betterMonadicForVersion = "0.3.0-M4"
 val kindProjectorVersion = "0.9.9"
 val linterVersion = "0.1.17"
 val scalatestVersion = "3.0.5"
+val scalatestShapelessVersion = "1.2.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -55,7 +56,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
 
-  "org.scalatest" %% "scalatest" % scalatestVersion % "test"
+  "org.scalatest" %% "scalatest" % scalatestVersion % "test",
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalatestShapelessVersion % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
