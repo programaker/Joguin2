@@ -72,7 +72,7 @@ final class CreateCharacterStep[F[_]](
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
-      .flatMap(_.map(city => AlienArmy.attack(city)).sequence)
+      .flatMap(_.map(AlienArmy.attack(_)).sequence)
       .map(GameProgress.start(mainCharacter, _))
 }
 
