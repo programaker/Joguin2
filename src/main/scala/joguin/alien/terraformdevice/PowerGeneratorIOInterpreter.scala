@@ -3,7 +3,6 @@ package joguin.alien.terraformdevice
 import java.util.concurrent.ThreadLocalRandom
 
 import cats.effect.IO
-import cats.implicits._
 import cats.~>
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
@@ -18,9 +17,8 @@ object PowerGeneratorIOInterpreter extends (PowerGeneratorF ~> IO) {
   private def randomPowerBetween(min: Power, max: Power): IO[Power] =
     IO(ThreadLocalRandom.current.nextInt(min, max + 1))
       .map(refineV[PowerR](_))
-      .map(_.leftMap(validationErrorToException))
-      .flatMap(IO.fromEither)
-
-  private def validationErrorToException(errorMessage: String): Exception =
-    new Exception(errorMessage)
+      .map {
+        case Right(generatedPower) => generatedPower
+        case Left(_) => min //in case of error, falls back to min value and life goes on...
+      }
 }
