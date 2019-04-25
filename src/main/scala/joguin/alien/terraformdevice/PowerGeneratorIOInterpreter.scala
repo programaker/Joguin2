@@ -15,10 +15,12 @@ object PowerGeneratorIOInterpreter extends (PowerGeneratorF ~> IO) {
   }
 
   private def randomPowerBetween(min: Power, max: Power): IO[Power] =
-    IO(ThreadLocalRandom.current.nextInt(min, max + 1))
-      .map(refineV[PowerR](_))
+    IO(impureRandomPower(min, max))
       .map {
         case Right(generatedPower) => generatedPower
         case Left(_) => min //in case of error, falls back to min value and life goes on...
       }
+
+  private def impureRandomPower(min: Power, max: Power): Either[String, Power] =
+    refineV[PowerR](ThreadLocalRandom.current.nextInt(min, max + 1))
 }
