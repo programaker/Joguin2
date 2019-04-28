@@ -9,8 +9,11 @@ import joguin.earth.city.City
  * Some Terraform Devices are more powerful - and harder to defeat - then others,
  * to make things more interesting */
 object AlienArmy {
+  val minPower: Power = 1000
+  val maxPower: Power = 20000
+
   def attack[F[_]](city: City)(implicit p: PowerGeneratorOps[F]): Free[F, Invasion] = {
-    p.generatePower(min = 1000, max = 20000)
+    p.generatePower(minPower, maxPower)
       .map(TerraformDevice)
       .map(Invasion(_, city))
   }
