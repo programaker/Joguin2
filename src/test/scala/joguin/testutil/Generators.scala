@@ -8,7 +8,7 @@ import joguin.{Name, NameR}
 import joguin.earth.{Country, CountryR}
 import joguin.earth.city.City
 import joguin.earth.maincharacter.{Age, AgeR, Female, Gender, MainCharacter, Male, Other}
-import joguin.game.progress.{Index, IndexR}
+import joguin.game.progress.{Experience, ExperienceR, Index, IndexR}
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
@@ -16,6 +16,7 @@ object Generators {
   implicit val arbMainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
   implicit val arbInvasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
   implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex)
+  implicit val arbExperience: Arbitrary[Experience] = Arbitrary(genExperience)
 
 
   def genInvasionList: Gen[List[Invasion]] = {
@@ -82,5 +83,13 @@ object Generators {
     Gen.choose(min = 1, max = 20)
       .map(refineV[IndexR](_))
       .map(_.getOrElse(elseIndex))
+  }
+
+  def genExperience: Gen[Experience] = {
+    val elseExperience: Experience = 0
+
+    Gen.choose(min = 0, max = 20000)
+      .map(refineV[ExperienceR](_))
+      .map(_.getOrElse(elseExperience))
   }
 }

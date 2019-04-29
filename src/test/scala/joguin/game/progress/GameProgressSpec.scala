@@ -44,4 +44,28 @@ class GameProgressSpec extends PropertyBasedSpec {
       }
     }
   }
+
+  property("should mark the Invasion at a given index as defeated") {
+    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], index: Index) =>
+      val gp = GameProgress.start(mainCharacter, invasions)
+      val maxIndex = invasions.size
+
+      whenever(index.value <= maxIndex) {
+        val gp1 = gp.defeatInvasion(index)
+
+        gp1.isInvasionDefeated(index) shouldBe true
+        gp1.defeatedInvasions.value shouldBe 1
+        gp1.defeatedInvasionsTrack should contain(index)
+        gp1.allInvasionsDefeated shouldBe false
+      }
+    }
+  }
+
+  property("should increase MainCharacter's experience by a given amount") {
+    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience) =>
+      val gp = GameProgress.start(mainCharacter, invasions)
+      val gp1 = gp.increaseMainCharacterExperience(xp)
+      gp1.mainCharacterExperience.value shouldBe (gp.mainCharacterExperience.value + xp.value)
+    }
+  }
 }
