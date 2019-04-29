@@ -6,6 +6,7 @@ import joguin.testutil.Generators._
 import joguin.testutil.PropertyBasedSpec
 import org.scalatest.OptionValues._
 
+@SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 class GameProgressSpec extends PropertyBasedSpec {
   property("should start with a 0-experience MainCharacter and no defeated Invasions") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>

@@ -7,6 +7,7 @@ import joguin.testutil.Generators._
 import joguin.testutil.Interpreters._
 import joguin.testutil.PropertyBasedSpec
 
+@SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 class AlienArmySpec extends PropertyBasedSpec {
   property("attack should put a TerraformDevice in a city with a power between 1000 and 20000") {
     forAll { givenCity: City =>
