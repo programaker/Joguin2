@@ -13,6 +13,7 @@ val linterVersion = "0.1.17"
 val scalatestVersion = "3.0.5"
 val scalacheckVersion = "1.14.0"
 val scalaCheckShapelessVersion = "1.2.0"
+val catsScalacheckVersion = "0.1.1"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -59,7 +60,8 @@ libraryDependencies ++= Seq(
 
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessVersion % "test"
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessVersion % "test",
+  "io.chrisdavenport" %% "cats-scalacheck" % catsScalacheckVersion % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
