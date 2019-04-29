@@ -17,6 +17,7 @@ object Generators {
   implicit val arbInvasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
   implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex)
   implicit val arbExperience: Arbitrary[Experience] = Arbitrary(genExperience)
+  implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(min = 1, max = 100))
 
 
   def genInvasionList: Gen[List[Invasion]] = {

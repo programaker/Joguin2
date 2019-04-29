@@ -62,10 +62,12 @@ class GameProgressSpec extends PropertyBasedSpec {
   }
 
   property("should increase MainCharacter's experience by a given amount") {
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience) =>
+    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience, n: Int) =>
       val gp = GameProgress.start(mainCharacter, invasions)
-      val gp1 = gp.increaseMainCharacterExperience(xp)
-      gp1.mainCharacterExperience.value shouldBe (gp.mainCharacterExperience.value + xp.value)
+      //val gp1 = gp.increaseMainCharacterExperience(xp)
+      //gp1.mainCharacterExperience.value shouldBe (gp.mainCharacterExperience.value + xp.value)
+      val gp1 = (1 to n).foldLeft(gp){ (acc, _) => acc.increaseMainCharacterExperience(xp) }
+      gp1.mainCharacterExperience.value shouldBe (gp.mainCharacterExperience.value + (n * xp.value))
     }
   }
 }
