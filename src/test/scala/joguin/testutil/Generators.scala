@@ -2,6 +2,7 @@ package joguin.testutil
 
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
+import joguin.alien.terraformdevice.TerraformDevice
 import joguin.alien.{AlienArmy, Invasion, Power, PowerR}
 import joguin.{Name, NameR}
 import joguin.earth.{Country, CountryR}
@@ -11,13 +12,19 @@ import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
   implicit val arbCity: Arbitrary[City] = Arbitrary(genCity)
-  implicit val arbMC: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
+  implicit val arbMainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
+  implicit val arbInvasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
+
+
+  def genInvasionList: Gen[List[Invasion]] = {
+    Gen.containerOfN[List, Invasion](6, genInvasion)
+  }
 
   def genInvasion: Gen[Invasion] =
     for {
-      mc <- genMainCharacter
+      power <- genPower
       city <- genCity
-    } yield Invasion()
+    } yield Invasion(TerraformDevice(power), city)
 
   def genMainCharacter: Gen[MainCharacter] =
     for {
