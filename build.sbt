@@ -12,7 +12,7 @@ val kindProjectorVersion = "0.9.9"
 val linterVersion = "0.1.17"
 val scalatestVersion = "3.0.5"
 val scalacheckVersion = "1.14.0"
-val scalatestShapelessVersion = "1.2.0"
+val scalaCheckShapelessVersion = "1.2.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -59,7 +59,7 @@ libraryDependencies ++= Seq(
 
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalatestShapelessVersion % "test"
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessVersion % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
