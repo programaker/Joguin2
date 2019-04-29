@@ -12,16 +12,18 @@ import joguin.game.progress.{Experience, ExperienceR, Index, IndexR}
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
+  private val invasionListSize = 10
+
   implicit val arbCity: Arbitrary[City] = Arbitrary(genCity)
   implicit val arbMainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
   implicit val arbInvasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
-  implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex)
+  implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex(min = 1, max = invasionListSize * 2))
   implicit val arbExperience: Arbitrary[Experience] = Arbitrary(genExperience)
   implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(min = 1, max = 100))
 
 
   def genInvasionList: Gen[List[Invasion]] = {
-    Gen.containerOfN[List, Invasion](10, genInvasion)
+    Gen.containerOfN[List, Invasion](invasionListSize, genInvasion)
   }
 
   def genInvasion: Gen[Invasion] =
@@ -78,13 +80,19 @@ object Generators {
       .map(_.getOrElse(elsePower))
   }
 
-  def genIndex: Gen[Index] = {
+  def genIndex(min: Int, max: Int): Gen[Index] = {
     val elseIndex: Index = 1
 
-    Gen.choose(min = 1, max = 20)
+    Gen.choose(min, max)
       .map(refineV[IndexR](_))
       .map(_.getOrElse(elseIndex))
   }
+
+  def genValidIndex: Gen[Index] =
+    genIndex(min = 1, max = invasionListSize)
+
+  def genInvalidIndex: Gen[Index] =
+    genIndex(min = invasionListSize + 1, max = invasionListSize * 2)
 
   def genExperience: Gen[Experience] = {
     val elseExperience: Experience = 0

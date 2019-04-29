@@ -8,14 +8,14 @@ import joguin.testutil.Interpreters._
 import joguin.testutil.PropertyBasedSpec
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
-class AlienArmySpec extends PropertyBasedSpec {
-  property("attack should put a TerraformDevice in a city with a power between 1000 and 20000") {
-    forAll { givenCity: City =>
+class AlienArmy_Properties extends PropertyBasedSpec {
+  property("invade a City installing a TerraformDevice") {
+    forAll { city: City =>
       val invasion = AlienArmy
-        .attack[PowerGeneratorF](givenCity)
+        .invade[PowerGeneratorF](city)
         .foldMap(powerGeneratorInterpreter)
 
-      invasion.city shouldBe givenCity
+      invasion.city shouldBe city
       invasion.terraformDevice.defensePower.value should (be >= 1000 and be <= 20000)
     }
   }

@@ -12,7 +12,7 @@ object AlienArmy {
   val minPower: Power = 1000
   val maxPower: Power = 20000
 
-  def attack[F[_]](city: City)(implicit p: PowerGeneratorOps[F]): Free[F, Invasion] = {
+  def invade[F[_]](city: City)(implicit p: PowerGeneratorOps[F]): Free[F, Invasion] = {
     p.generatePower(minPower, maxPower)
       .map(TerraformDevice)
       .map(Invasion(_, city))
