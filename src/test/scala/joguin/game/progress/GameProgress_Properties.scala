@@ -11,7 +11,7 @@ import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 class GameProgress_Properties extends PropertyBasedSpec {
-  property("start a new GameProgress") {
+  property("start gives a GameProgress with MainCharacter's experience = 0 and no defeated invasions") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       val invasionCount = invasions.size
@@ -25,7 +25,7 @@ class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("get an Invasion by a given Index") {
+  property("getting an Invasion by a valid Index (between 1 and total Invasions), gives Some(Invasion)") {
     forAll(genMainCharacter, genInvasionList, genValidIndex) {
       (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
 
@@ -33,7 +33,9 @@ class GameProgress_Properties extends PropertyBasedSpec {
         val invasionAtIndex = invasions(validIndex.value - 1)
         gp.invasionByIndex(validIndex).value shouldBe invasionAtIndex
     }
+  }
 
+  property("getting an Invasion by an invalid Index (> total Invasions), gives None") {
     forAll(genMainCharacter, genInvasionList, genInvalidIndex) {
       (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
 
@@ -42,29 +44,27 @@ class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("mark an Invasion as defeated by a given Index") {
+  property("defeating an Invasion by a valid Index (between 1 and total Invasions), marks that Invasion as defeated") {
     forAll(genMainCharacter, genInvasionList, genValidIndex) {
       (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
 
         val gp = GameProgress.start(mainCharacter, invasions)
-
         val gp1 = gp.defeatInvasion(validIndex)
         gp1.isInvasionDefeated(validIndex) shouldBe true
-        gp1.allInvasionsDefeated shouldBe false
     }
+  }
 
+  property("defeating an Invasion by an invalid Index (> total Invasions), does nothing") {
     forAll(genMainCharacter, genInvasionList, genInvalidIndex) {
       (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
 
         val gp = GameProgress.start(mainCharacter, invasions)
-
-        val gp2 = gp.defeatInvasion(invalidIndex)
-        gp2.isInvasionDefeated(invalidIndex) shouldBe false
-        gp2.allInvasionsDefeated shouldBe false
+        val gp1 = gp.defeatInvasion(invalidIndex)
+        gp1.isInvasionDefeated(invalidIndex) shouldBe false
     }
   }
 
-  property("increase MainCharacter's experience by a given amount") {
+  property("increasing MainCharacter's experience by a given amount gives a GameProgress with the increased experience") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience, n: Int) =>
       val start = GameProgress.start(mainCharacter, invasions)
 
@@ -76,7 +76,7 @@ class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("inform the defeating of all Invasions") {
+  property("informs when all Invasions were defeated") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val start = GameProgress.start(mainCharacter, invasions)
       val invasionCount = invasions.size
