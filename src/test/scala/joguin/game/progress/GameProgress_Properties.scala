@@ -76,7 +76,7 @@ class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("informs when all Invasions were defeated") {
+  property("tells if all Invasions were defeated") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val start = GameProgress.start(mainCharacter, invasions)
       val invasionCount = invasions.size
