@@ -40,14 +40,18 @@ final case class GameProgress(
     defeatedInvasions === invasionCount
 
   def defeatInvasion(selectedInvasion: Index): GameProgress =
-    refineV[CountR](defeatedInvasions + 1)
-      .map { updatedCount =>
-        copy(
-          defeatedInvasions = updatedCount,
-          defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
-        )
-      }
-      .getOrElse(this)
+    if (selectedInvasion.value > invasionCount.value) {
+      this
+    } else {
+      refineV[CountR](defeatedInvasions + 1)
+        .map { updatedCount =>
+          copy(
+            defeatedInvasions = updatedCount,
+            defeatedInvasionsTrack = defeatedInvasionsTrack + selectedInvasion
+          )
+        }
+        .getOrElse(this)
+    }
 }
 
 object GameProgress {

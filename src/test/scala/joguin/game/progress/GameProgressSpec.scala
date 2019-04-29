@@ -21,12 +21,7 @@ class GameProgressSpec extends PropertyBasedSpec {
 
       gp.mainCharacterExperience.value shouldBe 0
       gp.allInvasionsDefeated shouldBe false
-
-      Inspectors.forAll(indexes) { idx =>
-        val invasionAtIndex = invasions(idx.value - 1)
-        gp.invasionByIndex(idx).value shouldBe invasionAtIndex
-        gp.isInvasionDefeated(idx) shouldBe false
-      }
+      Inspectors.forAll(indexes)(idx => gp.isInvasionDefeated(idx) shouldBe false)
     }
   }
 
@@ -35,6 +30,7 @@ class GameProgressSpec extends PropertyBasedSpec {
       val gp = GameProgress.start(mainCharacter, invasions)
       val maxIndex = invasions.size
 
+      //index is always >= 1 due to type refinement
       whenever(index.value <= maxIndex) {
         val invasionAtIndex = invasions(index.value - 1)
         gp.invasionByIndex(index).value shouldBe invasionAtIndex
@@ -47,6 +43,7 @@ class GameProgressSpec extends PropertyBasedSpec {
       val gp = GameProgress.start(mainCharacter, invasions)
       val maxIndex = invasions.size
 
+      //index < 1 is impossible due to type refinement
       whenever(index.value > maxIndex) {
         gp.invasionByIndex(index) shouldBe empty
       }
@@ -61,6 +58,20 @@ class GameProgressSpec extends PropertyBasedSpec {
       whenever(index.value <= maxIndex) {
         val gp1 = gp.defeatInvasion(index)
         gp1.isInvasionDefeated(index) shouldBe true
+        gp1.allInvasionsDefeated shouldBe false
+      }
+    }
+  }
+
+  property("should not track the defeating of an Invasion given an invalid index") {
+    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], index: Index) =>
+      val gp = GameProgress.start(mainCharacter, invasions)
+      val maxIndex = invasions.size
+
+      //index < 1 is impossible due to type refinement
+      whenever(index.value > maxIndex) {
+        val gp1 = gp.defeatInvasion(index)
+        gp1.isInvasionDefeated(index) shouldBe false
         gp1.allInvasionsDefeated shouldBe false
       }
     }
