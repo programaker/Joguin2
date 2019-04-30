@@ -48,7 +48,7 @@ final class GameProgressRepositoryIOInterpreter(val file: File) extends (GamePro
   private def readFile: IO[Option[GameProgress]] =
     IO(FileUtils.readFileToString(file, UTF_8))
       .map(decode[PersistentGameProgress])
-      .map(_.map(toGameProgress))
+      .map(_.map(_.toGameProgress))
       .map(_.getOrElse(None))
 }
 

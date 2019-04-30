@@ -10,7 +10,7 @@ import org.scalatest.Inspectors
 import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
-class GameProgress_Properties extends PropertyBasedSpec {
+final class GameProgress_Properties extends PropertyBasedSpec {
   property("start gives a GameProgress with MainCharacter's experience = 0 and no defeated invasions") {
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)

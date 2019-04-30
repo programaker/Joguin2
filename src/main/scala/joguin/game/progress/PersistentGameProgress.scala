@@ -15,7 +15,18 @@ final case class PersistentGameProgress(
   invasions: List[PersistentInvasion],
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
-)
+) {
+	def toGameProgress: Option[GameProgress] =
+    (
+      mainCharacter.toMainCharacter,
+      refineV[ExperienceR](mainCharacterExperience).toOption,
+      invasions.map(_.toInvasion).sequence[Option, Invasion],
+      refineV[CountR](defeatedInvasions).toOption,
+      defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
+    ) mapN { (mc, mcxp, invs, dinvs, track) =>
+      GameProgress.of(mc, mcxp, invs, dinvs, track)
+    }
+}
 
 object PersistentGameProgress {
   import PersistentInvasion._
@@ -28,17 +39,6 @@ object PersistentGameProgress {
     defeatedInvasions = gp.defeatedInvasions,
     defeatedInvasionsTrack = gp.defeatedInvasionsTrack.map(_.value).toList
   )
-
-  def toGameProgress(pgp: PersistentGameProgress): Option[GameProgress] =
-    (
-      toMainCharacter(pgp.mainCharacter),
-      refineV[ExperienceR](pgp.mainCharacterExperience).toOption,
-      pgp.invasions.map(toInvasion).sequence[Option, Invasion],
-      refineV[CountR](pgp.defeatedInvasions).toOption,
-      pgp.defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
-    ) mapN { (mc, mcxp, invs, dinvs, track) =>
-      GameProgress.of(mc, mcxp, invs, dinvs, track)
-    }
 }
 
 
@@ -46,7 +46,16 @@ final case class PersistentMainCharacter(
   name: String,
   gender: Gender,
   age: Int
-)
+) {
+	def toMainCharacter: Option[MainCharacter] =
+    (
+      refineV[NameR](name).toOption,
+      gender.some,
+      refineV[AgeR](age).toOption
+    ) mapN { (name, gender, age) =>
+      MainCharacter(name, gender, age)
+    }
+}
 
 object PersistentMainCharacter {
   def fromMainCharacter(mc: MainCharacter): PersistentMainCharacter = PersistentMainCharacter(
@@ -54,15 +63,6 @@ object PersistentMainCharacter {
     gender = mc.gender,
     age = mc.age
   )
-
-  def toMainCharacter(pmc: PersistentMainCharacter): Option[MainCharacter] =
-    (
-      refineV[NameR](pmc.name).toOption,
-      pmc.gender.some,
-      refineV[AgeR](pmc.age).toOption
-    ) mapN { (name, gender, age) =>
-      MainCharacter(name, gender, age)
-    }
 }
 
 
@@ -70,7 +70,16 @@ final case class PersistentInvasion(
   terraformDevicePower: Int,
   cityName: String,
   country: String
-)
+) {
+	def toInvasion: Option[Invasion] =
+    (
+      refineV[PowerR](terraformDevicePower).toOption,
+      refineV[NameR](cityName).toOption,
+      refineV[NameR](country).toOption
+    ) mapN { (power, cityName, country) =>
+      Invasion(TerraformDevice(power), City(cityName, country))
+    }
+}
 
 object PersistentInvasion {
   def fromInvasion(i: Invasion): PersistentInvasion = PersistentInvasion(
@@ -78,13 +87,4 @@ object PersistentInvasion {
     cityName = i.city.name,
     country = i.city.country
   )
-
-  def toInvasion(pi: PersistentInvasion): Option[Invasion] =
-    (
-      refineV[PowerR](pi.terraformDevicePower).toOption,
-      refineV[NameR](pi.cityName).toOption,
-      refineV[NameR](pi.country).toOption
-    ) mapN { (power, cityName, country) =>
-      Invasion(TerraformDevice(power), City(cityName, country))
-    }
 }
