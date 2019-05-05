@@ -14,8 +14,8 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
       val gp = GameProgress.start(mainCharacter, invasions)
 
       val gp1 = gp
-        .increaseMainCharacterExperience(1000)
         .defeatInvasion(1)
+        .increaseMainCharacterExperience(1000)
         .defeatInvasion(2)
         .increaseMainCharacterExperience(500)
 
