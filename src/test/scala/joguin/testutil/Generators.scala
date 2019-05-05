@@ -8,7 +8,7 @@ import joguin.{Name, NameR}
 import joguin.earth.{Country, CountryR}
 import joguin.earth.city.City
 import joguin.earth.maincharacter.{Age, AgeR, Female, Gender, MainCharacter, Male, Other}
-import joguin.game.progress.{Experience, ExperienceR, Index, IndexR}
+import joguin.game.progress.{Experience, ExperienceR, Index, IndexR, PersistentGameProgress, PersistentInvasion, PersistentMainCharacter}
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
@@ -101,4 +101,57 @@ object Generators {
       .map(refineV[ExperienceR](_))
       .map(_.getOrElse(elseExperience))
   }
+
+  def genInvalidPersistentGameProgress: Gen[PersistentGameProgress] = {
+    for {
+      mc <- genInvalidPersistentMainCharacter
+      xp <- Gen.choose(min = -2000, max = -1)
+
+      invasions <- Gen.containerOfN[List, PersistentInvasion](
+        invasionListSize,
+        genInvalidPersistentInvasion
+      )
+
+      defeated <- Gen.choose(
+        min = invasionListSize + 1,
+        max = invasionListSize + 10
+      )
+
+      track <- Gen.containerOf[List, Int](Gen.choose(
+        min = invasionListSize + 1,
+        max = invasionListSize + 10
+      ))
+    } yield PersistentGameProgress(
+      mainCharacter = mc,
+      mainCharacterExperience = xp,
+      invasions = invasions,
+      defeatedInvasions = defeated,
+      defeatedInvasionsTrack = track
+    )
+  }
+
+  def genInvalidPersistentMainCharacter: Gen[PersistentMainCharacter] =
+    for {
+      invalidName <- genInvalidName
+      gender <- genGender
+      invalidAge <- Gen.choose(min = -17, max = 17)
+    } yield PersistentMainCharacter(
+      name = invalidName,
+      gender = gender,
+      age = invalidAge
+    )
+
+  def genInvalidPersistentInvasion: Gen[PersistentInvasion] =
+    for {
+      invalidPower <- Gen.choose(min = -2000, max = -1)
+      invalidCity <- genInvalidName
+      invalidCountry <- genInvalidName
+    } yield PersistentInvasion(
+      terraformDevicePower = invalidPower,
+      cityName = invalidCity,
+      country = invalidCountry
+    )
+
+  def genInvalidName: Gen[String] =
+    Gen.oneOf("", " ", "   ")
 }

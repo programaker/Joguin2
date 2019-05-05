@@ -23,4 +23,10 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
       PersistentGameProgress.fromGameProgress(gp1).toGameProgress.value shouldBe gp1
     }
   }
+
+  property("converting an invalid PersistentGameProgress to GameProgress gives None") {
+    forAll(genInvalidPersistentGameProgress) { invalidPgp: PersistentGameProgress =>
+      invalidPgp.toGameProgress shouldBe empty
+    }
+  }
 }
