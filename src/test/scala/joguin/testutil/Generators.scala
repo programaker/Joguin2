@@ -10,6 +10,7 @@ import joguin.earth.city.City
 import joguin.earth.maincharacter.{Age, AgeR, Female, Gender, MainCharacter, Male, Other}
 import joguin.game.progress.{Experience, ExperienceR, Index, IndexR, PersistentGameProgress, PersistentInvasion, PersistentMainCharacter}
 import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.ScalacheckShapeless._
 
 object Generators {
   private val invasionListSize = 10

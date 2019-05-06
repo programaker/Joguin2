@@ -24,9 +24,22 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("converting an invalid PersistentGameProgress to GameProgress gives None") {
+  /*property("converting a PersistentGameProgress with invalid MainChar. to GameProgress gives None") {
+    forAll(genInvalidPersistentMainCharacter) {
+      (invalidMainChar: PersistentMainCharacter, xp: Experience, invasions: List) =>
+
+        val pgp = PersistentGameProgress(
+          mainCharacter = invalidMainChar,
+          mainCharacterExperience = xp.value,
+          invasions = ???,
+          defeatedInvasions = ???,
+          defeatedInvasionsTrack = ???
+        )
+    }
+  }*/
+  /*property("converting an invalid PersistentGameProgress to GameProgress gives None") {
     forAll(genInvalidPersistentGameProgress) { invalidPgp: PersistentGameProgress =>
       invalidPgp.toGameProgress shouldBe empty
     }
-  }
+  }*/
 }
