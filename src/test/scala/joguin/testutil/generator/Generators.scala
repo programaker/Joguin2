@@ -9,22 +9,22 @@ import joguin.testutil.generator.ExperienceGenerators._
 import joguin.testutil.generator.IndexGenerator._
 import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.generator.MainCharacterGenerators._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Gen
 
 object Generators {
-  implicit def city: Arbitrary[City] = Arbitrary(genCity)
-  implicit def invalidCity: Arbitrary[String] = Arbitrary(genInvalidCity)
+  def city: Gen[City] = genCity
+  def invalidCity: Gen[String] = genInvalidCity
 
-  implicit def mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
+  def mainCharacter: Gen[MainCharacter] = genMainCharacter
 
-  implicit def invasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
+  def invasionList: Gen[List[Invasion]] = genInvasionList
 
-  implicit def index: Arbitrary[Index] = Arbitrary(genValidIndex(invasionListSize))
-  implicit def invalidIndex: Arbitrary[Index] = Arbitrary(genInvalidIndex(invasionListSize))
+  def index: Gen[Index] = genValidIndex(invasionListSize)
+  def invalidIndex: Gen[Index] = genInvalidIndex(invasionListSize)
 
-  implicit def experience: Arbitrary[Experience] = Arbitrary(genExperience)
+  def experience: Gen[Experience] = genExperience
 
-  implicit def intFrom1: Arbitrary[Int] = Arbitrary(Gen.choose(min = 1, max = Int.MaxValue))
+  def intFrom1: Gen[Int] = Gen.choose(min = 1, max = 10)
 
   /*implicit val arbCity: Arbitrary[City] = Arbitrary(genCity)
   implicit val arbMainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
