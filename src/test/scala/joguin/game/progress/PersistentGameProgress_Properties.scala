@@ -10,7 +10,7 @@ import org.scalatest.OptionValues._
 final class PersistentGameProgress_Properties extends PropertyBasedSpec {
 
   property("converting a GameProgress into PersistentGameProgress and back, gives the same GameProgress as Option") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList}
+    import joguin.testutil.generator.Generators.{invasionList, mainCharacter}
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -26,23 +26,28 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  /*property("converting a PersistentGameProgress with invalid MainChar. to GameProgress gives None") {
-    forAll(genInvalidPersistentMainCharacter) {
-      (invalidMainChar: PersistentMainCharacter, xp: Experience, invasions: List) =>
+  property("converting a PersistentGameProgress with invalid MainChar. to GameProgress gives None") {
+    import joguin.testutil.generator.Generators.{defeatedInvasions, defeatedInvasionsTrack, experience,
+      invalidPersistentMainCharacter, persistentInvasionList}
 
-        val pgp = PersistentGameProgress(
-          mainCharacter = invalidMainChar,
-          mainCharacterExperience = xp.value,
-          invasions = ???,
-          defeatedInvasions = ???,
-          defeatedInvasionsTrack = ???
-        )
+    forAll { (
+      invalidMainChar: PersistentMainCharacter,
+      xp: Experience,
+      invasions: List[PersistentInvasion],
+      defeated: Int,
+      track: List[Int]
+    ) =>
+
+      val pgp = PersistentGameProgress(
+        mainCharacter = invalidMainChar,
+        mainCharacterExperience = xp.value,
+        invasions = invasions,
+        defeatedInvasions = defeated,
+        defeatedInvasionsTrack = track
+      )
+
+      pgp.toGameProgress shouldBe empty
     }
-  }*/
-  /*property("converting an invalid PersistentGameProgress to GameProgress gives None") {
-    forAll(genInvalidPersistentGameProgress) { invalidPgp: PersistentGameProgress =>
-      invalidPgp.toGameProgress shouldBe empty
-    }
-  }*/
+  }
 
 }

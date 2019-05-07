@@ -14,13 +14,26 @@ object InvasionGenerators {
   val invasionListSize: Int = 10
 
   def genInvasionList: Gen[List[Invasion]] =
-    Gen.listOfN[Invasion](invasionListSize, genInvasion)
+    Gen.listOfN(invasionListSize, genInvasion)
+
+  def genPersistentInvasionList: Gen[List[PersistentInvasion]] =
+    Gen.listOfN(invasionListSize, genPersistentInvasion)
 
   def genInvasion: Gen[Invasion] =
-    (genPower, genCity)
-      .mapN((power, city) => Invasion(TerraformDevice(power), city))
+    (genPower, genCity).mapN { (power, city) =>
+      Invasion(TerraformDevice(power), city)
+    }
+
+  def genPersistentInvasion: Gen[PersistentInvasion] =
+    genInvasion.map(PersistentInvasion.fromInvasion)
 
   def genInvalidPersistentInvasion: Gen[PersistentInvasion] =
     (genInvalidPower, genInvalidCity, genInvalidCountry)
       .mapN(PersistentInvasion.apply)
+
+  def genDefeatedInvasions: Gen[Int] =
+    Gen.choose(min = 1, max = invasionListSize)
+
+  def genDefeatedInvasionsTrack: Gen[List[Int]] =
+    genDefeatedInvasions.flatMap(n => Gen.listOfN(n, genDefeatedInvasions))
 }
