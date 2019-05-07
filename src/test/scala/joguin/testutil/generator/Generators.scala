@@ -9,27 +9,20 @@ import joguin.testutil.generator.ExperienceGenerators._
 import joguin.testutil.generator.IndexGenerator._
 import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.generator.MainCharacterGenerators._
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
-  def city: Gen[City] = genCity
-  def invalidCity: Gen[String] = genInvalidCity
+  implicit val city: Arbitrary[City] = Arbitrary(genCity)
+  implicit val invalidCity: Arbitrary[String] = Arbitrary(genInvalidCity)
 
-  def mainCharacter: Gen[MainCharacter] = genMainCharacter
+  implicit val mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
 
-  def invasionList: Gen[List[Invasion]] = genInvasionList
+  implicit val invasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
 
-  def index: Gen[Index] = genValidIndex(invasionListSize)
-  def invalidIndex: Gen[Index] = genInvalidIndex(invasionListSize)
+  implicit val index: Arbitrary[Index] = Arbitrary(genValidIndex(invasionListSize))
+  implicit val invalidIndex: Arbitrary[Index] = Arbitrary(genInvalidIndex(invasionListSize))
 
-  def experience: Gen[Experience] = genExperience
+  implicit val experience: Arbitrary[Experience] = Arbitrary(genExperience)
 
-  def intFrom1: Gen[Int] = Gen.choose(min = 1, max = 10)
-
-  /*implicit val arbCity: Arbitrary[City] = Arbitrary(genCity)
-  implicit val arbMainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
-  implicit val arbInvasionList: Arbitrary[List[Invasion]] = Arbitrary(genInvasionList)
-  implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex(min = 1, max = invasionListSize * 2))
-  implicit val arbExperience: Arbitrary[Experience] = Arbitrary(genExperience)
-  implicit val arbInt: Arbitrary[Int] = Arbitrary(Gen.choose(min = 1, max = 100))*/
+  implicit val smallInt: Arbitrary[Int] = Arbitrary(Gen.choose(min = 1, max = 10))
 }

@@ -5,13 +5,14 @@ import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
 import joguin.testutil.PropertyBasedSpec
 import org.scalatest.OptionValues._
-import joguin.testutil.generator.Generators._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class PersistentGameProgress_Properties extends PropertyBasedSpec {
 
   property("converting a GameProgress into PersistentGameProgress and back, gives the same GameProgress as Option") {
-    forAll(mainCharacter, invasionList) { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
+    import joguin.testutil.generator.Generators.{mainCharacter, invasionList}
+
+    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
 
       val gp1 = gp
