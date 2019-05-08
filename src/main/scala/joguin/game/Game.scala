@@ -5,15 +5,16 @@ import cats.free.Free._
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
 import joguin.game.progress.GameProgressRepositoryOps
+import joguin.game.step._
 import joguin.game.step.createcharacter.CreateCharacterStep
 import joguin.game.step.explore.ExploreStep
 import joguin.game.step.fight.FightStep
 import joguin.game.step.quit.QuitStep
 import joguin.game.step.savegame.SaveGameStep
 import joguin.game.step.showintro.ShowIntroStep
-import joguin.game.step._
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps}
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
 
 final class Game(

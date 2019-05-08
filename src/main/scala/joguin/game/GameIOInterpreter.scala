@@ -8,7 +8,8 @@ import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryIOInterpreter
 import joguin.playerinteraction.interaction.InteractionIOInterpreter
-import joguin.playerinteraction.message.{MessageSourceInterpreter, MessagesIOInterpreter}
+import joguin.playerinteraction.message.MessageSourceInterpreter
+import joguin.playerinteraction.message.MessagesIOInterpreter
 import joguin.playerinteraction.wait.WaitIOInterpreter
 
 /** GameF composite interpreter to IO */

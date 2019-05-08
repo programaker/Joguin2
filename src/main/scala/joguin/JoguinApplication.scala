@@ -1,6 +1,8 @@
 package joguin
 
-import cats.effect.{ExitCode, IO, IOApp}
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.CityRepositoryOps._
 import joguin.game._

@@ -2,7 +2,8 @@ package joguin.testutil.generator
 
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import joguin.{Name, NameR}
+import joguin.Name
+import joguin.NameR
 import org.scalacheck.Gen
 
 object NameGenerators {

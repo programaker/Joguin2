@@ -1,9 +1,13 @@
 package joguin.game.step.savegame
 import cats.free.Free
-import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
-import joguin.game.step.{GameOver, GameStep}
+import joguin.game.progress.GameProgress
+import joguin.game.progress.GameProgressRepositoryOps
+import joguin.game.step.GameOver
+import joguin.game.step.GameStep
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, SaveGameMessageSource}
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
+import joguin.playerinteraction.message.SaveGameMessageSource
 
 final class SaveGameStep[F[_]](
   implicit

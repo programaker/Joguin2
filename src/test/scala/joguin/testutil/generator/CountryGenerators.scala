@@ -1,8 +1,9 @@
 package joguin.testutil.generator
 
-import eu.timepit.refined.refineV
 import eu.timepit.refined.auto._
-import joguin.earth.{Country, CountryR}
+import eu.timepit.refined.refineV
+import joguin.earth.Country
+import joguin.earth.CountryR
 import org.scalacheck.Gen
 
 object CountryGenerators {

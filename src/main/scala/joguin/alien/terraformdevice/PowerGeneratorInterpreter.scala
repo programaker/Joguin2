@@ -5,7 +5,8 @@ import java.util.concurrent.ThreadLocalRandom
 import cats.~>
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
-import joguin.alien.{Power, PowerR}
+import joguin.alien.Power
+import joguin.alien.PowerR
 
 /** PowerGeneratorF root interpreter to any F that produces random numbers between min and max */
 final class PowerGeneratorInterpreter[F[_]](lift: (=>Power) => F[Power]) extends (PowerGeneratorF ~> F) {

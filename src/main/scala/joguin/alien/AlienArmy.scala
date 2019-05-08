@@ -2,7 +2,8 @@ package joguin.alien
 
 import cats.free.Free
 import eu.timepit.refined.auto._
-import joguin.alien.terraformdevice.{PowerGeneratorOps, TerraformDevice}
+import joguin.alien.terraformdevice.PowerGeneratorOps
+import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
 
 /** Attacks a city installing a Terraform Device in it, resulting an invasion.

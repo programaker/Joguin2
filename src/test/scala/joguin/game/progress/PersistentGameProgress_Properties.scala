@@ -10,7 +10,8 @@ import org.scalatest.OptionValues._
 final class PersistentGameProgress_Properties extends PropertyBasedSpec {
 
   property("converting a GameProgress into PersistentGameProgress and back, gives the same GameProgress as Option") {
-    import joguin.testutil.generator.Generators.{invasionList, mainCharacter}
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -27,8 +28,11 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("converting a PersistentGameProgress with invalid MainChar. to GameProgress gives None") {
-    import joguin.testutil.generator.Generators.{defeatedInvasions, defeatedInvasionsTrack, experience,
-      invalidPersistentMainCharacter, persistentInvasionList}
+    import joguin.testutil.generator.Generators.defeatedInvasions
+    import joguin.testutil.generator.Generators.defeatedInvasionsTrack
+    import joguin.testutil.generator.Generators.experience
+    import joguin.testutil.generator.Generators.invalidPersistentMainCharacter
+    import joguin.testutil.generator.Generators.persistentInvasionList
 
     forAll { (
       invalidMainChar: PersistentMainCharacter,

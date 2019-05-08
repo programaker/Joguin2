@@ -1,14 +1,15 @@
 package joguin.testutil.generator
 
+import cats.implicits._
 import joguin.alien.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.game.progress.PersistentInvasion
-import joguin.testutil.generator.CityGenerators.{genCity, genInvalidCity}
+import joguin.testutil.generator.CityGenerators.genCity
+import joguin.testutil.generator.CityGenerators.genInvalidCity
 import joguin.testutil.generator.CountryGenerators.genInvalidCountry
 import joguin.testutil.generator.PowerGenerators._
 import org.scalacheck.Gen
 import org.scalacheck.cats.implicits._
-import cats.implicits._
 
 object InvasionGenerators {
   val invasionListSize: Int = 10

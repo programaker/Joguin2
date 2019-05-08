@@ -3,9 +3,13 @@ package joguin.game.step.quit
 import cats.free.Free
 import eu.timepit.refined._
 import joguin.game.progress.GameProgress
-import joguin.game.step.{GameOver, GameStep, SaveGame}
+import joguin.game.step.GameOver
+import joguin.game.step.GameStep
+import joguin.game.step.SaveGame
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{MessageSourceOps, MessagesOps, QuitMessageSource}
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
+import joguin.playerinteraction.message.QuitMessageSource
 
 final class QuitStep[F[_]](
   implicit

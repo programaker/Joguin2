@@ -1,6 +1,7 @@
 package joguin.game.step
 
-import joguin.game.progress.{GameProgress, Index}
+import joguin.game.progress.GameProgress
+import joguin.game.progress.Index
 
 sealed trait GameStep
 case object ShowIntro extends GameStep

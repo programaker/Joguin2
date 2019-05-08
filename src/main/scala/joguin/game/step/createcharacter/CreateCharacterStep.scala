@@ -8,12 +8,19 @@ import eu.timepit.refined.string.ValidInt
 import joguin.alien.AlienArmy
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
-import joguin.earth.maincharacter.{Age, AgeR, Gender, MainCharacter}
+import joguin.earth.maincharacter.Age
+import joguin.earth.maincharacter.AgeR
+import joguin.earth.maincharacter.Gender
+import joguin.earth.maincharacter.MainCharacter
 import joguin.game.progress.GameProgress
-import joguin.game.step.{Explore, GameStep}
+import joguin.game.step.Explore
+import joguin.game.step.GameStep
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{CreateCharacterMessageSource, MessageSourceOps, MessagesOps}
-import joguin.{Name, NameR}
+import joguin.playerinteraction.message.CreateCharacterMessageSource
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
+import joguin.Name
+import joguin.NameR
 
 final class CreateCharacterStep[F[_]](
   implicit

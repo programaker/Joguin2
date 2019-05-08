@@ -5,10 +5,19 @@ import cats.free.Free._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.alien.Invasion
-import joguin.game.progress.{Count, GameProgress, Index, IndexR}
-import joguin.game.step.{Fight, GameOver, GameStep, Quit}
+import joguin.game.progress.Count
+import joguin.game.progress.GameProgress
+import joguin.game.progress.Index
+import joguin.game.progress.IndexR
+import joguin.game.step.Fight
+import joguin.game.step.GameOver
+import joguin.game.step.GameStep
+import joguin.game.step.Quit
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{ExploreMessageSource, LocalizedMessageSource, MessageSourceOps, MessagesOps}
+import joguin.playerinteraction.message.ExploreMessageSource
+import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._

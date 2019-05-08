@@ -2,7 +2,8 @@ package joguin.playerinteraction.message
 
 import java.text.MessageFormat.format
 import java.util.ResourceBundle.getBundle
-import java.util.{Locale, ResourceBundle}
+import java.util.Locale
+import java.util.ResourceBundle
 
 import cats.effect.IO
 import cats.~>

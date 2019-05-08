@@ -1,7 +1,8 @@
 package joguin.game
 
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.{NonNegative, Positive}
+import eu.timepit.refined.numeric.NonNegative
+import eu.timepit.refined.numeric.Positive
 
 package object progress {
   type ExperienceR = NonNegative

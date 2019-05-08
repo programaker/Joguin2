@@ -1,8 +1,9 @@
 package joguin.testutil.generator
 
-import eu.timepit.refined.refineV
 import eu.timepit.refined.auto._
-import joguin.earth.maincharacter.{Age, AgeR}
+import eu.timepit.refined.refineV
+import joguin.earth.maincharacter.Age
+import joguin.earth.maincharacter.AgeR
 import org.scalacheck.Gen
 
 object AgeGenerators {

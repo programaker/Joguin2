@@ -1,7 +1,9 @@
 package joguin.testutil.generator
 
 import eu.timepit.refined.refineV
-import joguin.alien.{AlienArmy, Power, PowerR}
+import joguin.alien.AlienArmy
+import joguin.alien.Power
+import joguin.alien.PowerR
 import org.scalacheck.Gen
 
 object PowerGenerators {

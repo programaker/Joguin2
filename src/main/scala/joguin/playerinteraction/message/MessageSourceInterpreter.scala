@@ -2,7 +2,8 @@ package joguin.playerinteraction.message
 
 import java.util.Locale
 
-import cats.{Monad, ~>}
+import cats.Monad
+import cats.~>
 
 /** MessageSourceF root interpreter to any Monad that uses a hardcoded LocalizedMessageSource.
  * Having no restriction about the target Monad, it can be used for both production and test */

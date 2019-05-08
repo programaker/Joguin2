@@ -12,7 +12,8 @@ import org.scalatest.OptionValues._
 final class GameProgress_Properties extends PropertyBasedSpec {
 
   property("start gives a GameProgress with MainCharacter's experience = 0 and no defeated invasions") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList}
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -28,7 +29,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("getting an Invasion by a valid Index (between 1 and total Invasions), gives Some(Invasion)") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList, index}
+    import joguin.testutil.generator.Generators.index
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -38,7 +41,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("getting an Invasion by an invalid Index (> total Invasions), gives None") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList, invalidIndex}
+    import joguin.testutil.generator.Generators.invalidIndex
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -47,7 +52,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("defeating an Invasion by a valid Index (between 1 and total Invasions), marks that Invasion as defeated") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList, index}
+    import joguin.testutil.generator.Generators.index
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -57,7 +64,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("defeating an Invasion by an invalid Index (> total Invasions), does nothing") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList, invalidIndex}
+    import joguin.testutil.generator.Generators.invalidIndex
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
@@ -67,7 +76,10 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("increasing MainCharacter's experience by a given amount gives a GameProgress with the increased experience") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList, experience, smallInt}
+    import joguin.testutil.generator.Generators.experience
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generator.Generators.smallInt
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience, n: Int) =>
       val start = GameProgress.start(mainCharacter, invasions)
@@ -81,7 +93,8 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("tells if all Invasions were defeated") {
-    import joguin.testutil.generator.Generators.{mainCharacter, invasionList}
+    import joguin.testutil.generator.Generators.invasionList
+    import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
       val start = GameProgress.start(mainCharacter, invasions)

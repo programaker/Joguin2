@@ -1,6 +1,7 @@
 package joguin.earth.city
 
-import cats.{Monad, ~>}
+import cats.Monad
+import cats.~>
 import eu.timepit.refined.auto._
 
 /** CityRepositoryF interpreter to any Monad that returns a hardcoded list of cities.

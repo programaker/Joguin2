@@ -2,7 +2,8 @@ import cats.Eq
 import cats.implicits._
 import eu.timepit.refined.W
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.boolean.{And, Not}
+import eu.timepit.refined.boolean.And
+import eu.timepit.refined.boolean.Not
 import eu.timepit.refined.collection.MinSize
 import eu.timepit.refined.string.MatchesRegex
 

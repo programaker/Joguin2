@@ -5,10 +5,17 @@ import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import joguin.game.progress.{GameProgress, GameProgressRepositoryOps}
-import joguin.game.step.{CreateCharacter, Explore, GameOver, GameStep}
+import joguin.game.progress.GameProgress
+import joguin.game.progress.GameProgressRepositoryOps
+import joguin.game.step.CreateCharacter
+import joguin.game.step.Explore
+import joguin.game.step.GameOver
+import joguin.game.step.GameStep
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.{LocalizedMessageSource, MessageSourceOps, MessagesOps, ShowIntroMessageSource}
+import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSourceOps
+import joguin.playerinteraction.message.MessagesOps
+import joguin.playerinteraction.message.ShowIntroMessageSource
 
 final class ShowIntroStep[F[_]](
   implicit

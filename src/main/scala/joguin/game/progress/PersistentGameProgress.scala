@@ -5,9 +5,12 @@ import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.NameR
 import joguin.alien.terraformdevice.TerraformDevice
-import joguin.alien.{Invasion, PowerR}
+import joguin.alien.Invasion
+import joguin.alien.PowerR
 import joguin.earth.city.City
-import joguin.earth.maincharacter.{AgeR, Gender, MainCharacter}
+import joguin.earth.maincharacter.AgeR
+import joguin.earth.maincharacter.Gender
+import joguin.earth.maincharacter.MainCharacter
 
 final case class PersistentGameProgress(
   mainCharacter: PersistentMainCharacter,

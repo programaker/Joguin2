@@ -2,7 +2,8 @@ package joguin.testutil.generator
 
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
-import joguin.game.progress.{Index, IndexR}
+import joguin.game.progress.Index
+import joguin.game.progress.IndexR
 import org.scalacheck.Gen
 
 object IndexGenerator {

@@ -1,8 +1,9 @@
 package joguin.testutil.generator
 
-import eu.timepit.refined.refineV
 import eu.timepit.refined.auto._
-import joguin.game.progress.{Experience, ExperienceR}
+import eu.timepit.refined.refineV
+import joguin.game.progress.Experience
+import joguin.game.progress.ExperienceR
 import org.scalacheck.Gen
 
 object ExperienceGenerators {

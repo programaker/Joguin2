@@ -9,7 +9,8 @@ import joguin.testutil.generator.ExperienceGenerators._
 import joguin.testutil.generator.IndexGenerator._
 import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.generator.MainCharacterGenerators._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 
 object Generators {
   implicit val city: Arbitrary[City] =

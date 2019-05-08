@@ -5,7 +5,8 @@ import joguin.alien.terraformdevice.PowerGeneratorF
 import joguin.earth.city.CityRepositoryF
 import joguin.game.progress.GameProgressRepositoryF
 import joguin.playerinteraction.interaction.InteractionF
-import joguin.playerinteraction.message.{MessageSourceF, MessagesF}
+import joguin.playerinteraction.message.MessageSourceF
+import joguin.playerinteraction.message.MessagesF
 import joguin.playerinteraction.wait.WaitF
 
 package object game {
