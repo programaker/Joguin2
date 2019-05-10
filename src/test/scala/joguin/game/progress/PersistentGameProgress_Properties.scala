@@ -64,6 +64,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("converting a PersistentGameProgress with invalid experience to GameProgress gives None") {
+    import Tag.implicits._
     import joguin.testutil.generator.Generators.defeatedInvasionsTrack
     import joguin.testutil.generator.Generators.persistentInvasionList
     implicitly[Arbitrary[PersistentMainCharacter]]
@@ -78,16 +79,15 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
       track: List[Int]
     ) =>
 
-      println((xp, defeated))
       val mainCharIsValid = !mainChar.name.trim.isEmpty && mainChar.age >= 18
-      val experienceIsInvalid = xp.value < 0
+      val experienceIsInvalid = xp < 0
 
       whenever(mainCharIsValid && experienceIsInvalid) {
         val pgp = PersistentGameProgress(
           mainCharacter = mainChar,
-          mainCharacterExperience = xp.value,
+          mainCharacterExperience = xp,
           invasions = invasions,
-          defeatedInvasions = defeated.value,
+          defeatedInvasions = defeated,
           defeatedInvasionsTrack = track
         )
 
