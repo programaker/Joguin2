@@ -5,11 +5,9 @@ import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.Tag
-import joguin.testutil.generator.Tag.T1
-import joguin.testutil.generator.Tag.T2
 import org.scalacheck.Arbitrary
-import org.scalatest.OptionValues._
 import org.scalacheck.ScalacheckShapeless._
+import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements", "org.wartremover.warts.Null"))
 final class PersistentGameProgress_Properties extends PropertyBasedSpec {
@@ -33,18 +31,25 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("converting a PersistentGameProgress with invalid MainCharacter to GameProgress gives None") {
-    import joguin.testutil.generator.Generators.defeatedInvasions
+    import Tag._
+    import joguin.testutil.generator.ExperienceGenerators._
     import joguin.testutil.generator.Generators.defeatedInvasionsTrack
-    import joguin.testutil.generator.Generators.experience
     import joguin.testutil.generator.Generators.persistentInvasionList
+    import joguin.testutil.generator.InvasionGenerators._
+
     implicitly[Arbitrary[PersistentMainCharacter]]
+
+    //Tag was necessary here to disambiguate Experience and Count implicits,
+    //because they are synonyms - both are Refined[Int, NonNegative]
+    implicit val x: Arbitrary[Tag[T1, Experience]] = arbTag(genExperience)
+    implicit val d: Arbitrary[Tag[T2, Count]] = arbTag(genDefeatedInvasions)
 
     forAll { (
       mainChar: PersistentMainCharacter,
-      xp: Experience,
+      xp: Tag[T1, Experience],
       invasions: List[PersistentInvasion],
-      defeated: Int,
-      track: List[Int]
+      defeated: Tag[T2, Count],
+      track: List[Index]
     ) =>
 
       val mainCharIsInvalid = mainChar.name.trim.isEmpty || mainChar.age < 18
@@ -54,8 +59,8 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
           mainCharacter = mainChar,
           mainCharacterExperience = xp.value,
           invasions = invasions,
-          defeatedInvasions = defeated,
-          defeatedInvasionsTrack = track
+          defeatedInvasions = defeated.value,
+          defeatedInvasionsTrack = track.map(_.value)
         )
 
         pgp.toGameProgress shouldBe empty
@@ -64,35 +69,29 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("converting a PersistentGameProgress with invalid experience to GameProgress gives None") {
-    import Tag.implicits._
     import joguin.testutil.generator.Generators.defeatedInvasionsTrack
     import joguin.testutil.generator.Generators.persistentInvasionList
-    implicitly[Arbitrary[PersistentMainCharacter]]
-    implicitly[Arbitrary[Tag[T1, Int]]]
-    implicitly[Arbitrary[Tag[T2, Int]]]
+    import joguin.testutil.generator.Generators.persistentMainCharacter
+    import joguin.testutil.generator.Generators.defeatedInvasions
+    import joguin.testutil.generator.Generators.invalidExperience
 
     forAll { (
       mainChar: PersistentMainCharacter,
-      xp: Tag[T1, Int],
+      invalidXp: Int,
       invasions: List[PersistentInvasion],
-      defeated: Tag[T2, Int],
-      track: List[Int]
+      defeated: Count,
+      track: List[Index]
     ) =>
 
-      val mainCharIsValid = !mainChar.name.trim.isEmpty && mainChar.age >= 18
-      val experienceIsInvalid = xp < 0
+      val pgp = PersistentGameProgress(
+        mainCharacter = mainChar,
+        mainCharacterExperience = invalidXp,
+        invasions = invasions,
+        defeatedInvasions = defeated.value,
+        defeatedInvasionsTrack = track.map(_.value)
+      )
 
-      whenever(mainCharIsValid && experienceIsInvalid) {
-        val pgp = PersistentGameProgress(
-          mainCharacter = mainChar,
-          mainCharacterExperience = xp,
-          invasions = invasions,
-          defeatedInvasions = defeated,
-          defeatedInvasionsTrack = track
-        )
-
-        pgp.toGameProgress shouldBe empty
-      }
+      pgp.toGameProgress shouldBe empty
     }
   }
 

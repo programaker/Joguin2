@@ -22,16 +22,19 @@ object Generators {
   implicit val mainCharacter: Arbitrary[MainCharacter] =
     Arbitrary(genMainCharacter)
 
+  implicit val persistentMainCharacter: Arbitrary[PersistentMainCharacter] =
+    Arbitrary(genPersistentMainCharacter)
+
   implicit val invasionList: Arbitrary[List[Invasion]] =
     Arbitrary(genInvasionList)
 
   implicit val persistentInvasionList: Arbitrary[List[PersistentInvasion]] =
     Arbitrary(genPersistentInvasionList)
 
-  implicit val defeatedInvasions: Arbitrary[Int] =
+  implicit val defeatedInvasions: Arbitrary[Count] =
     Arbitrary(genDefeatedInvasions)
 
-  implicit val defeatedInvasionsTrack: Arbitrary[List[Int]] =
+  implicit val defeatedInvasionsTrack: Arbitrary[List[Index]] =
     Arbitrary(genDefeatedInvasionsTrack)
 
   implicit val index: Arbitrary[Index] =
@@ -42,6 +45,9 @@ object Generators {
 
   implicit val experience: Arbitrary[Experience] =
     Arbitrary(genExperience)
+
+  implicit val invalidExperience: Arbitrary[Int] =
+    Arbitrary(genInvalidExperience)
 
   implicit val smallInt: Arbitrary[Int] =
     Arbitrary(Gen.choose(min = 1, max = 10))
