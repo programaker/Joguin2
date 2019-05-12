@@ -1,5 +1,6 @@
 package joguin.game.progress
 
+import cats.implicits._
 import eu.timepit.refined.auto._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
@@ -12,7 +13,7 @@ import org.scalatest.OptionValues._
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements", "org.wartremover.warts.Null"))
 final class PersistentGameProgress_Properties extends PropertyBasedSpec {
 
-  property("converting a GameProgress into PersistentGameProgress and back, gives the same GameProgress as Option") {
+  property("converting a GameProgress into PersistentGameProgress and back, gives the same GameProgress as Some") {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
@@ -30,68 +31,58 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("converting a PersistentGameProgress with invalid MainCharacter to GameProgress gives None") {
+  property("converting an invalid PersistentGameProgress to GameProgress gives None") {
     import Tag._
-    import joguin.testutil.generator.ExperienceGenerators._
-    import joguin.testutil.generator.Generators.defeatedInvasionsTrack
-    import joguin.testutil.generator.Generators.persistentInvasionList
-    import joguin.testutil.generator.InvasionGenerators._
+    import Tag.implicits._
 
     implicitly[Arbitrary[PersistentMainCharacter]]
+    implicitly[Arbitrary[List[PersistentInvasion]]]
+    implicitly[Arbitrary[List[Int]]]
 
-    //Tag was necessary here to disambiguate Experience and Count implicits,
-    //because they are synonyms - both are Refined[Int, NonNegative]
-    implicit val x: Arbitrary[Tag[T1, Experience]] = arbTag(genExperience)
-    implicit val d: Arbitrary[Tag[T2, Count]] = arbTag(genDefeatedInvasions)
+    //Tag[T, A] was necessary here to disambiguate
+    //xp and defeatedCount implicits, because both are Ints
+    implicitly[Arbitrary[Tag[T1, Int]]]
+    implicitly[Arbitrary[Tag[T2, Int]]]
 
     forAll { (
       mainChar: PersistentMainCharacter,
-      xp: Tag[T1, Experience],
+      xp: Tag[T1, Int],
       invasions: List[PersistentInvasion],
-      defeated: Tag[T2, Count],
-      track: List[Index]
+      defeatedCount: Tag[T2, Int],
+      defeatedInvasionsTrack: List[Int]
     ) =>
 
-      val mainCharIsInvalid = mainChar.name.trim.isEmpty || mainChar.age < 18
+      val invalidStr: String => Boolean = _.trim.isBlank
 
-      whenever(mainCharIsInvalid) {
+      val mainCharIsInvalid = invalidStr(mainChar.name) || mainChar.age < 18
+      val xpIsInvalid = xp < 0
+
+      val invasionsAreInvalid = invasions.exists { pi =>
+        invalidStr(pi.cityName) || invalidStr(pi.country) || pi.terraformDevicePower <= 0
+      }
+
+      val invasionCount = invasions.size
+      val defeatedCountIsInvalid = defeatedCount > invasionCount
+      val defeatedInvasionsTrackIsInvalid = defeatedInvasionsTrack.lengthCompare(defeatedCount) =!= 0
+
+      val pgpIsInvalid =
+        mainCharIsInvalid ||
+          xpIsInvalid ||
+          invasionsAreInvalid ||
+          defeatedCountIsInvalid ||
+          defeatedInvasionsTrackIsInvalid
+
+      whenever(pgpIsInvalid) {
         val pgp = PersistentGameProgress(
           mainCharacter = mainChar,
-          mainCharacterExperience = xp.value,
+          mainCharacterExperience = xp,
           invasions = invasions,
-          defeatedInvasions = defeated.value,
-          defeatedInvasionsTrack = track.map(_.value)
+          defeatedInvasions = defeatedCount,
+          defeatedInvasionsTrack = defeatedInvasionsTrack
         )
 
         pgp.toGameProgress shouldBe empty
       }
-    }
-  }
-
-  property("converting a PersistentGameProgress with invalid experience to GameProgress gives None") {
-    import joguin.testutil.generator.Generators.defeatedInvasionsTrack
-    import joguin.testutil.generator.Generators.persistentInvasionList
-    import joguin.testutil.generator.Generators.persistentMainCharacter
-    import joguin.testutil.generator.Generators.defeatedInvasions
-    import joguin.testutil.generator.Generators.invalidExperience
-
-    forAll { (
-      mainChar: PersistentMainCharacter,
-      invalidXp: Int,
-      invasions: List[PersistentInvasion],
-      defeated: Count,
-      track: List[Index]
-    ) =>
-
-      val pgp = PersistentGameProgress(
-        mainCharacter = mainChar,
-        mainCharacterExperience = invalidXp,
-        invasions = invasions,
-        defeatedInvasions = defeated.value,
-        defeatedInvasionsTrack = track.map(_.value)
-      )
-
-      pgp.toGameProgress shouldBe empty
     }
   }
 
