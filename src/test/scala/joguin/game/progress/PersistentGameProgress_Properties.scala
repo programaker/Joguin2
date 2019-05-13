@@ -52,7 +52,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
       defeatedInvasionsTrack: List[Int]
     ) =>
 
-      val invalidStr: String => Boolean = _.trim.isBlank
+      val invalidStr: String => Boolean = _.trim.isEmpty
 
       val mainCharIsInvalid = invalidStr(mainChar.name) || mainChar.age < 18
       val xpIsInvalid = xp < 0
