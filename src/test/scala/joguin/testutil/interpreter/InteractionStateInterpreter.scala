@@ -4,20 +4,21 @@ import cats.~>
 import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.interaction.ReadAnswer
 import joguin.playerinteraction.interaction.WriteMessage
-import joguin.testutil.interpreter.MessageAnswer._
+import joguin.testutil.interpreter.WriteMessageTrack._
 
 /** InteractionF interpreter for State. For test purposes only */
-final class InteractionStateInterpreter extends (InteractionF ~> TrackState) {
-  override def apply[A](fa: InteractionF[A]): TrackState[A] = fa match {
+final class InteractionStateInterpreter() extends (InteractionF ~> IndexedTrackState) {
+
+  override def apply[A](fa: InteractionF[A]): IndexedTrackState[A] = fa match {
     case WriteMessage(message) => writeMessage(message)
     case ReadAnswer => readAnswer
   }
 
-  private def writeMessage(message: String): TrackState[Unit] = {
+  private def writeMessage(message: String): IndexedTrackState[Unit] = {
     ???
   }
 
-  private def readAnswer: TrackState[String] = {
+  private def readAnswer: IndexedTrackState[String] = {
     ???
   }
 }
