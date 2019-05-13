@@ -1,4 +1,4 @@
-package joguin.testutil
+package joguin.testutil.interpreter
 
 import cats.Id
 import joguin.alien.Power

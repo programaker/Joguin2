@@ -3,7 +3,7 @@ package joguin.alien
 import joguin.alien.terraformdevice.PowerGeneratorF
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.City
-import joguin.testutil.Interpreters._
+import joguin.testutil.interpreter.Interpreters._
 import joguin.testutil.PropertyBasedSpec
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
