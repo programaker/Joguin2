@@ -8,31 +8,31 @@ import java.util.ResourceBundle.getBundle
 import cats.Monad
 import cats.implicits._
 import cats.~>
-import joguin.LazyPure
+import joguin.LazyEff
 
 /** MessagesF root interpreter to any F that uses ResourceBundle to read messages from app resources */
-final class MessagesInterpreter[F[_] : Monad : LazyPure] extends (MessagesF ~> F) {
+final class MessagesInterpreter[F[_] : Monad : LazyEff] extends (MessagesF ~> F) {
   override def apply[A](fa: MessagesF[A]): F[A] = fa match {
     case GetMessage(source, key) => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
   }
 
   private def message[T <: MessageSource](
-    source: LocalizedMessageSource[T], 
-    key: T#Key, 
+    source: LocalizedMessageSource[T],
+    key: T#Key,
     args: List[String]
   ): F[String] = {
 
     Monad[F].pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
-      .flatMap(rb => LazyPure[F].lazyPure(rb.getString(keyName(key))))
+      .flatMap(rb => LazyEff[F].wrap(rb.getString(keyName(key))))
       .map(format(_, args: _*))
-  }    
+  }
 
   private def resourceBundle(params: (String, Locale)): F[ResourceBundle] =
     Monad[F].pure(params).flatMap { case (name, locale) =>
-      LazyPure[F].lazyPure(getBundle(name, locale))
+      LazyEff[F].wrap(getBundle(name, locale))
     }
 
   private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
@@ -53,5 +53,5 @@ final class MessagesInterpreter[F[_] : Monad : LazyPure] extends (MessagesF ~> F
 }
 
 object MessagesInterpreter {
-  def apply[F[_] : Monad : LazyPure]: MessagesInterpreter[F] = new MessagesInterpreter[F]
+  def apply[F[_] : Monad : LazyEff]: MessagesInterpreter[F] = new MessagesInterpreter[F]
 }

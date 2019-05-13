@@ -5,18 +5,18 @@ import java.util.concurrent.ThreadLocalRandom
 import cats.~>
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
-import joguin.LazyPure
+import joguin.LazyEff
 import joguin.alien.Power
 import joguin.alien.PowerR
 
 /** PowerGeneratorF root interpreter to any F that produces random numbers between min and max */
-final class PowerGeneratorInterpreter[F[_] : LazyPure] extends (PowerGeneratorF ~> F) {
+final class PowerGeneratorInterpreter[F[_] : LazyEff] extends (PowerGeneratorF ~> F) {
   override def apply[A](fa: PowerGeneratorF[A]): F[A] = fa match {
     case GeneratePower(min, max) => randomPowerBetween(min, max)
   }
 
   private def randomPowerBetween(min: Power, max: Power): F[Power] =
-    LazyPure[F].lazyPure(impureRandomPower(min, max))
+    LazyEff[F].wrap(impureRandomPower(min, max))
 
   private def impureRandomPower(min: Power, max: Power): Power =
     refineV[PowerR](ThreadLocalRandom.current.nextInt(min, max + 1)) match {
@@ -26,5 +26,5 @@ final class PowerGeneratorInterpreter[F[_] : LazyPure] extends (PowerGeneratorF 
 }
 
 object PowerGeneratorInterpreter {
-  def apply[F[_] : LazyPure]: PowerGeneratorInterpreter[F] = new PowerGeneratorInterpreter[F]
+  def apply[F[_] : LazyEff]: PowerGeneratorInterpreter[F] = new PowerGeneratorInterpreter[F]
 }
