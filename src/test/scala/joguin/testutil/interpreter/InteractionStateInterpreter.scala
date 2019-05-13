@@ -7,7 +7,10 @@ import joguin.playerinteraction.interaction.WriteMessage
 import joguin.testutil.interpreter.WriteMessageTrack._
 
 /** InteractionF interpreter for State. For test purposes only */
-final class InteractionStateInterpreter(answers: IndexedTrack) extends (InteractionF ~> IndexedTrackState) {
+final class InteractionStateInterpreter[T](
+  answers: IndexedTrack,
+  state: IndexedTrackState[T]
+) extends (InteractionF ~> IndexedTrackState) {
 
   override def apply[A](fa: InteractionF[A]): IndexedTrackState[A] = fa match {
     case WriteMessage(message) => writeMessage(message)
