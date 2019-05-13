@@ -2,7 +2,7 @@ package joguin.testutil.interpreter
 
 import cats.data.State
 
-final case class MessageAnswer(message: String, answer: String)
+final case class MessageAnswer(index: Int, message: String)
 
 object MessageAnswer {
   type Track = Map[Int, MessageAnswer]
