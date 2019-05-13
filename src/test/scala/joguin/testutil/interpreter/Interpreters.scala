@@ -15,5 +15,6 @@ object Interpreters {
   val powerGeneratorInterpreter: PowerGeneratorInterpreter[Id] =
     PowerGeneratorInterpreter[Id]
 
-  val waitInterpreter: WaitIdInterpreter.type = WaitIdInterpreter
+  val waitInterpreter: WaitInterpreter[Id] =
+    WaitInterpreter[Id]
 }
