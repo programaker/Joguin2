@@ -13,6 +13,8 @@ package object joguin {
   type NameR = NonBlankString
   type Name = String Refined NameR
 
+  type LazyUnit[A, F[_]] = (=>A) => F[A]
+
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value
 }
