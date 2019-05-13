@@ -1,16 +1,18 @@
 package joguin.playerinteraction.message
 
 import java.text.MessageFormat.format
-import java.util.ResourceBundle.getBundle
 import java.util.Locale
 import java.util.ResourceBundle
+import java.util.ResourceBundle.getBundle
 
-import cats.effect.IO
+import cats.Monad
+import cats.implicits._
 import cats.~>
+import joguin.LazyPure
 
-/** MessagesF root interpreter to IO that uses ResourceBundle to read messages from app resources */
-object MessagesIOInterpreter extends (MessagesF ~> IO) {
-  override def apply[A](fa: MessagesF[A]): IO[A] = fa match {
+/** MessagesF root interpreter to any F that uses ResourceBundle to read messages from app resources */
+final class MessagesInterpreter[F[_] : Monad : LazyPure] extends (MessagesF ~> F) {
+  override def apply[A](fa: MessagesF[A]): F[A] = fa match {
     case GetMessage(source, key) => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
   }
@@ -19,17 +21,19 @@ object MessagesIOInterpreter extends (MessagesF ~> IO) {
     source: LocalizedMessageSource[T], 
     key: T#Key, 
     args: List[String]
-  ): IO[String] = {
-   
-    IO.pure(source)
+  ): F[String] = {
+
+    Monad[F].pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
-      .flatMap(rb => IO(rb.getString(keyName(key))))
+      .flatMap(rb => LazyPure[F].lazyPure(rb.getString(keyName(key))))
       .map(format(_, args: _*))
   }    
 
-  private def resourceBundle(params: (String, Locale)): IO[ResourceBundle] =
-    IO.pure(params).flatMap { case (name, locale) => IO(getBundle(name, locale)) }
+  private def resourceBundle(params: (String, Locale)): F[ResourceBundle] =
+    Monad[F].pure(params).flatMap { case (name, locale) =>
+      LazyPure[F].lazyPure(getBundle(name, locale))
+    }
 
   private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
     (sourceName(lms.source), lms.locale)
@@ -46,4 +50,8 @@ object MessagesIOInterpreter extends (MessagesF ~> IO) {
   private def keyName[T <: MessageSource](key: T#Key): String =
     //too lazy to map all keys to String
     s"${key.getClass.getSimpleName.replaceAll("\\$", "")}"
+}
+
+object MessagesInterpreter {
+  def apply[F[_] : Monad : LazyPure]: MessagesInterpreter[F] = new MessagesInterpreter[F]
 }
