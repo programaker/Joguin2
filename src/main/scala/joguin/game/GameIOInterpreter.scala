@@ -40,5 +40,5 @@ object GameIOInterpreter {
     GameProgressRepositoryIOInterpreter(new File("saved-game/last-progress.prog"))
 
   private val powerGeneratorIOInterpreter =
-    PowerGeneratorInterpreter(IO.apply)
+    PowerGeneratorInterpreter[IO]
 }
