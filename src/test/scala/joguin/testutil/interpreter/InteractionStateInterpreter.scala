@@ -23,6 +23,6 @@ final class InteractionStateInterpreter[T](answers: Map[Int, String]) extends (I
 
   private def readAnswer: IndexedTrackState[String] =
     State { track =>
-      (track, answers.getOrElse(track.lastIndex, ""))
+      (track, answers.getOrElse(track.lastIndex, "<<fail>>"))
     }
 }
