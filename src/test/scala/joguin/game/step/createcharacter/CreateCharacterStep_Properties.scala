@@ -10,6 +10,7 @@ import joguin.testutil.interpreter.CreateCharacterStepInterpreter.CreateCharacte
 import joguin.testutil.interpreter.WriteMessageTrack
 import org.scalatest.OptionValues._
 
+@SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   private val askToCreateCharacter = "\nCreate your main character\n"
 
@@ -37,10 +38,10 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
       age: Age
     ) =>
 
-      val expectedAnswers: Map[Int, String] = Map(
-        0 -> name,
-        1 -> gender.code,
-        3 -> age.toString
+      val expectedAnswers: Map[String, String] = Map(
+        askName -> name,
+        askGender -> gender.code,
+        askAge -> age.toString
       )
 
       val track = CreateCharacterStep[CreateCharacterStepF].start
