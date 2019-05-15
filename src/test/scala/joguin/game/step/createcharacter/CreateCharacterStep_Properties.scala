@@ -1,13 +1,16 @@
 package joguin.game.step.createcharacter
 
-import joguin.testutil.PropertyBasedSpec
 import eu.timepit.refined.auto._
 import joguin.Name
 import joguin.earth.maincharacter.Age
 import joguin.earth.maincharacter.Gender
+import joguin.earth.maincharacter.MainCharacter
+import joguin.game.step.Explore
+import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.interpreter.CreateCharacterStepInterpreter
 import joguin.testutil.interpreter.CreateCharacterStepInterpreter.CreateCharacterStepF
 import joguin.testutil.interpreter.WriteMessageTrack
+import org.scalatest.Inside._
 import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
@@ -28,9 +31,9 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
 
   property("displays messages to the player in the correct order") {
-    import joguin.testutil.generator.Generators.name
-    import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.age
+    import joguin.testutil.generator.Generators.gender
+    import joguin.testutil.generator.Generators.name
 
     forAll { (
       name: Name,
@@ -54,6 +57,35 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
       actualMessages.get(2).value shouldBe askGender
       actualMessages.get(3).value shouldBe askAge
       actualMessages.get(4).value shouldBe characterCreated(name)
+    }
+  }
+
+  property("goes to the Explore step after the creation of the MainCharacter") {
+    import joguin.testutil.generator.Generators.age
+    import joguin.testutil.generator.Generators.gender
+    import joguin.testutil.generator.Generators.name
+
+    forAll { (
+      name: Name,
+      gender: Gender,
+      age: Age
+    ) =>
+
+      val expectedMainChar = MainCharacter(name, gender, age)
+
+      val expectedAnswers: Map[String, String] = Map(
+        askName -> name,
+        askGender -> gender.code,
+        askAge -> age.toString
+      )
+
+      val nextStep = CreateCharacterStep[CreateCharacterStepF].start
+        .foldMap(CreateCharacterStepInterpreter.build(expectedAnswers))
+        .runA(WriteMessageTrack.empty)
+
+      inside(nextStep.value) { case Explore(progress) =>
+        progress.mainCharacter shouldBe expectedMainChar
+      }
     }
   }
 
