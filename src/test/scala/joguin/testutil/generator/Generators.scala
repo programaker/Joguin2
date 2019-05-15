@@ -1,5 +1,6 @@
 package joguin.testutil.generator
 
+import joguin.Name
 import joguin.alien.Invasion
 import joguin.earth.city.City
 import joguin.earth.maincharacter._
@@ -9,6 +10,9 @@ import joguin.testutil.generator.ExperienceGenerators._
 import joguin.testutil.generator.IndexGenerator._
 import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.generator.MainCharacterGenerators._
+import joguin.testutil.generator.NameGenerators._
+import joguin.testutil.generator.GenderGenerators._
+import joguin.testutil.generator.AgeGenerators._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
@@ -51,4 +55,13 @@ object Generators {
 
   implicit val smallInt: Arbitrary[Int] =
     Arbitrary(Gen.choose(min = 1, max = 10))
+
+  implicit val name: Arbitrary[Name] =
+    Arbitrary(genName)
+
+  implicit val gender: Arbitrary[Gender] =
+    Arbitrary(genGender)
+
+  implicit val age: Arbitrary[Age] =
+    Arbitrary(genAge)
 }

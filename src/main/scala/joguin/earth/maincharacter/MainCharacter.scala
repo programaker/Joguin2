@@ -9,17 +9,17 @@ final case class MainCharacter(
 )
 
 
-sealed trait Gender
-object Female extends Gender
-object Male extends Gender
-object Other extends Gender
+sealed abstract class Gender(val code: String)
+object Female extends Gender("f")
+object Male extends Gender("m")
+object Other extends Gender("o")
 
 object Gender {
   def byCode(code: String): Option[Gender] =
     code.toLowerCase match {
-      case "f" => Some(Female)
-      case "m" => Some(Male)
-      case "o" => Some(Other)
+      case Female.code => Some(Female)
+      case Male.code => Some(Male)
+      case Other.code => Some(Other)
       case _   => None
     }
 }

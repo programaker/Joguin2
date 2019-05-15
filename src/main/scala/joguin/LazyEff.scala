@@ -1,6 +1,7 @@
 package joguin
 
 import cats.Id
+import cats.Monad
 import cats.effect.IO
 
 trait LazyEff[F[_]] {
@@ -15,6 +16,6 @@ object LazyEff {
   }
 
   implicit val idLazyEff: LazyEff[Id] = new LazyEff[Id] {
-    override def wrap[A](a: =>A): Id[A] = a:Id[A]
+    override def wrap[A](a: =>A): Id[A] = Monad[Id].pure(a)
   }
 }
