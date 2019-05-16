@@ -11,7 +11,7 @@ import joguin.testutil.interpreter.WriteMessageTrack._
 final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackState) {
   override def apply[A](fa: InteractionF[A]): MessageTrackState[A] = fa match {
     case WriteMessage(message) => writeMessage(message)
-    case ReadAnswer => readAnswer
+    case ReadAnswer            => readAnswer
   }
 
   private def writeMessage(message: String): MessageTrackState[Unit] =
@@ -30,7 +30,7 @@ final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackSta
 
       val (currentAnswer, nextAnswers) = answers match {
         case head :: tail => (head, tail)
-        case Nil => ("<<fail>>", Nil)
+        case Nil          => ("<<fail>>", Nil)
       }
 
       val newAnswers = track.answersByQuestion.updated(question, nextAnswers)

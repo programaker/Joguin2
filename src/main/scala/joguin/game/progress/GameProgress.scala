@@ -9,24 +9,21 @@ import joguin.earth.maincharacter.MainCharacter
 
 final case class GameProgress(
   mainCharacter: MainCharacter,
-
   //The experience is not in the MainCharacter to enable
   //the possibility of reuse the same character in a new game,
   //with 0 experience, and at the same time resume a game with
   //the same character, more experienced
   mainCharacterExperience: Experience,
-
   invasions: List[Invasion],
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index],
   indexedInvasions: Map[Index, Invasion],
   invasionCount: Count
 ) {
-  def invasionByIndex(selectedInvasion: Index): Option[Invasion] = {
+  def invasionByIndex(selectedInvasion: Index): Option[Invasion] =
     //1-based index, to match the invasion list as the player sees it
     //and also the player's input when select an invasion to fight
     indexedInvasions.get(selectedInvasion)
-  }
 
   def isInvasionDefeated(selectedInvasion: Index): Boolean =
     defeatedInvasionsTrack.contains(selectedInvasion)
@@ -90,7 +87,7 @@ object GameProgress {
       defeatedInvasions,
       defeatedInvasionsTrack,
       indexedInvasions._2,
-      indexedInvasions._3,
+      indexedInvasions._3
     )
   }
 }

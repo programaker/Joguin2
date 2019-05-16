@@ -34,9 +34,9 @@ final class ShowIntroStep[F[_]](
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
     val answer = for {
-      src <- messageSource
-      introMessage <- getMessage(src)(intro)
-      _ <- writeMessage(introMessage)
+      src              <- messageSource
+      introMessage     <- getMessage(src)(intro)
+      _                <- writeMessage(introMessage)
       hasSavedProgress <- savedProgressExists
 
       startKey = if (hasSavedProgress) start_with_resume else start_no_resume
@@ -84,12 +84,9 @@ object ShowIntroStep {
     m: MessagesOps[F],
     s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
-  ): ShowIntroStep[F] = {
-    
+  ): ShowIntroStep[F] =
     new ShowIntroStep[F]
-  }
 }
-
 
 sealed trait ShowIntroOption
 case object NewGame extends ShowIntroOption

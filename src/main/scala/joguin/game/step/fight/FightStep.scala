@@ -53,12 +53,10 @@ final class FightStep[F[_]](
     gameProgress: GameProgress,
     invasion: Invasion,
     src: LocalizedMessageSource[FightMessageSource.type]
-  ): Free[F, GameProgress] = {
-
+  ): Free[F, GameProgress] =
     getMessageFmt(src)(city_already_saved, List(invasion.city.name.value))
       .flatMap(writeMessage)
       .map(_ => gameProgress)
-  }
 
   private def fightOrRetreat(
     gameProgress: GameProgress,
@@ -73,16 +71,16 @@ final class FightStep[F[_]](
 
     val option = for {
       report <- getMessageFmt(src)(report, List(character, city, device))
-      _ <- writeMessage(report)
+      _      <- writeMessage(report)
 
-      giveOrder <- getMessage(src)(give_order)
+      giveOrder    <- getMessage(src)(give_order)
       errorMessage <- getMessage(src)(error_invalid_option)
-      option <- ask(giveOrder, errorMessage, FightOption.parse)
+      option       <- ask(giveOrder, errorMessage, FightOption.parse)
     } yield option
 
     option.flatMap {
       case FightAliens => fight(gameProgress, invasion, invasionIndex, src)
-      case Retreat => pure(gameProgress)
+      case Retreat     => pure(gameProgress)
     }
   }
 
@@ -120,11 +118,11 @@ final class FightStep[F[_]](
     val time = 100.milliseconds
 
     for {
-      earth <- getMessage(src)(animation_earth)
+      earth       <- getMessage(src)(animation_earth)
       earthWeapon <- getMessage(src)(animation_earth_weapon)
-      alien <- getMessage(src)(animation_alien)
+      alien       <- getMessage(src)(animation_alien)
       alienWeapon <- getMessage(src)(animation_alien_weapon)
-      strike <- getMessage(src)(animation_strike)
+      strike      <- getMessage(src)(animation_strike)
 
       _ <- showAttack(earth, earthWeapon, strike)
       _ <- waitFor(time)
@@ -134,7 +132,7 @@ final class FightStep[F[_]](
     } yield ()
   }
 
-  private def showAttack(attacker: String, weapon: String, strike: String): Free[F, Unit] = {
+  private def showAttack(attacker: String, weapon: String, strike: String): Free[F, Unit] =
     for {
       _ <- writeMessage("\n")
       _ <- writeMessage(attacker)
@@ -144,9 +142,8 @@ final class FightStep[F[_]](
       _ <- writeMessage(strike)
       _ <- writeMessage("\n")
     } yield ()
-  }
 
-  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[F, Unit] = {
+  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[F, Unit] =
     if (start <= end) {
       val res = for {
         _ <- if (start % 2 === 0) {
@@ -162,7 +159,6 @@ final class FightStep[F[_]](
     } else {
       pure(())
     }
-  }
 }
 
 object FightStep {
@@ -172,12 +168,9 @@ object FightStep {
     m: MessagesOps[F],
     i: InteractionOps[F],
     w: WaitOps[F]
-  ): FightStep[F] = {
-
+  ): FightStep[F] =
     new FightStep[F]
-  }
 }
-
 
 sealed trait FightOption
 case object FightAliens extends FightOption

@@ -75,7 +75,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("increasing MainCharacter's experience by a given amount gives a GameProgress with the increased experience") {
+  property("increasing MC's experience by a given amount gives a GameProgress with the increased experience") {
     import joguin.testutil.generator.Generators.experience
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter

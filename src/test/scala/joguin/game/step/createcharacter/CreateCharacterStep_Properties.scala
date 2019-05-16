@@ -27,8 +27,8 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
   private def characterCreated(name: Name): String =
     s"\nWelcome, commander $name! Now, you must bring our forces\n" +
-    "to the invaded cities and take them back from the Zorblaxians.\n" +
-    "Destroy the Terraform Devices and save all life on Earth!\n"
+      "to the invaded cities and take them back from the Zorblaxians.\n" +
+      "Destroy the Terraform Devices and save all life on Earth!\n"
 
   private val errorInvalidName = "Invalid name\n"
   private val errorInvalidGender = "Invalid gender\n"
@@ -39,28 +39,28 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.name
 
-    forAll { (
-      name: Name,
-      gender: Gender,
-      age: Age
-    ) =>
+    forAll {
+      (
+        name: Name,
+        gender: Gender,
+        age: Age
+      ) =>
+        val answers: Map[String, List[String]] = Map(
+          askName   -> List(name),
+          askGender -> List(gender.code),
+          askAge    -> List(age.toString)
+        )
 
-      val answers: Map[String, List[String]] = Map(
-        askName -> List(name),
-        askGender -> List(gender.code),
-        askAge -> List(age.toString)
-      )
+        val track = CreateCharacterStep[CreateCharacterStepF].start
+          .foldMap(CreateCharacterStepInterpreter.build)
+          .runS(WriteMessageTrack.build(answers))
 
-      val track = CreateCharacterStep[CreateCharacterStepF].start
-        .foldMap(CreateCharacterStepInterpreter.build)
-        .runS(WriteMessageTrack.build(answers))
-
-      val actualMessages = track.map(_.indexedMessages).value
-      actualMessages.get(0).value shouldBe askToCreateCharacter
-      actualMessages.get(1).value shouldBe askName
-      actualMessages.get(2).value shouldBe askGender
-      actualMessages.get(3).value shouldBe askAge
-      actualMessages.get(4).value shouldBe characterCreated(name)
+        val actualMessages = track.map(_.indexedMessages).value
+        actualMessages.get(0).value shouldBe askToCreateCharacter
+        actualMessages.get(1).value shouldBe askName
+        actualMessages.get(2).value shouldBe askGender
+        actualMessages.get(3).value shouldBe askAge
+        actualMessages.get(4).value shouldBe characterCreated(name)
     }
   }
 
@@ -69,27 +69,28 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.name
 
-    forAll { (
-      name: Name,
-      gender: Gender,
-      age: Age
-    ) =>
+    forAll {
+      (
+        name: Name,
+        gender: Gender,
+        age: Age
+      ) =>
+        val expectedMainChar = MainCharacter(name, gender, age)
 
-      val expectedMainChar = MainCharacter(name, gender, age)
+        val answers: Map[String, List[String]] = Map(
+          askName   -> List(name),
+          askGender -> List(gender.code),
+          askAge    -> List(age.toString)
+        )
 
-      val answers: Map[String, List[String]] = Map(
-        askName -> List(name),
-        askGender -> List(gender.code),
-        askAge -> List(age.toString)
-      )
+        val nextStep = CreateCharacterStep[CreateCharacterStepF].start
+          .foldMap(CreateCharacterStepInterpreter.build)
+          .runA(WriteMessageTrack.build(answers))
 
-      val nextStep = CreateCharacterStep[CreateCharacterStepF].start
-        .foldMap(CreateCharacterStepInterpreter.build)
-        .runA(WriteMessageTrack.build(answers))
-
-      inside(nextStep.value) { case Explore(progress) =>
-        progress.mainCharacter shouldBe expectedMainChar
-      }
+        inside(nextStep.value) {
+          case Explore(progress) =>
+            progress.mainCharacter shouldBe expectedMainChar
+        }
     }
   }
 
@@ -104,40 +105,40 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     implicit val i1: Arbitrary[Tag[T1, Int]] = arbTag(Generators.genSmallInt)
     implicit val i2: Arbitrary[Tag[T2, Int]] = arbTag(AgeGenerators.genInvalidAge)
 
-    forAll { (
-      name: Name,
-      gender: Gender,
-      age: Age,
-      n: Tag[T1, Int],
-      invalidName: String,
-      invalidAge: Tag[T2, Int]
-    ) =>
+    forAll {
+      (
+        name: Name,
+        gender: Gender,
+        age: Age,
+        n: Tag[T1, Int],
+        invalidName: String,
+        invalidAge: Tag[T2, Int]
+      ) =>
+        val names = List.fill(n)(invalidName) ++ List(name.value)
+        val genders = List.fill(n)(invalidName) ++ List(gender.code)
+        val ages = List.fill(n)(invalidAge.toString) ++ List(age.toString)
 
-      val names = List.fill(n)(invalidName) ++ List(name.value)
-      val genders = List.fill(n)(invalidName) ++ List(gender.code)
-      val ages = List.fill(n)(invalidAge.toString) ++ List(age.toString)
+        val answers = Map(
+          askName   -> names,
+          askGender -> genders,
+          askAge    -> ages
+        )
 
-      val answers = Map(
-        askName -> names,
-        askGender -> genders,
-        askAge -> ages
-      )
+        val track = CreateCharacterStep[CreateCharacterStepF].start
+          .foldMap(CreateCharacterStepInterpreter.build)
+          .runS(WriteMessageTrack.build(answers))
 
-      val track = CreateCharacterStep[CreateCharacterStepF].start
-        .foldMap(CreateCharacterStepInterpreter.build)
-        .runS(WriteMessageTrack.build(answers))
+        val actualMessages = track.map(_.indexedMessages).value
+        val _n: Int = n
 
-      val actualMessages = track.map(_.indexedMessages).value
-      val _n: Int = n
+        actualMessages.count { case (_, msg) => msg === askName } shouldBe (_n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidName } shouldBe _n
 
-      actualMessages.count{ case (_, msg) => msg === askName } shouldBe (_n + 1)
-      actualMessages.count{ case (_, msg) => msg === errorInvalidName } shouldBe _n
+        actualMessages.count { case (_, msg) => msg === askGender } shouldBe (_n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidGender } shouldBe _n
 
-      actualMessages.count{ case (_, msg) => msg === askGender } shouldBe (_n + 1)
-      actualMessages.count{ case (_, msg) => msg === errorInvalidGender } shouldBe _n
-
-      actualMessages.count{ case (_, msg) => msg === askAge } shouldBe (_n + 1)
-      actualMessages.count{ case (_, msg) => msg === errorInvalidAge } shouldBe _n
+        actualMessages.count { case (_, msg) => msg === askAge } shouldBe (_n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidAge } shouldBe _n
     }
   }
 

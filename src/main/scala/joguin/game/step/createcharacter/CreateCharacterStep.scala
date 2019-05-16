@@ -38,29 +38,29 @@ final class CreateCharacterStep[F[_]](
 
   def start: Free[F, GameStep] =
     for {
-      src <- getLocalizedMessageSource(CreateCharacterMessageSource)
-      message <- pure(getMessage(src)(_))
+      src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
+      message    <- pure(getMessage(src)(_))
       messageFmt <- pure(getMessageFmt(src)(_, _))
 
       createCharacterMessage <- message(create_character)
-      _ <- writeMessage(createCharacterMessage)
+      _                      <- writeMessage(createCharacterMessage)
 
-      informName <- message(inform_character_name)
+      informName      <- message(inform_character_name)
       informNameError <- message(error_invalid_name)
-      name <- ask(informName, informNameError, parseName)
+      name            <- ask(informName, informNameError, parseName)
 
-      informGender <- message(inform_character_gender)
+      informGender      <- message(inform_character_gender)
       informGenderError <- message(error_invalid_gender)
-      gender <- ask(informGender, informGenderError, parseGender)
+      gender            <- ask(informGender, informGenderError, parseGender)
 
-      informAge <- message(inform_character_age)
+      informAge      <- message(inform_character_age)
       informAgeError <- message(error_invalid_age)
-      age <- ask(informAge, informAgeError, parseAge)
+      age            <- ask(informAge, informAgeError, parseAge)
 
       mc <- pure(MainCharacter(name, gender, age))
 
       characterCreated <- messageFmt(character_created, List(name.value))
-      _ <- writeMessage(characterCreated)
+      _                <- writeMessage(characterCreated)
 
       gameProgress <- initGameProgress(mc)
     } yield Explore(gameProgress)
@@ -91,8 +91,6 @@ object CreateCharacterStep {
     i: InteractionOps[F],
     c: CityRepositoryOps[F],
     p: PowerGeneratorOps[F]
-  ): CreateCharacterStep[F] = {
-    
+  ): CreateCharacterStep[F] =
     new CreateCharacterStep[F]
-  }
 }

@@ -10,7 +10,7 @@ import joguin.alien.Power
 import joguin.alien.PowerR
 
 /** PowerGeneratorF root interpreter to any F that produces random numbers between min and max */
-final class PowerGeneratorInterpreter[F[_] : LazyEff] extends (PowerGeneratorF ~> F) {
+final class PowerGeneratorInterpreter[F[_]: LazyEff] extends (PowerGeneratorF ~> F) {
   override def apply[A](fa: PowerGeneratorF[A]): F[A] = fa match {
     case GeneratePower(min, max) => randomPowerBetween(min, max)
   }
@@ -21,10 +21,10 @@ final class PowerGeneratorInterpreter[F[_] : LazyEff] extends (PowerGeneratorF ~
   private def impureRandomPower(min: Power, max: Power): Power =
     refineV[PowerR](ThreadLocalRandom.current.nextInt(min, max + 1)) match {
       case Right(generatedPower) => generatedPower
-      case Left(_) => min //in case of error, falls back to min value and life goes on...
+      case Left(_)               => min //in case of error, falls back to min value and life goes on...
     }
 }
 
 object PowerGeneratorInterpreter {
-  def apply[F[_] : LazyEff]: PowerGeneratorInterpreter[F] = new PowerGeneratorInterpreter[F]
+  def apply[F[_]: LazyEff]: PowerGeneratorInterpreter[F] = new PowerGeneratorInterpreter[F]
 }

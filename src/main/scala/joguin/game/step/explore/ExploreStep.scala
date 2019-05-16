@@ -35,11 +35,11 @@ final class ExploreStep[F[_]](
   import s._
   import w._
 
-  def play(gameProgress: GameProgress): Free[F, GameStep] = {
+  def play(gameProgress: GameProgress): Free[F, GameStep] =
     for {
-      _ <- writeMessage("\n")
+      _   <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
-      _ <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
+      _   <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
 
       nextStep <- if (gameProgress.allInvasionsDefeated) {
         missionAccomplished(src)
@@ -47,7 +47,6 @@ final class ExploreStep[F[_]](
         chooseYourDestiny(src, gameProgress)
       }
     } yield nextStep
-  }
 
   private def showInvasions(
     invasions: List[Invasion],
@@ -89,8 +88,8 @@ final class ExploreStep[F[_]](
   private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
     for {
       message <- getMessage(src)(mission_accomplished)
-      _ <- writeMessage(message)
-      _ <- waitFor(10.seconds)
+      _       <- writeMessage(message)
+      _       <- waitFor(10.seconds)
     } yield GameOver
 
   private def chooseYourDestiny(
@@ -101,13 +100,14 @@ final class ExploreStep[F[_]](
     val invasionCount = gp.invasionCount
 
     for {
-      message <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.value.toString))
+      message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.value.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
-      option <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield option match {
-      case QuitGame => Quit(gp)
-      case GoToInvasion(index) => Fight(gp, index)
-    }
+      option       <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
+    } yield
+      option match {
+        case QuitGame            => Quit(gp)
+        case GoToInvasion(index) => Fight(gp, index)
+      }
   }
 }
 
@@ -118,12 +118,9 @@ object ExploreStep {
     m: MessagesOps[F],
     i: InteractionOps[F],
     w: WaitOps[F]
-  ): ExploreStep[F] = {
-
+  ): ExploreStep[F] =
     new ExploreStep[F]
-  }
 }
-
 
 sealed trait ExploreOption
 object QuitGame extends ExploreOption

@@ -11,9 +11,9 @@ import cats.~>
 import joguin.LazyEff
 
 /** MessagesF root interpreter to any F that uses ResourceBundle to read messages from app resources */
-final class MessagesInterpreter[F[_] : Monad : LazyEff] extends (MessagesF ~> F) {
+final class MessagesInterpreter[F[_]: Monad: LazyEff] extends (MessagesF ~> F) {
   override def apply[A](fa: MessagesF[A]): F[A] = fa match {
-    case GetMessage(source, key) => message(source, key, Nil)
+    case GetMessage(source, key)          => message(source, key, Nil)
     case GetMessageFmt(source, key, args) => message(source, key, args)
   }
 
@@ -21,18 +21,18 @@ final class MessagesInterpreter[F[_] : Monad : LazyEff] extends (MessagesF ~> F)
     source: LocalizedMessageSource[T],
     key: T#Key,
     args: List[String]
-  ): F[String] = {
-
-    Monad[F].pure(source)
+  ): F[String] =
+    Monad[F]
+      .pure(source)
       .map(resourceBundleParams)
       .flatMap(resourceBundle)
       .flatMap(rb => LazyEff[F].wrap(rb.getString(keyName(key))))
       .map(format(_, args: _*))
-  }
 
   private def resourceBundle(params: (String, Locale)): F[ResourceBundle] =
-    Monad[F].pure(params).flatMap { case (name, locale) =>
-      LazyEff[F].wrap(getBundle(name, locale))
+    Monad[F].pure(params).flatMap {
+      case (name, locale) =>
+        LazyEff[F].wrap(getBundle(name, locale))
     }
 
   private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
@@ -40,11 +40,11 @@ final class MessagesInterpreter[F[_] : Monad : LazyEff] extends (MessagesF ~> F)
 
   private def sourceName(src: MessageSource): String = src match {
     case CreateCharacterMessageSource => "CreateCharacterMessageSource"
-    case ExploreMessageSource => "ExploreMessageSource"
-    case QuitMessageSource => "QuitMessageSource"
-    case ShowIntroMessageSource => "ShowIntroMessageSource"
-    case FightMessageSource => "FightMessageSource"
-    case SaveGameMessageSource => "SaveGameMessageSource"
+    case ExploreMessageSource         => "ExploreMessageSource"
+    case QuitMessageSource            => "QuitMessageSource"
+    case ShowIntroMessageSource       => "ShowIntroMessageSource"
+    case FightMessageSource           => "FightMessageSource"
+    case SaveGameMessageSource        => "SaveGameMessageSource"
   }
 
   private def keyName[T <: MessageSource](key: T#Key): String =
@@ -53,5 +53,5 @@ final class MessagesInterpreter[F[_] : Monad : LazyEff] extends (MessagesF ~> F)
 }
 
 object MessagesInterpreter {
-  def apply[F[_] : Monad : LazyEff]: MessagesInterpreter[F] = new MessagesInterpreter[F]
+  def apply[F[_]: Monad: LazyEff]: MessagesInterpreter[F] = new MessagesInterpreter[F]
 }

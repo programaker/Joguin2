@@ -10,7 +10,8 @@ object PowerGenerators {
   def genPower: Gen[Power] = {
     val elsePower: Power = AlienArmy.minPower
 
-    Gen.choose(min = AlienArmy.minPower.value, max = AlienArmy.maxPower.value)
+    Gen
+      .choose(min = AlienArmy.minPower.value, max = AlienArmy.maxPower.value)
       .map(refineV[PowerR](_))
       .map(_.getOrElse(elsePower))
   }

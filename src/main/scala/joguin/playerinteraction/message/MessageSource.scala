@@ -6,7 +6,6 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-
 sealed trait MessageSource {
   type Key
 }
@@ -80,15 +79,12 @@ case object SaveGameMessageSource extends MessageSource {
   object save_game_error extends SaveGameKey
 }
 
-
 final case class LocalizedMessageSource[T <: MessageSource](source: T, locale: Locale)
-
 
 sealed trait MessageSourceF[A]
 
 final case class GetLocalizedMessageSource[T <: MessageSource](source: T)
-  extends MessageSourceF[LocalizedMessageSource[T]]
-
+    extends MessageSourceF[LocalizedMessageSource[T]]
 
 final class MessageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]) {
   def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =

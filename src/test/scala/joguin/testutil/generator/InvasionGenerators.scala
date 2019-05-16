@@ -44,7 +44,8 @@ object InvasionGenerators {
   def genDefeatedInvasions: Gen[Count] = {
     val elseValue: Count = 0
 
-    Gen.choose(min = 0, max = invasionListSize)
+    Gen
+      .choose(min = 0, max = invasionListSize)
       .map(refineV[CountR](_).getOrElse(elseValue))
   }
 

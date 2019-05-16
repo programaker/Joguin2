@@ -14,9 +14,9 @@ import org.apache.commons.io.FileUtils
 /** GameProgressRepositoryF root interpreter to IO that uses a file for persistence */
 final class GameProgressRepositoryIOInterpreter(val file: File) extends (GameProgressRepositoryF ~> IO) {
   override def apply[A](fa: GameProgressRepositoryF[A]): IO[A] = fa match {
-    case Save(gameProgress) => save(gameProgress)
+    case Save(gameProgress)  => save(gameProgress)
     case SavedProgressExists => savedProgressExists
-    case Restore => restore
+    case Restore             => restore
   }
 
   private def save(gameProgress: GameProgress): IO[Boolean] =

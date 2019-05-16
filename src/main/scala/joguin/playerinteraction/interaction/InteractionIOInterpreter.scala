@@ -9,7 +9,7 @@ import scala.io.StdIn.readLine
 object InteractionIOInterpreter extends (InteractionF ~> IO) {
   override def apply[A](fa: InteractionF[A]): IO[A] = fa match {
     case WriteMessage(message) => write(message)
-    case ReadAnswer => read()
+    case ReadAnswer            => read()
   }
 
   private def write(message: String): IO[Unit] = IO(print(message))

@@ -17,6 +17,6 @@ object WriteMessageTrack {
     new WriteMessageTrack("", 0, Map.empty, answersByQuestion)
 
   implicit val stateLazyEff: LazyEff[MessageTrackState] = new LazyEff[MessageTrackState] {
-    override def wrap[A](a: =>A): MessageTrackState[A] = State.pure(a)
+    override def wrap[A](a: => A): MessageTrackState[A] = State.pure(a)
   }
 }

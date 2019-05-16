@@ -44,45 +44,45 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     implicitly[Arbitrary[Tag[T1, Int]]]
     implicitly[Arbitrary[Tag[T2, Int]]]
 
-    forAll { (
-      mainChar: PersistentMainCharacter,
-      xp: Tag[T1, Int],
-      invasions: List[PersistentInvasion],
-      defeatedCount: Tag[T2, Int],
-      defeatedInvasionsTrack: List[Int]
-    ) =>
+    forAll {
+      (
+        mainChar: PersistentMainCharacter,
+        xp: Tag[T1, Int],
+        invasions: List[PersistentInvasion],
+        defeatedCount: Tag[T2, Int],
+        defeatedInvasionsTrack: List[Int]
+      ) =>
+        val invalidStr: String => Boolean = _.trim.isEmpty
 
-      val invalidStr: String => Boolean = _.trim.isEmpty
+        val mainCharIsInvalid = invalidStr(mainChar.name) || mainChar.age < 18
+        val xpIsInvalid = xp < 0
 
-      val mainCharIsInvalid = invalidStr(mainChar.name) || mainChar.age < 18
-      val xpIsInvalid = xp < 0
+        val invasionsAreInvalid = invasions.exists { pi =>
+          invalidStr(pi.cityName) || invalidStr(pi.country) || pi.terraformDevicePower <= 0
+        }
 
-      val invasionsAreInvalid = invasions.exists { pi =>
-        invalidStr(pi.cityName) || invalidStr(pi.country) || pi.terraformDevicePower <= 0
-      }
+        val invasionCount = invasions.size
+        val defeatedCountIsInvalid = defeatedCount > invasionCount
+        val defeatedInvasionsTrackIsInvalid = defeatedInvasionsTrack.lengthCompare(defeatedCount) =!= 0
 
-      val invasionCount = invasions.size
-      val defeatedCountIsInvalid = defeatedCount > invasionCount
-      val defeatedInvasionsTrackIsInvalid = defeatedInvasionsTrack.lengthCompare(defeatedCount) =!= 0
+        val pgpIsInvalid =
+          mainCharIsInvalid ||
+            xpIsInvalid ||
+            invasionsAreInvalid ||
+            defeatedCountIsInvalid ||
+            defeatedInvasionsTrackIsInvalid
 
-      val pgpIsInvalid =
-        mainCharIsInvalid ||
-          xpIsInvalid ||
-          invasionsAreInvalid ||
-          defeatedCountIsInvalid ||
-          defeatedInvasionsTrackIsInvalid
+        whenever(pgpIsInvalid) {
+          val pgp = PersistentGameProgress(
+            mainCharacter = mainChar,
+            mainCharacterExperience = xp,
+            invasions = invasions,
+            defeatedInvasions = defeatedCount,
+            defeatedInvasionsTrack = defeatedInvasionsTrack
+          )
 
-      whenever(pgpIsInvalid) {
-        val pgp = PersistentGameProgress(
-          mainCharacter = mainChar,
-          mainCharacterExperience = xp,
-          invasions = invasions,
-          defeatedInvasions = defeatedCount,
-          defeatedInvasionsTrack = defeatedInvasionsTrack
-        )
-
-        pgp.toGameProgress shouldBe empty
-      }
+          pgp.toGameProgress shouldBe empty
+        }
     }
   }
 

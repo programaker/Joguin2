@@ -71,7 +71,6 @@ object Generators {
   implicit val invalidAge: Arbitrary[Int] =
     Arbitrary(genInvalidAge)
 
-
   def genSmallInt: Gen[Int] =
     Gen.choose(min = 1, max = 10)
 }

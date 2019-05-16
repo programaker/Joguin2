@@ -17,21 +17,14 @@ final case class GetMessageFmt[T <: MessageSource](
   args: List[String]
 ) extends MessagesF[String]
 
-
 final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
-  def getMessage[T <: MessageSource]
-      (source: LocalizedMessageSource[T])
-      (key: T#Key): Free[C, String] = {
-
+  def getMessage[T <: MessageSource](source: LocalizedMessageSource[T])(key: T#Key): Free[C, String] =
     inject[MessagesF, C](GetMessage(source, key))
-  }
 
-  def getMessageFmt[T <: MessageSource]
-      (source: LocalizedMessageSource[T])
-      (key: T#Key, args: List[String]): Free[C, String] = {
-
+  def getMessageFmt[T <: MessageSource](
+    source: LocalizedMessageSource[T]
+  )(key: T#Key, args: List[String]): Free[C, String] =
     inject[MessagesF, C](GetMessageFmt(source, key, args))
-  }
 }
 
 object MessagesOps {

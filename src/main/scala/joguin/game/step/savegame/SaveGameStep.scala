@@ -25,7 +25,7 @@ final class SaveGameStep[F[_]](
   def play(gameProgress: GameProgress): Free[F, GameStep] =
     for {
       success <- save(gameProgress)
-      src <- getLocalizedMessageSource(SaveGameMessageSource)
+      src     <- getLocalizedMessageSource(SaveGameMessageSource)
 
       message <- if (success) {
         getMessage(src)(save_game_success)
@@ -44,8 +44,6 @@ object SaveGameStep {
     m: MessagesOps[F],
     s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
-  ): SaveGameStep[F] = {
-
+  ): SaveGameStep[F] =
     new SaveGameStep[F]
-  }
 }

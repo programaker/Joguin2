@@ -10,7 +10,8 @@ object ExperienceGenerators {
   def genExperience: Gen[Experience] = {
     val elseExperience: Experience = 0
 
-    Gen.choose(min = 0, max = 20000)
+    Gen
+      .choose(min = 0, max = 20000)
       .map(refineV[ExperienceR](_))
       .map(_.getOrElse(elseExperience))
   }

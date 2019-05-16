@@ -19,7 +19,7 @@ final case class PersistentGameProgress(
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
 ) {
-	def toGameProgress: Option[GameProgress] =
+  def toGameProgress: Option[GameProgress] =
     (
       mainCharacter.toMainCharacter,
       refineV[ExperienceR](mainCharacterExperience).toOption,
@@ -44,13 +44,12 @@ object PersistentGameProgress {
   )
 }
 
-
 final case class PersistentMainCharacter(
   name: String,
   gender: Gender,
   age: Int
 ) {
-	def toMainCharacter: Option[MainCharacter] =
+  def toMainCharacter: Option[MainCharacter] =
     (
       refineV[NameR](name).toOption,
       gender.some,
@@ -68,13 +67,12 @@ object PersistentMainCharacter {
   )
 }
 
-
 final case class PersistentInvasion(
   terraformDevicePower: Int,
   cityName: String,
   country: String
 ) {
-	def toInvasion: Option[Invasion] =
+  def toInvasion: Option[Invasion] =
     (
       refineV[PowerR](terraformDevicePower).toOption,
       refineV[NameR](cityName).toOption,

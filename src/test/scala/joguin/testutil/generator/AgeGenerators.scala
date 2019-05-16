@@ -10,7 +10,8 @@ object AgeGenerators {
   def genAge: Gen[Age] = {
     val elseAge: Age = 18
 
-    Gen.choose(min = 18, max = 65)
+    Gen
+      .choose(min = 18, max = 65)
       .map(refineV[AgeR](_))
       .map(_.getOrElse(elseAge))
   }

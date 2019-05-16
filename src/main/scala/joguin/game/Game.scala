@@ -61,8 +61,7 @@ object Game {
     cityRepositoryOps: CityRepositoryOps[GameF],
     powerGeneratorOps: PowerGeneratorOps[GameF],
     waitOps: WaitOps[GameF]
-  ): Free[GameF, Unit] = {
-
+  ): Free[GameF, Unit] =
     new Game(
       ShowIntroStep[GameF],
       CreateCharacterStep[GameF],
@@ -71,5 +70,4 @@ object Game {
       SaveGameStep[GameF],
       QuitStep[GameF]
     ).play
-  }
 }

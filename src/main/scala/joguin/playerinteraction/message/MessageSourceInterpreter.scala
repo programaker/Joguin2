@@ -7,7 +7,7 @@ import cats.~>
 
 /** MessageSourceF root interpreter to any Monad that uses a hardcoded LocalizedMessageSource.
  * Having no restriction about the target Monad, it can be used for both production and test */
-final class MessageSourceInterpreter[F[_] : Monad] extends (MessageSourceF ~> F) {
+final class MessageSourceInterpreter[F[_]: Monad] extends (MessageSourceF ~> F) {
   override def apply[A](fa: MessageSourceF[A]): F[A] = fa match {
     case GetLocalizedMessageSource(source) => getLocalizedMessageSource(source)
   }
@@ -19,5 +19,5 @@ final class MessageSourceInterpreter[F[_] : Monad] extends (MessageSourceF ~> F)
 }
 
 object MessageSourceInterpreter {
-  def apply[F[_] : Monad]: MessageSourceInterpreter[F] = new MessageSourceInterpreter[F]
+  def apply[F[_]: Monad]: MessageSourceInterpreter[F] = new MessageSourceInterpreter[F]
 }

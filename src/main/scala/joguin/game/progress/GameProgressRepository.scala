@@ -18,7 +18,6 @@ final class GameProgressRepositoryOps[C[_]](implicit i: InjectK[GameProgressRepo
 object GameProgressRepositoryOps {
   implicit def gameProgressRepositoryOps[C[_]](
     implicit i: InjectK[GameProgressRepositoryF, C]
-  ): GameProgressRepositoryOps[C] = {
+  ): GameProgressRepositoryOps[C] =
     new GameProgressRepositoryOps[C]
-  }
 }
