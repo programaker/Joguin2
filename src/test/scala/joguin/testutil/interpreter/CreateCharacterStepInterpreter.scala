@@ -19,9 +19,9 @@ object CreateCharacterStepInterpreter {
   type F3[A] = EitherK[CityRepositoryF, F2, A]
   type CreateCharacterStepF[A] = EitherK[PowerGeneratorF, F3, A]
 
-  def build(answers: Map[String, String]): CreateCharacterStepF ~> MessageTrackState = {
+  def build: CreateCharacterStepF ~> MessageTrackState = {
     val i1 = messageSourceInterpreter or messagesInterpreter
-    val i2 = InteractionStateInterpreter(answers) or i1
+    val i2 = InteractionStateInterpreter() or i1
     val i3 = cityRepositoryInterpreter or i2
     powerGeneratorInterpreter or i3
   }

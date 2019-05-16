@@ -54,14 +54,24 @@ object Generators {
     Arbitrary(genInvalidExperience)
 
   implicit val smallInt: Arbitrary[Int] =
-    Arbitrary(Gen.choose(min = 1, max = 10))
+    Arbitrary(genSmallInt)
 
   implicit val name: Arbitrary[Name] =
     Arbitrary(genName)
+
+  implicit val invalidName: Arbitrary[String] =
+    Arbitrary(genInvalidName)
 
   implicit val gender: Arbitrary[Gender] =
     Arbitrary(genGender)
 
   implicit val age: Arbitrary[Age] =
     Arbitrary(genAge)
+
+  implicit val invalidAge: Arbitrary[Int] =
+    Arbitrary(genInvalidAge)
+
+
+  def genSmallInt: Gen[Int] =
+    Gen.choose(min = 1, max = 10)
 }

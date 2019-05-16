@@ -8,7 +8,7 @@ import joguin.playerinteraction.interaction.WriteMessage
 import joguin.testutil.interpreter.WriteMessageTrack._
 
 /** InteractionF interpreter for State. For test purposes only */
-final class InteractionStateInterpreter(val answers: Map[String, String]) extends (InteractionF ~> MessageTrackState) {
+final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackState) {
   override def apply[A](fa: InteractionF[A]): MessageTrackState[A] = fa match {
     case WriteMessage(message) => writeMessage(message)
     case ReadAnswer => readAnswer
@@ -16,21 +16,30 @@ final class InteractionStateInterpreter(val answers: Map[String, String]) extend
 
   private def writeMessage(message: String): MessageTrackState[Unit] =
     State { track =>
-      val newMap = track.indexedMessages + (track.lastIndex -> message)
       val newMessage = message
-      val newIndex = track.lastIndex + 1
-      (WriteMessageTrack(newMessage, newIndex, newMap), ())
+      val newMap = track.indexedMessages + (track.currentIndex -> message)
+      val newIndex = track.currentIndex + 1
+      val newTrack = track.copy(currentMessage = newMessage, currentIndex = newIndex, indexedMessages = newMap)
+      (newTrack, ())
     }
 
   private def readAnswer: MessageTrackState[String] =
     State { track =>
-      val question = track.lastMessage
-      val answer = answers.getOrElse(question, "<<fail>>")
-      (track, answer)
+      val question = track.currentMessage
+      val answers = track.answersByQuestion.getOrElse(question, Nil)
+
+      val (currentAnswer, nextAnswers) = answers match {
+        case head :: tail => (head, tail)
+        case Nil => ("<<fail>>", Nil)
+      }
+
+      val newAnswers = track.answersByQuestion.updated(question, nextAnswers)
+      val newTrack = track.copy(answersByQuestion = newAnswers)
+
+      (newTrack, currentAnswer)
     }
 }
 
 object InteractionStateInterpreter {
-  def apply(answers: Map[String, String]): InteractionStateInterpreter =
-    new InteractionStateInterpreter(answers)
+  def apply(): InteractionStateInterpreter = new InteractionStateInterpreter
 }
