@@ -75,8 +75,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           .runA(WriteMessageTrack.build(answers))
 
         inside(nextStep.value) {
-          case Explore(progress) =>
-            progress.mainCharacter shouldBe expectedMainChar
+          case Explore(progress) => progress.mainCharacter shouldBe expectedMainChar
         }
     }
   }

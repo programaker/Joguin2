@@ -1,7 +1,9 @@
 package joguin.game.step.explore
 
+import eu.timepit.refined.auto._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
+import joguin.game.step.Quit
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.interpreter.ExploreStepInterpreter
 import joguin.testutil.interpreter.ExploreStepInterpreter.ExploreStepF
@@ -10,6 +12,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.OptionValues._
 import joguin.testutil.generator.InvasionGenerators._
+import org.scalatest.Inside.inside
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class ExploreStep_Properties extends PropertyBasedSpec {
@@ -44,9 +47,30 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     }
   }
 
+  property("goes to Quit step if the player chooses to quit") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+
+    forAll { gp: GameProgress =>
+      val n: Int = gp.invasionCount
+
+      val answers = Map(
+        whereToGo(n) -> List("q")
+      )
+
+      val nextStep = ExploreStep[ExploreStepF]
+        .play(gp)
+        .foldMap(ExploreStepInterpreter.build)
+        .runA(WriteMessageTrack.build(answers))
+
+      inside(nextStep.value) {
+        case Quit(gameProgress) => gameProgress shouldBe gp
+      }
+    }
+  }
+
   private def city(index: Int, city: City): String = s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
   private def savedCity(index: Int, city: City): String = s"$index. \uD83C\uDF0D ${city.name} - ${city.country}\n"
-  private def whereToGo(lastCity: Int) = s"\nWhere do you want to go? - (1) to ($lastCity), (Q)uit:\n"
+  private def whereToGo(lastCity: Int): String = s"\nWhere do you want to go? - (1) to ($lastCity), (Q)uit:\n"
   private val invalidOption = "Invalid option\n"
 
   private val missionAccomplished =
