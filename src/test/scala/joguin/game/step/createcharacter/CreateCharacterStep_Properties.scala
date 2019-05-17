@@ -19,20 +19,6 @@ import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class CreateCharacterStep_Properties extends PropertyBasedSpec {
-  private val askToCreateCharacter = "\nCreate your main character\n"
-
-  private val askName = "\nName:\n"
-  private val askGender = "\nGender - (F)emale, (M)ale, (O)ther:\n"
-  private val askAge = "\nAge:\n"
-
-  private def characterCreated(name: Name): String =
-    s"\nWelcome, commander $name! Now, you must bring our forces\n" +
-      "to the invaded cities and take them back from the Zorblaxians.\n" +
-      "Destroy the Terraform Devices and save all life on Earth!\n"
-
-  private val errorInvalidName = "Invalid name\n"
-  private val errorInvalidGender = "Invalid gender\n"
-  private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
 
   property("displays messages to the player in the correct order") {
     import joguin.testutil.generator.Generators.age
@@ -142,5 +128,20 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         actualMessages.count { case (_, msg) => msg === errorInvalidAge } shouldBe _n
     }
   }
+
+  private val askToCreateCharacter = "\nCreate your main character\n"
+
+  private val askName = "\nName:\n"
+  private val askGender = "\nGender - (F)emale, (M)ale, (O)ther:\n"
+  private val askAge = "\nAge:\n"
+
+  private def characterCreated(name: Name): String =
+    s"\nWelcome, commander $name! Now, you must bring our forces\n" +
+      "to the invaded cities and take them back from the Zorblaxians.\n" +
+      "Destroy the Terraform Devices and save all life on Earth!\n"
+
+  private val errorInvalidName = "Invalid name\n"
+  private val errorInvalidGender = "Invalid gender\n"
+  private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
 
 }
