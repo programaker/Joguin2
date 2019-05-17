@@ -51,11 +51,12 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           askAge    -> List(age.toString)
         )
 
-        val track = CreateCharacterStep[CreateCharacterStepF].play
+        val actualMessages = CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(CreateCharacterStepInterpreter.build)
           .runS(WriteMessageTrack.build(answers))
+          .map(_.indexedMessages)
+          .value
 
-        val actualMessages = track.map(_.indexedMessages).value
         actualMessages.get(0).value shouldBe askToCreateCharacter
         actualMessages.get(1).value shouldBe askName
         actualMessages.get(2).value shouldBe askGender

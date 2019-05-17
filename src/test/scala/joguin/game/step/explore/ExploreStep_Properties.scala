@@ -1,6 +1,13 @@
 package joguin.game.step.explore
 
+import joguin.game.progress.GameProgress
 import joguin.testutil.PropertyBasedSpec
+import joguin.testutil.interpreter.ExploreStepInterpreter
+import joguin.testutil.interpreter.ExploreStepInterpreter.ExploreStepF
+import joguin.testutil.interpreter.WriteMessageTrack
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class ExploreStep_Properties extends PropertyBasedSpec {
@@ -22,5 +29,27 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       "They may return one day, but they must think twice before mess with the Earth again!\n" +
       "\n" + "THE END.\n"
 
-  property("displays messages to the player in the correct order") {}
+  property("displays messages to the player in the correct order") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+    implicit val i1: Arbitrary[Int] = Arbitrary(Gen.choose(1, 3))
+
+    forAll { (gp: GameProgress, chosenCity: Int) =>
+      val answers = Map(
+        whereToGo -> List(chosenCity.toString)
+      )
+
+      val actualMessages = ExploreStep[ExploreStepF]
+        .play(gp)
+        .foldMap(ExploreStepInterpreter.build)
+        .runS(WriteMessageTrack.build(answers))
+        .map(_.indexedMessages)
+        .value
+
+      actualMessages.get(0).value shouldBe "\n"
+      actualMessages.get(1).value shouldBe london
+      actualMessages.get(2).value shouldBe tokyo
+      actualMessages.get(3).value shouldBe saoPaulo
+      actualMessages.get(4).value shouldBe whereToGo
+    }
+  }
 }
