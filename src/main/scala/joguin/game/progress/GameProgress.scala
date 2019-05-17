@@ -9,11 +9,13 @@ import joguin.earth.maincharacter.MainCharacter
 
 final case class GameProgress(
   mainCharacter: MainCharacter,
+  //
   //The experience is not in the MainCharacter to enable
   //the possibility of reuse the same character in a new game,
   //with 0 experience, and at the same time resume a game with
   //the same character, more experienced
   mainCharacterExperience: Experience,
+  //
   invasions: List[Invasion],
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index],
