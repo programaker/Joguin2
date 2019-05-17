@@ -22,4 +22,5 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       "They may return one day, but they must think twice before mess with the Earth again!\n" +
       "\n" + "THE END.\n"
 
+  property("displays messages to the player in the correct order") {}
 }

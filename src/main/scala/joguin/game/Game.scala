@@ -32,7 +32,7 @@ final class Game(
       showIntro.play.flatMap(gameLoop)
 
     case CreateCharacter =>
-      createCharacter.start.flatMap(gameLoop)
+      createCharacter.play.flatMap(gameLoop)
 
     case Explore(gameProgress) =>
       explore.play(gameProgress).flatMap(gameLoop)

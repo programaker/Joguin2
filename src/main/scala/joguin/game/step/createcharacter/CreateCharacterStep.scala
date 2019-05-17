@@ -36,7 +36,7 @@ final class CreateCharacterStep[F[_]](
   import m._
   import s._
 
-  def start: Free[F, GameStep] =
+  def play: Free[F, GameStep] =
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
       message    <- pure(getMessage(src)(_))

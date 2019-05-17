@@ -13,6 +13,7 @@ import joguin.testutil.generator.MainCharacterGenerators._
 import joguin.testutil.generator.NameGenerators._
 import joguin.testutil.generator.GenderGenerators._
 import joguin.testutil.generator.AgeGenerators._
+import joguin.testutil.generator.GameProgressGenerators._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
@@ -70,6 +71,9 @@ object Generators {
 
   implicit val invalidAge: Arbitrary[Int] =
     Arbitrary(genInvalidAge)
+
+  implicit val gameProgressStart: Arbitrary[GameProgress] =
+    Arbitrary(genGameProgressStart)
 
   def genSmallInt: Gen[Int] =
     Gen.choose(min = 1, max = 10)
