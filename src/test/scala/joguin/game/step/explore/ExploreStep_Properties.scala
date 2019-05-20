@@ -23,7 +23,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
     forAll { (gp: GameProgress, chosenCity: Int) =>
       val cities = gp.invasions.map(_.city)
-      val cityCount = cities.size
+      val cityCount = gp.invasionCount
+      val firstMessage = 0
+      val lastMessage = cityCount + 1
 
       val answers = Map(
         whereToGo(cityCount) -> List(chosenCity.toString)
@@ -36,18 +38,18 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         .map(_.indexedMessages)
         .value
 
-      actualMessages.get(0).value shouldBe "\n"
+      actualMessages.get(firstMessage).value shouldBe "\n"
 
       cities.foldLeft(1) { (i, c) =>
         actualMessages.get(i).value shouldBe city(i, c)
         i + 1
       }
 
-      actualMessages.get(cityCount + 1).value shouldBe whereToGo(cityCount)
+      actualMessages.get(lastMessage).value shouldBe whereToGo(cityCount)
     }
   }
 
-  property("goes to Quit step if the player chooses to quit") {
+  property("goes to Quit step passing the current progress if the player chooses to quit") {
     import joguin.testutil.generator.Generators.gameProgressStart
 
     forAll { gp: GameProgress =>
@@ -66,6 +68,11 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         case Quit(gameProgress) => gameProgress shouldBe gp
       }
     }
+  }
+
+  property("repeats a question to the player until receives a valid answer, informing the error") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+
   }
 
   private def city(index: Int, city: City): String = s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
