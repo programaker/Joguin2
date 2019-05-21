@@ -1,10 +1,13 @@
 package joguin.game.step.explore
 
+import cats.~>
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
+import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.game.step.Fight
 import joguin.game.step.GameOver
 import joguin.game.step.Quit
 import joguin.testutil.PropertyBasedSpec
@@ -17,6 +20,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.OptionValues._
 import joguin.testutil.generator.InvasionGenerators._
+import joguin.testutil.interpreter.WriteMessageTrack.MessageTrackState
 import org.scalatest.Inside.inside
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
@@ -38,7 +42,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
       val actualMessages = ExploreStep[ExploreStepF]
         .play(gp)
-        .foldMap(ExploreStepInterpreter.build)
+        .foldMap(exploreStepInterpreter)
         .runS(WriteMessageTrack.build(answers))
         .map(_.indexedMessages)
         .value
@@ -67,7 +71,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
       val nextStep = ExploreStep[ExploreStepF]
         .play(gp)
-        .foldMap(ExploreStepInterpreter.build)
+        .foldMap(exploreStepInterpreter)
         .runA(WriteMessageTrack.build(answers))
 
       inside(nextStep.value) {
@@ -102,7 +106,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
         val actualMessages = ExploreStep[ExploreStepF]
           .play(gp)
-          .foldMap(ExploreStepInterpreter.build)
+          .foldMap(exploreStepInterpreter)
           .runS(WriteMessageTrack.build(answers))
           .map(_.indexedMessages)
           .value
@@ -132,7 +136,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
       val (actualMessages, nextStep) = ExploreStep[ExploreStepF]
         .play(allInvasionsDefeatedGp)
-        .foldMap(ExploreStepInterpreter.build)
+        .foldMap(exploreStepInterpreter)
         .run(WriteMessageTrack.build(answers))
         .map {
           case (track, step) => (track.indexedMessages, step)
@@ -150,6 +154,31 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       nextStep shouldBe GameOver
     }
   }
+
+  property("goes to the Fight game step passing the current progress if the player chooses a city") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+    import joguin.testutil.generator.Generators.index
+
+    forAll { (gp: GameProgress, index: Index) =>
+      val answers = Map(
+        whereToGo(gp.invasionCount) -> List(index.toString)
+      )
+
+      val nextStep = ExploreStep[ExploreStepF]
+        .play(gp)
+        .foldMap(exploreStepInterpreter)
+        .runA(WriteMessageTrack.build(answers))
+
+      inside(nextStep.value) {
+        case Fight(gameProgress, selectedInvasion) =>
+          gameProgress shouldBe gp
+          selectedInvasion shouldBe index
+      }
+    }
+  }
+
+  private val exploreStepInterpreter: ExploreStepF ~> MessageTrackState =
+    ExploreStepInterpreter.build
 
   private def invadedCityMessage(index: Int, city: City): String =
     s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
