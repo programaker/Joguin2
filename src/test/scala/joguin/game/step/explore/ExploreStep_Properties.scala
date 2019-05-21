@@ -175,6 +175,40 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     }
   }
 
+  property("going back from Fight with an invasion defeated, displays the corresponding city as saved") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+    import joguin.testutil.generator.Generators.index
+
+    forAll { (gp: GameProgress, index: Index) =>
+      val gp1 = gp.defeatInvasion(index)
+
+      val answers = Map(
+        whereToGo(gp.invasionCount) -> List("q")
+      )
+
+      val actualMessages = ExploreStep[ExploreStepF]
+        .play(gp1)
+        .foldMap(exploreStepInterpreter)
+        .runS(WriteMessageTrack.build(answers))
+        .map(_.indexedMessages)
+        .value
+
+      val cities = gp1.invasions.map(_.city)
+
+      cities.foldLeft(1) { (idx, c) =>
+        val message = actualMessages.get(idx).value
+
+        if (idx === index.value) {
+          message shouldBe savedCityMessage(idx, c)
+        } else {
+          message shouldBe invadedCityMessage(idx, c)
+        }
+
+        idx + 1
+      }
+    }
+  }
+
   private val exploreStepInterpreter =
     ExploreStepInterpreter.build
 
