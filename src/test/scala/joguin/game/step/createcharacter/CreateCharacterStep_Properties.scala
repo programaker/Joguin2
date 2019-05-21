@@ -88,21 +88,21 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invalidName
     import joguin.testutil.generator.Generators.name
 
-    implicit val i1: Arbitrary[Tag[T1, Int]] = arbTag(Generators.genSmallInt)
-    implicit val i2: Arbitrary[Tag[T2, Int]] = arbTag(AgeGenerators.genInvalidAge)
+    implicit val a1: Arbitrary[Tag[T1, Int]] = arbTag(Generators.genSmallInt)
+    implicit val a2: Arbitrary[Tag[T2, Int]] = arbTag(AgeGenerators.genInvalidAge)
 
     forAll {
       (
         name: Name,
         gender: Gender,
         age: Age,
-        n: Tag[T1, Int],
+        repetitions: Tag[T1, Int],
         invalidName: String,
         invalidAge: Tag[T2, Int]
       ) =>
-        val names = List.fill(n)(invalidName) ++ List(name.value)
-        val genders = List.fill(n)(invalidName) ++ List(gender.code)
-        val ages = List.fill(n)(invalidAge.toString) ++ List(age.toString)
+        val names = List.fill(repetitions)(invalidName) ++ List(name.value)
+        val genders = List.fill(repetitions)(invalidName) ++ List(gender.code)
+        val ages = List.fill(repetitions)(invalidAge.toString) ++ List(age.toString)
 
         val answers = Map(
           askName   -> names,
@@ -110,21 +110,22 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           askAge    -> ages
         )
 
-        val track = CreateCharacterStep[CreateCharacterStepF].play
+        val actualMessages = CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(CreateCharacterStepInterpreter.build)
           .runS(WriteMessageTrack.build(answers))
+          .map(_.indexedMessages)
+          .value
 
-        val actualMessages = track.map(_.indexedMessages).value
-        val _n: Int = n
+        val n: Int = repetitions
 
-        actualMessages.count { case (_, msg) => msg === askName } shouldBe (_n + 1)
-        actualMessages.count { case (_, msg) => msg === errorInvalidName } shouldBe _n
+        actualMessages.count { case (_, msg) => msg === askName } shouldBe (n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidName } shouldBe n
 
-        actualMessages.count { case (_, msg) => msg === askGender } shouldBe (_n + 1)
-        actualMessages.count { case (_, msg) => msg === errorInvalidGender } shouldBe _n
+        actualMessages.count { case (_, msg) => msg === askGender } shouldBe (n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidGender } shouldBe n
 
-        actualMessages.count { case (_, msg) => msg === askAge } shouldBe (_n + 1)
-        actualMessages.count { case (_, msg) => msg === errorInvalidAge } shouldBe _n
+        actualMessages.count { case (_, msg) => msg === askAge } shouldBe (n + 1)
+        actualMessages.count { case (_, msg) => msg === errorInvalidAge } shouldBe n
     }
   }
 
@@ -134,13 +135,13 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   private val askGender = "\nGender - (F)emale, (M)ale, (O)ther:\n"
   private val askAge = "\nAge:\n"
 
+  private val errorInvalidName = "Invalid name\n"
+  private val errorInvalidGender = "Invalid gender\n"
+  private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
+
   private def characterCreated(name: Name): String =
     s"\nWelcome, commander $name! Now, you must bring our forces\n" +
       "to the invaded cities and take them back from the Zorblaxians.\n" +
       "Destroy the Terraform Devices and save all life on Earth!\n"
-
-  private val errorInvalidName = "Invalid name\n"
-  private val errorInvalidGender = "Invalid gender\n"
-  private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
 
 }

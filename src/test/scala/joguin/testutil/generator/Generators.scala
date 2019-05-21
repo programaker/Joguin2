@@ -75,6 +75,11 @@ object Generators {
   implicit val gameProgressStart: Arbitrary[GameProgress] =
     Arbitrary(genGameProgressStart)
 
+  implicit val quitOption: Arbitrary[String] =
+    Arbitrary(genQuitOption)
+
   def genSmallInt: Gen[Int] =
     Gen.choose(min = 1, max = 10)
+
+  def genQuitOption: Gen[String] = Gen.oneOf("q", "Q")
 }
