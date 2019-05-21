@@ -38,7 +38,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         )
 
         val actualMessages = CreateCharacterStep[CreateCharacterStepF].play
-          .foldMap(CreateCharacterStepInterpreter.build)
+          .foldMap(createCharacterInterpreter)
           .runS(WriteMessageTrack.build(answers))
           .map(_.indexedMessages)
           .value
@@ -71,7 +71,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         )
 
         val nextStep = CreateCharacterStep[CreateCharacterStepF].play
-          .foldMap(CreateCharacterStepInterpreter.build)
+          .foldMap(createCharacterInterpreter)
           .runA(WriteMessageTrack.build(answers))
 
         inside(nextStep.value) {
@@ -111,7 +111,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         )
 
         val actualMessages = CreateCharacterStep[CreateCharacterStepF].play
-          .foldMap(CreateCharacterStepInterpreter.build)
+          .foldMap(createCharacterInterpreter)
           .runS(WriteMessageTrack.build(answers))
           .map(_.indexedMessages)
           .value
@@ -128,6 +128,8 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         actualMessages.count { case (_, msg) => msg === errorInvalidAge } shouldBe n
     }
   }
+
+  private val createCharacterInterpreter = CreateCharacterStepInterpreter.build
 
   private val askToCreateCharacter = "\nCreate your main character\n"
 

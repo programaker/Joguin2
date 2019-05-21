@@ -1,6 +1,5 @@
 package joguin.game.step.explore
 
-import cats.~>
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.earth.city.City
@@ -13,15 +12,14 @@ import joguin.game.step.Quit
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.Generators
 import joguin.testutil.generator.InvasionGenerators
+import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.interpreter.ExploreStepInterpreter
 import joguin.testutil.interpreter.ExploreStepInterpreter.ExploreStepF
 import joguin.testutil.interpreter.WriteMessageTrack
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.scalatest.OptionValues._
-import joguin.testutil.generator.InvasionGenerators._
-import joguin.testutil.interpreter.WriteMessageTrack.MessageTrackState
 import org.scalatest.Inside.inside
+import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class ExploreStep_Properties extends PropertyBasedSpec {
@@ -81,11 +79,11 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
+    import joguin.testutil.generator.Generators.gameProgressStart
+    import joguin.testutil.generator.Generators.smallInt
     import joguin.testutil.generator.Tag
     import joguin.testutil.generator.Tag._
     import joguin.testutil.generator.Tag.implicits._
-    import joguin.testutil.generator.Generators.gameProgressStart
-    import joguin.testutil.generator.Generators.smallInt
 
     implicit val a1: Arbitrary[Tag[T1, String]] = arbTag(genValidOption(InvasionGenerators.invasionListSize))
     implicit val a2: Arbitrary[Tag[T2, String]] = arbTag(Gen.alphaNumStr)
@@ -177,7 +175,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     }
   }
 
-  private val exploreStepInterpreter: ExploreStepF ~> MessageTrackState =
+  private val exploreStepInterpreter =
     ExploreStepInterpreter.build
 
   private def invadedCityMessage(index: Int, city: City): String =
