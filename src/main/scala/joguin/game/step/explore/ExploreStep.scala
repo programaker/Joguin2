@@ -39,7 +39,7 @@ final class ExploreStep[F[_]](
     for {
       _   <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
-      _   <- showInvasions(gameProgress.invasions, gameProgress.defeatedInvasionsTrack, src, Some(1))
+      _   <- showInvasions(gameProgress.invasions, gameProgress, src, Some(1))
 
       nextStep <- if (gameProgress.allInvasionsDefeated) {
         missionAccomplished(src)
@@ -50,7 +50,7 @@ final class ExploreStep[F[_]](
 
   private def showInvasions(
     invasions: List[Invasion],
-    defeatedInvasions: Set[Index],
+    gameProgress: GameProgress,
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
   ): Free[F, Unit] =
@@ -62,9 +62,9 @@ final class ExploreStep[F[_]](
         pure(()) //A very improbable refinement error happened
 
       case (invasion :: otherInvasions, Some(idx)) =>
-        showInvasion(invasion, defeatedInvasions.contains(idx), src, idx)
+        showInvasion(invasion, gameProgress.isInvasionDefeated(idx), src, idx)
           .flatMap { _ =>
-            showInvasions(otherInvasions, defeatedInvasions, src, refineV[IndexR](idx + 1).toOption)
+            showInvasions(otherInvasions, gameProgress, src, refineV[IndexR](idx + 1).toOption)
           }
     }
 
@@ -104,11 +104,10 @@ final class ExploreStep[F[_]](
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.value.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield
-      option match {
-        case QuitGame            => Quit(gp)
-        case GoToInvasion(index) => Fight(gp, index)
-      }
+    } yield option match {
+      case QuitGame            => Quit(gp)
+      case GoToInvasion(index) => Fight(gp, index)
+    }
   }
 }
 
