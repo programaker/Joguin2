@@ -7,7 +7,9 @@ import joguin._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
 
+/* TODO => Big GameProgress Refactoring! https://github.com/programaker/Joguin2/issues/4 */
 final case class GameProgress(
+  //These are the required data
   mainCharacter: MainCharacter,
   //
   //The experience is not in the MainCharacter to enable
@@ -17,6 +19,10 @@ final case class GameProgress(
   mainCharacterExperience: Experience,
   //
   invasions: List[Invasion],
+  //
+  //
+  //These are data derived from invasions for optimisation purposes,
+  //like avoiding O(n) operations on an immutable List
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index],
   indexedInvasions: Map[Index, Invasion],
