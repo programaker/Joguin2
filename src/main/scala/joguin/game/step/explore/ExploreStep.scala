@@ -53,20 +53,20 @@ final class ExploreStep[F[_]](
     defeatedInvasions: Set[Index],
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
-  ): Free[F, Unit] = (invasions, index) match {
+  ): Free[F, Unit] =
+    (invasions, index) match {
+      case (Nil, _) =>
+        pure(())
 
-    case (Nil, _) =>
-      pure(())
+      case (_, None) =>
+        pure(()) //A very improbable refinement error happened
 
-    case (_, None) =>
-      pure(()) //A very improbable refinement error happened
-
-    case (invasion :: otherInvasions, Some(idx)) =>
-      showInvasion(invasion, defeatedInvasions.contains(idx), src, idx)
-        .flatMap { _ =>
-          showInvasions(otherInvasions, defeatedInvasions, src, refineV[IndexR](idx + 1).toOption)
-        }
-  }
+      case (invasion :: otherInvasions, Some(idx)) =>
+        showInvasion(invasion, defeatedInvasions.contains(idx), src, idx)
+          .flatMap { _ =>
+            showInvasions(otherInvasions, defeatedInvasions, src, refineV[IndexR](idx + 1).toOption)
+          }
+    }
 
   private def showInvasion(
     invasion: Invasion,
@@ -75,13 +75,14 @@ final class ExploreStep[F[_]](
     index: Index
   ): Free[F, Unit] = {
 
+    val city = invasion.city
+
     val key = if (invasionDefeated) {
       human_dominated_city
     } else {
       alien_dominated_city
     }
 
-    val city = invasion.city
     getMessageFmt(src)(key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
   }
 
