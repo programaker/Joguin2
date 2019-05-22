@@ -44,7 +44,7 @@ final class ExploreStep[F[_]](
       nextStep <- if (gameProgress.allInvasionsDefeated) {
         missionAccomplished(src)
       } else {
-        chooseYourDestiny(src, gameProgress)
+        chooseOption(src, gameProgress)
       }
     } yield nextStep
 
@@ -62,31 +62,18 @@ final class ExploreStep[F[_]](
         pure(()) //A very improbable refinement error happened
 
       case (invasion :: otherInvasions, Some(idx)) =>
-        val invasionDefeated = gameProgress.isInvasionDefeated(idx)
+        val key = if (gameProgress.isInvasionDefeated(idx)) {
+          human_dominated_city
+        } else {
+          alien_dominated_city
+        }
 
-        showInvasion(invasion, invasionDefeated, src, idx)
+        getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
+          .flatMap(writeMessage)
           .flatMap { _ =>
             showInvasions(otherInvasions, gameProgress, src, refineV[IndexR](idx + 1).toOption)
           }
     }
-
-  private def showInvasion(
-    invasion: Invasion,
-    invasionDefeated: Boolean,
-    src: LocalizedMessageSource[ExploreMessageSource.type],
-    index: Index
-  ): Free[F, Unit] = {
-
-    val city = invasion.city
-
-    val key = if (invasionDefeated) {
-      human_dominated_city
-    } else {
-      alien_dominated_city
-    }
-
-    getMessageFmt(src)(key, List(index.toString, city.name, city.country)).flatMap(writeMessage)
-  }
 
   private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
     for {
@@ -95,7 +82,7 @@ final class ExploreStep[F[_]](
       _       <- waitFor(10.seconds)
     } yield GameOver
 
-  private def chooseYourDestiny(
+  private def chooseOption(
     src: LocalizedMessageSource[ExploreMessageSource.type],
     gp: GameProgress
   ): Free[F, GameStep] = {
