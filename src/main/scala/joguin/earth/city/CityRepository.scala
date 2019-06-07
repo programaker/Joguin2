@@ -4,7 +4,7 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait CityRepositoryF[A]
+sealed abstract class CityRepositoryF[A] extends Product with Serializable
 case object FindAllCities extends CityRepositoryF[List[City]]
 
 final class CityRepositoryOps[C[_]](implicit i: InjectK[CityRepositoryF, C]) {

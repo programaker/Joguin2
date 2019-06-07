@@ -112,8 +112,8 @@ object ExploreStep {
     new ExploreStep[F]
 }
 
-sealed trait ExploreOption
-object QuitGame extends ExploreOption
+sealed abstract class ExploreOption extends Product with Serializable
+case object QuitGame extends ExploreOption
 final case class GoToInvasion(index: Index) extends ExploreOption
 
 object ExploreOption {

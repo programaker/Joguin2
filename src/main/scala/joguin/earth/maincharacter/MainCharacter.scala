@@ -8,10 +8,10 @@ final case class MainCharacter(
   age: Age
 )
 
-sealed abstract class Gender(val code: String)
-object Female extends Gender("f")
-object Male extends Gender("m")
-object Other extends Gender("o")
+sealed abstract class Gender(val code: String) extends Product with Serializable
+case object Female extends Gender("f")
+case object Male extends Gender("m")
+case object Other extends Gender("o")
 
 object Gender {
   def byCode(code: String): Option[Gender] =

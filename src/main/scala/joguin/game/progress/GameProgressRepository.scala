@@ -4,7 +4,7 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait GameProgressRepositoryF[A]
+sealed abstract class GameProgressRepositoryF[A] extends Product with Serializable
 final case class Save(gameProgress: GameProgress) extends GameProgressRepositoryF[Boolean]
 case object SavedProgressExists extends GameProgressRepositoryF[Boolean]
 case object Restore extends GameProgressRepositoryF[Option[GameProgress]]

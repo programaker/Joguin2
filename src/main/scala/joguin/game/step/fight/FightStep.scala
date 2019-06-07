@@ -172,7 +172,7 @@ object FightStep {
     new FightStep[F]
 }
 
-sealed trait FightOption
+sealed abstract class FightOption extends Product with Serializable
 case object FightAliens extends FightOption
 case object Retreat extends FightOption
 

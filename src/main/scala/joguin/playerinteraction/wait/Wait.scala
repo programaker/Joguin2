@@ -6,7 +6,7 @@ import cats.free.Free._
 
 import scala.concurrent.duration.FiniteDuration
 
-sealed trait WaitF[A]
+sealed abstract class WaitF[A] extends Product with Serializable
 final case class WaitFor(duration: FiniteDuration) extends WaitF[Unit]
 
 final class WaitOps[C[_]](implicit i: InjectK[WaitF, C]) {

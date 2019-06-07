@@ -3,7 +3,7 @@ package joguin.game.step
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 
-sealed trait GameStep
+sealed abstract class GameStep extends Product with Serializable
 case object ShowIntro extends GameStep
 case object CreateCharacter extends GameStep
 final case class Explore(gameProgress: GameProgress) extends GameStep

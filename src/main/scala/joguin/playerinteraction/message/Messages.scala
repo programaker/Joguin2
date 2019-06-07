@@ -4,7 +4,7 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait MessagesF[A]
+sealed abstract class MessagesF[A] extends Product with Serializable
 
 final case class GetMessage[T <: MessageSource](
   source: LocalizedMessageSource[T],

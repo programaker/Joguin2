@@ -4,7 +4,7 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
 
-sealed trait InteractionF[A]
+sealed abstract class InteractionF[A] extends Product with Serializable
 final case class WriteMessage(message: String) extends InteractionF[Unit]
 case object ReadAnswer extends InteractionF[String]
 
