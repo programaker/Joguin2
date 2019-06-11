@@ -8,7 +8,7 @@ val refinedV = "0.9.8"
 val commonsIoV = "2.6"
 val circeV = "0.11.1"
 val betterMonadicForV = "0.3.0"
-val kindProjectorV = "0.9.9"
+val kindProjectorV = "0.10.3"
 val linterV = "0.1.17"
 val scalaTestV = "3.0.7"
 val scalaCheckV = "1.14.0"
@@ -18,7 +18,7 @@ val catsScalaCheckV = "0.1.1"
 resolvers += Resolver.sonatypeRepo("releases")
 
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV)
-addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorV)
+addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV)
 addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterV)
 
 scalacOptions ++= Seq(
