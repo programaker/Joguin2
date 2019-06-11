@@ -1,14 +1,14 @@
 name := "joguin2"
 version := "2.0"
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.0"
 
 val catsV = "2.0.0-M4"
 val catsEffectV = "1.3.1"
 val refinedV = "0.9.8"
 val commonsIoV = "2.6"
-val circeV = "0.11.1"
+val circeV = "0.12.0-M2"
 val betterMonadicForV = "0.3.0"
-val kindProjectorV = "0.9.9"
+val kindProjectorV = "0.10.3"
 val linterV = "0.1.17"
 val scalaTestV = "3.0.7"
 val scalaCheckV = "1.14.0"
@@ -18,7 +18,7 @@ val catsScalaCheckV = "0.1.1"
 resolvers += Resolver.sonatypeRepo("releases")
 
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV)
-addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorV)
+addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV)
 addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterV)
 
 scalacOptions ++= Seq(
@@ -33,7 +33,6 @@ scalacOptions ++= Seq(
   "-language:implicitConversions",
 
   "-Ywarn-dead-code",
-  "-Ypartial-unification",
   "-Ywarn-value-discard", 
   "-Ywarn-unused:imports",
   "-Ywarn-unused:implicits",
