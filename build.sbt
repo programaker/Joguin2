@@ -2,24 +2,24 @@ name := "joguin2"
 version := "2.0"
 scalaVersion := "2.12.8"
 
-val catsVersion = "1.6.0"
-val catsEffectVersion = "1.2.0"
-val refinedVersion = "0.9.4"
-val commonsIoVersion = "2.6"
-val circeVersion = "0.10.0"
-val betterMonadicForVersion = "0.3.0-M4"
-val kindProjectorVersion = "0.9.9"
-val linterVersion = "0.1.17"
-val scalatestVersion = "3.0.5"
-val scalacheckVersion = "1.14.0"
-val scalaCheckShapelessVersion = "1.2.0"
-val catsScalacheckVersion = "0.1.1"
+val catsV = "1.6.1"
+val catsEffectV = "1.3.1"
+val refinedV = "0.9.8"
+val commonsIoV = "2.6"
+val circeV = "0.11.1"
+val betterMonadicForV = "0.3.0"
+val kindProjectorV = "0.9.9"
+val linterV = "0.1.17"
+val scalaTestV = "3.0.7"
+val scalaCheckV = "1.14.0"
+val scalaCheckShapelessV = "1.2.3"
+val catsScalaCheckV = "0.1.1"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForVersion)
-addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorVersion)
-addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterVersion)
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV)
+addCompilerPlugin("org.spire-math" %% "kind-projector" % kindProjectorV)
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % linterV)
 
 scalacOptions ++= Seq(
   "-encoding", "utf8",
@@ -28,7 +28,6 @@ scalacOptions ++= Seq(
   "-deprecation",
   
   "-language:experimental.macros",
-  "-language:postfixOps",
   "-language:existentials",
   "-language:higherKinds",
   "-language:implicitConversions",
@@ -45,23 +44,23 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % catsVersion,
-  "org.typelevel" %% "cats-free" % catsVersion,
-  "org.typelevel" %% "cats-effect" % catsEffectVersion,
+  "org.typelevel" %% "cats-core" % catsV,
+  "org.typelevel" %% "cats-free" % catsV,
+  "org.typelevel" %% "cats-effect" % catsEffectV,
 
-  "eu.timepit" %% "refined" % refinedVersion,
-  "eu.timepit" %% "refined-cats" % refinedVersion,
+  "eu.timepit" %% "refined" % refinedV,
+  "eu.timepit" %% "refined-cats" % refinedV,
   
-  "commons-io" % "commons-io" % commonsIoVersion,
+  "commons-io" % "commons-io" % commonsIoV,
   
-  "io.circe" %% "circe-core" % circeVersion,
-  "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion,
+  "io.circe" %% "circe-core" % circeV,
+  "io.circe" %% "circe-generic" % circeV,
+  "io.circe" %% "circe-parser" % circeV,
 
-  "org.scalatest" %% "scalatest" % scalatestVersion % "test",
-  "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessVersion % "test",
-  "io.chrisdavenport" %% "cats-scalacheck" % catsScalacheckVersion % "test"
+  "org.scalatest" %% "scalatest" % scalaTestV % "test",
+  "org.scalacheck" %% "scalacheck" % scalaCheckV % "test",
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessV % "test",
+  "io.chrisdavenport" %% "cats-scalacheck" % catsScalaCheckV % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
