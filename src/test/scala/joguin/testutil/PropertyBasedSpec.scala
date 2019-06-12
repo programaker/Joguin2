@@ -1,7 +1,7 @@
 package joguin.testutil
 
-import org.scalatest.prop.PropertyChecks
 import org.scalatest.Matchers
 import org.scalatest.PropSpec
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-abstract class PropertyBasedSpec extends PropSpec with PropertyChecks with Matchers
+abstract class PropertyBasedSpec extends PropSpec with ScalaCheckPropertyChecks with Matchers
