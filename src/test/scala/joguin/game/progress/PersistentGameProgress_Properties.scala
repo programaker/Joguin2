@@ -75,7 +75,6 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
         whenever(pgpIsInvalid) {
           val pgp = PersistentGameProgress(
             mainCharacter = mainChar,
-            mainCharacterExperience = xp,
             invasions = invasions,
             defeatedInvasions = defeatedCount,
             defeatedInvasionsTrack = defeatedInvasionsTrack

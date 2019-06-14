@@ -1,10 +1,13 @@
 package joguin.game.step.createcharacter
 
 import eu.timepit.refined.auto._
+import eu.timepit.refined.refineV
 import joguin.Name
 import joguin.earth.maincharacter.Age
 import joguin.earth.maincharacter.Gender
 import joguin.earth.maincharacter.MainCharacter
+import joguin.game.progress.Index
+import joguin.game.progress.IndexR
 import joguin.game.step.Explore
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.AgeGenerators
@@ -15,6 +18,7 @@ import joguin.testutil.interpreter.CreateCharacterStepInterpreter.CreateCharacte
 import joguin.testutil.interpreter.WriteMessageTrack
 import org.scalacheck.Arbitrary
 import org.scalatest.Inside._
+import org.scalatest.Inspectors
 import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
@@ -51,7 +55,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("goes to the Explore step, passing the created MainCharacter") {
+  property("goes to the Explore step, starting the GameProgress with the created MainCharacter") {
     import joguin.testutil.generator.Generators.age
     import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.name
@@ -62,7 +66,8 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         gender: Gender,
         age: Age
       ) =>
-        val expectedMainChar = MainCharacter(name, gender, age)
+        //MainCharacter is created with 0 experience - never fought aliens before
+        val expectedMainChar = MainCharacter(name, gender, age, experience = 0)
 
         val answers: Map[String, List[String]] = Map(
           askName   -> List(name),
@@ -75,7 +80,13 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           .runA(WriteMessageTrack.build(answers))
 
         inside(nextStep.value) {
-          case Explore(progress) => progress.mainCharacter shouldBe expectedMainChar
+          case Explore(progress) =>
+            progress.mainCharacter shouldBe expectedMainChar
+
+            //GameProgress starts with all cities invaded
+            val indexes = (1 to progress.invasionCount).map(refineV[IndexR](_).getOrElse(1: Index))
+            progress.allInvasionsDefeated shouldBe false
+            Inspectors.forAll(indexes)(idx => progress.isInvasionDefeated(idx) shouldBe false)
         }
     }
   }

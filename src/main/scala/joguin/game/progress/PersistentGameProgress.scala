@@ -14,7 +14,6 @@ import joguin.earth.maincharacter.MainCharacter
 
 final case class PersistentGameProgress(
   mainCharacter: PersistentMainCharacter,
-  mainCharacterExperience: Int,
   invasions: List[PersistentInvasion],
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
@@ -22,12 +21,11 @@ final case class PersistentGameProgress(
   def toGameProgress: Option[GameProgress] =
     (
       mainCharacter.toMainCharacter,
-      refineV[ExperienceR](mainCharacterExperience).toOption,
       invasions.map(_.toInvasion).sequence[Option, Invasion],
       refineV[CountR](defeatedInvasions).toOption,
       defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
-    ) mapN { (mc, mcxp, invs, dinvs, track) =>
-      GameProgress.of(mc, mcxp, invs, dinvs, track)
+    ) mapN { (mc, invs, dinvs, track) =>
+      GameProgress.of(mc, invs, dinvs, track)
     }
 }
 
@@ -37,7 +35,6 @@ object PersistentGameProgress {
 
   def fromGameProgress(gp: GameProgress): PersistentGameProgress = PersistentGameProgress(
     mainCharacter = fromMainCharacter(gp.mainCharacter),
-    mainCharacterExperience = gp.mainCharacterExperience,
     invasions = gp.invasions.map(fromInvasion),
     defeatedInvasions = gp.defeatedInvasions,
     defeatedInvasionsTrack = gp.defeatedInvasionsTrack.map(_.value).toList
@@ -47,15 +44,17 @@ object PersistentGameProgress {
 final case class PersistentMainCharacter(
   name: String,
   gender: Gender,
-  age: Int
+  age: Int,
+  experience: Int
 ) {
   def toMainCharacter: Option[MainCharacter] =
     (
       refineV[NameR](name).toOption,
       gender.some,
-      refineV[AgeR](age).toOption
-    ) mapN { (name, gender, age) =>
-      MainCharacter(name, gender, age)
+      refineV[AgeR](age).toOption,
+      refineV[ExperienceR](experience).toOption
+    ) mapN { (name, gender, age, xp) =>
+      MainCharacter(name, gender, age, xp)
     }
 }
 
@@ -63,7 +62,8 @@ object PersistentMainCharacter {
   def fromMainCharacter(mc: MainCharacter): PersistentMainCharacter = PersistentMainCharacter(
     name = mc.name,
     gender = mc.gender,
-    age = mc.age
+    age = mc.age,
+    experience = mc.experience
   )
 }
 

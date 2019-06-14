@@ -11,13 +11,6 @@ import joguin.earth.maincharacter.MainCharacter
 final case class GameProgress(
   //These are the required data
   mainCharacter: MainCharacter,
-  //
-  //The experience is not in the MainCharacter to enable
-  //the possibility of reuse the same character in a new game,
-  //with 0 experience, and at the same time resume a game with
-  //the same character, more experienced
-  mainCharacterExperience: Experience,
-  //
   invasions: List[Invasion],
   //
   //
@@ -37,8 +30,8 @@ final case class GameProgress(
     defeatedInvasionsTrack.contains(selectedInvasion)
 
   def increaseMainCharacterExperience(experiencePoints: Experience): GameProgress =
-    refineV[ExperienceR](mainCharacterExperience.value + experiencePoints.value)
-      .map(updatedXp => copy(mainCharacterExperience = updatedXp))
+    refineV[ExperienceR](mainCharacter.experience.value + experiencePoints.value)
+      .map(updatedXp => copy(mainCharacter = mainCharacter.copy(experience = updatedXp))) //TODO => Lenses!
       .getOrElse(this)
 
   def allInvasionsDefeated: Boolean =
@@ -63,7 +56,6 @@ object GameProgress {
   def start(mainCharacter: MainCharacter, invasions: List[Invasion]): GameProgress =
     of(
       mainCharacter = mainCharacter,
-      mainCharacterExperience = 0,
       invasions = invasions,
       defeatedInvasions = 0,
       defeatedInvasionsTrack = Set.empty
@@ -71,7 +63,6 @@ object GameProgress {
 
   def of(
     mainCharacter: MainCharacter,
-    mainCharacterExperience: Experience,
     invasions: List[Invasion],
     defeatedInvasions: Count,
     defeatedInvasionsTrack: Set[Index]
@@ -90,7 +81,6 @@ object GameProgress {
 
     new GameProgress(
       mainCharacter,
-      mainCharacterExperience,
       invasions,
       defeatedInvasions,
       defeatedInvasionsTrack,
