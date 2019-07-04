@@ -17,7 +17,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
 
       val gp1 = gp
@@ -36,7 +36,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     import Tag.implicits._
 
     implicitly[Arbitrary[PersistentMainCharacter]]
-    implicitly[Arbitrary[List[PersistentInvasion]]]
+    implicitly[Arbitrary[Vector[PersistentInvasion]]]
     implicitly[Arbitrary[List[Int]]]
 
     //Tag[T, A] was necessary here to disambiguate
@@ -48,7 +48,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
       (
         mainChar: PersistentMainCharacter,
         xp: Tag[T1, Int],
-        invasions: List[PersistentInvasion],
+        invasions: Vector[PersistentInvasion],
         defeatedCount: Tag[T2, Int],
         defeatedInvasionsTrack: List[Int]
       ) =>

@@ -30,7 +30,7 @@ object Generators {
   implicit val persistentMainCharacter: Arbitrary[PersistentMainCharacter] =
     Arbitrary(genPersistentMainCharacter)
 
-  implicit val invasionList: Arbitrary[List[Invasion]] =
+  implicit val invasionList: Arbitrary[Vector[Invasion]] =
     Arbitrary(genInvasionList)
 
   implicit val persistentInvasionList: Arbitrary[List[PersistentInvasion]] =

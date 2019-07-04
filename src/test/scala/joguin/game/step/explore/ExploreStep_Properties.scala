@@ -1,7 +1,6 @@
 package joguin.game.step.explore
 
 import eu.timepit.refined._
-import eu.timepit.refined.auto._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
@@ -29,7 +28,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     implicit val i1: Arbitrary[Int] = Arbitrary(Gen.choose(1, invasionListSize))
 
     forAll { (gp: GameProgress, chosenCity: Int) =>
-      val i = gp.invasionCount
+      val i = gp.invasions.size
       val cities = gp.invasions.map(_.city)
       val firstMessage = 0
       val lastMessage = i + 1
@@ -61,7 +60,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.quitOption
 
     forAll { (gp: GameProgress, quitOption: String) =>
-      val i: Int = gp.invasionCount
+      val i: Int = gp.invasions.size
 
       val answers = Map(
         whereToGo(i) -> List(quitOption)
@@ -95,7 +94,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         validOption: Tag[T1, String],
         invalidOption: Tag[T2, String]
       ) =>
-        val i: Int = gp.invasionCount
+        val i: Int = gp.invasions.size
         val options = List.fill[String](repetitions)(invalidOption) ++ List[String](validOption)
 
         val answers = Map(
@@ -119,7 +118,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
     forAll { gp: GameProgress =>
       val cities = gp.invasions.map(_.city)
-      val i: Int = gp.invasionCount
+      val i: Int = gp.invasions.size
       val firstMessage = 0
       val lastMessage = i + 1
 
@@ -159,7 +158,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
     forAll { (gp: GameProgress, index: Index) =>
       val answers = Map(
-        whereToGo(gp.invasionCount) -> List(index.toString)
+        whereToGo(gp.invasions.size) -> List(index.toString)
       )
 
       val nextStep = ExploreStep[ExploreStepF]
@@ -183,7 +182,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val gp1 = gp.defeatInvasion(index)
 
       val answers = Map(
-        whereToGo(gp.invasionCount) -> List("q")
+        whereToGo(gp.invasions.size) -> List("q")
       )
 
       val actualMessages = ExploreStep[ExploreStepF]

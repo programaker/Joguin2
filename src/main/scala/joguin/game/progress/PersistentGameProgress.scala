@@ -24,9 +24,7 @@ final case class PersistentGameProgress(
       invasions.map(_.toInvasion).sequence[Option, Invasion],
       refineV[CountR](defeatedInvasions).toOption,
       defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
-    ) mapN { (mc, invs, dinvs, track) =>
-      GameProgress(mc, invs, dinvs, track)
-    }
+    ).mapN(GameProgress.apply)
 }
 
 object PersistentGameProgress {

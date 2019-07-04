@@ -84,7 +84,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
             progress.mainCharacter shouldBe expectedMainChar
 
             //GameProgress starts with all cities invaded
-            val indexes = (1 to progress.invasionCount).map(refineV[IndexR](_).getOrElse(1: Index))
+            val indexes = (1 to progress.invasions.size).map(refineV[IndexR](_).getOrElse(1: Index))
             progress.allInvasionsDefeated shouldBe false
             Inspectors.forAll(indexes)(idx => progress.isInvasionDefeated(idx) shouldBe false)
         }
