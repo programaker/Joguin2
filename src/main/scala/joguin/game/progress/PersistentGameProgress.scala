@@ -14,7 +14,7 @@ import joguin.earth.maincharacter.MainCharacter
 
 final case class PersistentGameProgress(
   mainCharacter: PersistentMainCharacter,
-  invasions: List[PersistentInvasion],
+  invasions: Vector[PersistentInvasion],
   defeatedInvasions: Int,
   defeatedInvasionsTrack: List[Int]
 ) {
@@ -25,7 +25,7 @@ final case class PersistentGameProgress(
       refineV[CountR](defeatedInvasions).toOption,
       defeatedInvasionsTrack.flatMap(refineV[IndexR](_).toList).toSet.some
     ) mapN { (mc, invs, dinvs, track) =>
-      GameProgress.of(mc, invs, dinvs, track)
+      GameProgress(mc, invs, dinvs, track)
     }
 }
 

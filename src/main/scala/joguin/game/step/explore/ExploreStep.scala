@@ -2,10 +2,12 @@ package joguin.game.step.explore
 
 import cats.free.Free
 import cats.free.Free._
+import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.alien.Invasion
 import joguin.game.progress.Count
+import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
@@ -49,31 +51,37 @@ final class ExploreStep[F[_]](
     } yield nextStep
 
   private def showInvasions(
-    invasions: List[Invasion],
+    invasions: Vector[Invasion],
     gameProgress: GameProgress,
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
   ): Free[F, Unit] =
-    (invasions, index) match {
-      case (Nil, _) =>
-        pure(())
-
-      case (_, None) =>
-        pure(()) //A very improbable refinement error happened
-
-      case (invasion :: otherInvasions, Some(idx)) =>
-        val key = if (gameProgress.isInvasionDefeated(idx)) {
-          human_dominated_city
-        } else {
-          alien_dominated_city
-        }
-
-        getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
-          .flatMap(writeMessage)
+    (invasions.headOption, index)
+      .mapN { (invasion, idx) =>
+        showInvasion(invasion, gameProgress, src, idx)
           .flatMap { _ =>
-            showInvasions(otherInvasions, gameProgress, src, refineV[IndexR](idx + 1).toOption)
+            showInvasions(invasions.drop(1), gameProgress, src, refineV[IndexR](idx + 1).toOption)
           }
+      }
+      .getOrElse(pure(()))
+
+  private def showInvasion(
+    invasion: Invasion,
+    gameProgress: GameProgress,
+    src: LocalizedMessageSource[ExploreMessageSource.type],
+    idx: Index
+  ): Free[F, Unit] = {
+
+    //TODO => Move "isInvasionDefeated" to somewhere else, like a HumanArmy report
+    val key = if (gameProgress.defeatedInvasionsTrack.contains(idx)) {
+      human_dominated_city
+    } else {
+      alien_dominated_city
     }
+
+    getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
+      .flatMap(writeMessage)
+  }
 
   private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
     for {
@@ -87,17 +95,16 @@ final class ExploreStep[F[_]](
     gp: GameProgress
   ): Free[F, GameStep] = {
 
-    val invasionCount = gp.invasionCount
+    val invasionCount: Count = refineV[CountR](gp.invasions.size).getOrElse(0)
 
     for {
-      message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.value.toString))
+      message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield
-      option match {
-        case QuitGame            => Quit(gp)
-        case GoToInvasion(index) => Fight(gp, index)
-      }
+    } yield option match {
+      case QuitGame            => Quit(gp)
+      case GoToInvasion(index) => Fight(gp, index)
+    }
   }
 }
 
