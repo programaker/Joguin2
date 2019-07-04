@@ -80,7 +80,9 @@ final class CreateCharacterStep[F[_]](
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
-      .flatMap(_.map(AlienArmy.invade(_)).sequence)
+      .map(_.map(AlienArmy.invade(_)))
+      .map(_.toVector) //TODO => Maybe, use Vector everywhere...
+      .flatMap(_.sequence)
       .map(GameProgress.start(mainCharacter, _))
 }
 
