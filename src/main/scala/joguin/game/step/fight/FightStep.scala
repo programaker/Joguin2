@@ -91,7 +91,7 @@ final class FightStep[F[_]](
     src: LocalizedMessageSource[FightMessageSource.type]
   ): Free[F, GameProgress] = {
 
-    val characterExperience = gameProgress.mainCharacterExperience.value
+    val characterExperience = gameProgress.mainCharacter.experience.value //TODO => Lenses!
     val deviceDefensePower = invasion.terraformDevice.defensePower.value
     val city = invasion.city.name.value
     val deviceDestroyed = characterExperience >= deviceDefensePower
@@ -101,7 +101,7 @@ final class FightStep[F[_]](
         .map(gameProgress.increaseMainCharacterExperience)
         .getOrElse(gameProgress)
 
-      val newExperience = up1.mainCharacterExperience.value.toString
+      val newExperience = up1.mainCharacter.experience.value.toString
 
       val (up2, fightOutCome) =
         if (deviceDestroyed) {

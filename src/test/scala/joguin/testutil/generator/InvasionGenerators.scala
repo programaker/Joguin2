@@ -21,8 +21,8 @@ import org.scalacheck.cats.implicits._
 object InvasionGenerators {
   val invasionListSize: Int = 10
 
-  def genInvasionList: Gen[List[Invasion]] =
-    Gen.listOfN(invasionListSize, genInvasion)
+  def genInvasionList: Gen[Vector[Invasion]] =
+    Gen.containerOfN[Vector, Invasion](invasionListSize, genInvasion)
 
   def genPersistentInvasionList: Gen[List[PersistentInvasion]] =
     Gen.listOfN(invasionListSize, genPersistentInvasion)

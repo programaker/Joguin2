@@ -1,11 +1,13 @@
 package joguin.earth.maincharacter
 
 import joguin.Name
+import joguin.game.progress.Experience
 
 final case class MainCharacter(
   name: Name,
   gender: Gender,
-  age: Age
+  age: Age,
+  experience: Experience
 )
 
 sealed abstract class Gender(val code: String) extends Product with Serializable

@@ -72,7 +72,7 @@ final class ShowIntroStep[F[_]](
   ): Free[F, GameStep] = {
 
     val name: String = gp.mainCharacter.name
-    val experience: Int = gp.mainCharacterExperience
+    val experience: Int = gp.mainCharacter.experience
     getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }

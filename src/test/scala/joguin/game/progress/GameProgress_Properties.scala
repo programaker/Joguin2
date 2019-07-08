@@ -11,29 +11,12 @@ import org.scalatest.OptionValues._
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class GameProgress_Properties extends PropertyBasedSpec {
 
-  property("start gives a GameProgress with MainCharacter's experience = 0 and no defeated invasions") {
-    import joguin.testutil.generator.Generators.invasionList
-    import joguin.testutil.generator.Generators.mainCharacter
-
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
-      val gp = GameProgress.start(mainCharacter, invasions)
-      val invasionCount = invasions.size
-
-      val shouldNotHappen: Index = 1
-      val indexes = (1 to invasionCount).map(refineV[IndexR](_).getOrElse(shouldNotHappen))
-
-      gp.mainCharacterExperience.value shouldBe 0
-      gp.allInvasionsDefeated shouldBe false
-      Inspectors.forAll(indexes)(idx => gp.isInvasionDefeated(idx) shouldBe false)
-    }
-  }
-
   property("getting an Invasion by a valid Index (between 1 and total Invasions), gives Some(Invasion)") {
     import joguin.testutil.generator.Generators.index
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       val invasionAtIndex = invasions(validIndex.value - 1)
       gp.invasionByIndex(validIndex).value shouldBe invasionAtIndex
@@ -45,7 +28,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       gp.invasionByIndex(invalidIndex) shouldBe empty
     }
@@ -56,7 +39,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], validIndex: Index) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       val gp1 = gp.defeatInvasion(validIndex)
       gp1.isInvasionDefeated(validIndex) shouldBe true
@@ -68,7 +51,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], invalidIndex: Index) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       val gp1 = gp.defeatInvasion(invalidIndex)
       gp1.isInvasionDefeated(invalidIndex) shouldBe false
@@ -81,14 +64,14 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.mainCharacter
     import joguin.testutil.generator.Generators.smallInt
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion], xp: Experience, n: Int) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], xp: Experience, n: Int) =>
       val start = GameProgress.start(mainCharacter, invasions)
 
       val gp1 = (1 to n).foldLeft(start) { (gp, _) =>
         gp.increaseMainCharacterExperience(xp)
       }
 
-      gp1.mainCharacterExperience.value shouldBe (start.mainCharacterExperience.value + (n * xp.value))
+      gp1.mainCharacter.experience.value shouldBe (start.mainCharacter.experience.value + (n * xp.value))
     }
   }
 
@@ -96,7 +79,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
 
-    forAll { (mainCharacter: MainCharacter, invasions: List[Invasion]) =>
+    forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion]) =>
       val start = GameProgress.start(mainCharacter, invasions)
       val invasionCount = invasions.size
 

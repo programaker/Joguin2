@@ -4,6 +4,7 @@ import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
+import eu.timepit.refined.auto._
 import eu.timepit.refined.string.ValidInt
 import joguin.alien.AlienArmy
 import joguin.alien.terraformdevice.PowerGeneratorOps
@@ -57,7 +58,7 @@ final class CreateCharacterStep[F[_]](
       informAgeError <- message(error_invalid_age)
       age            <- ask(informAge, informAgeError, parseAge)
 
-      mc <- pure(MainCharacter(name, gender, age))
+      mc <- pure(MainCharacter(name, gender, age, experience = 0))
 
       characterCreated <- messageFmt(character_created, List(name.value))
       _                <- writeMessage(characterCreated)
@@ -79,7 +80,9 @@ final class CreateCharacterStep[F[_]](
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
-      .flatMap(_.map(AlienArmy.invade(_)).sequence)
+      .map(_.map(AlienArmy.invade(_)))
+      .map(_.toVector) //TODO => Maybe, use Vector everywhere...
+      .flatMap(_.sequence)
       .map(GameProgress.start(mainCharacter, _))
 }
 
