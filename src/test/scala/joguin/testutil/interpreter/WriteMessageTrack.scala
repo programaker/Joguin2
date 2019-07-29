@@ -1,7 +1,7 @@
 package joguin.testutil.interpreter
 
 import cats.data.State
-import joguin.LazyEff
+import joguin.Lazy
 
 final case class WriteMessageTrack(
   currentMessage: String,
@@ -16,7 +16,7 @@ object WriteMessageTrack {
   def build(answersByQuestion: Map[String, List[String]]): WriteMessageTrack =
     new WriteMessageTrack("", 0, Map.empty, answersByQuestion)
 
-  implicit val stateLazyEff: LazyEff[MessageTrackState] = new LazyEff[MessageTrackState] {
-    override def wrap[A](a: => A): MessageTrackState[A] = State.pure(a)
+  implicit val stateLazyEff: Lazy[MessageTrackState] = new Lazy[MessageTrackState] {
+    override def lift[A](a: => A): MessageTrackState[A] = State.pure(a)
   }
 }
