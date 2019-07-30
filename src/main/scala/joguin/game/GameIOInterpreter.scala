@@ -6,7 +6,7 @@ import cats.effect.IO
 import cats.~>
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.earth.city.CityRepositoryInterpreter
-import joguin.game.progress.GameProgressRepositoryIOInterpreter
+import joguin.game.progress.GameProgressRepositoryInterpreter
 import joguin.playerinteraction.interaction.InteractionInterpreter
 import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesInterpreter
@@ -22,32 +22,32 @@ object GameIOInterpreter {
     //This is important, as the interpreter composition must be
     //in the same order of the Coproduct composition and, without the
     //variables, it would be "upside-down" in relation to the Coproduct
-    val i1 = messagesIOInterpreter or messageSourceIOInterpreter
-    val i2 = interactionIOInterpreter or i1
-    val i3 = cityRepositoryIOInterpreter or i2
-    val i4 = gameProgressRepositoryIOInterpreter or i3
-    val i5 = powerGeneratorIOInterpreter or i4
-    waitIOInterpreter or i5
+    val i1 = messagesInterpreter or messageSourceInterpreter
+    val i2 = interactionInterpreter or i1
+    val i3 = cityRepositoryInterpreter or i2
+    val i4 = gameProgressRepositoryInterpreter or i3
+    val i5 = powerGeneratorInterpreter or i4
+    waitInterpreter or i5
   }
 
-  private val messageSourceIOInterpreter =
+  private val messageSourceInterpreter =
     MessageSourceInterpreter[IO]
 
-  private val interactionIOInterpreter =
+  private val interactionInterpreter =
     InteractionInterpreter[IO]
 
-  private val messagesIOInterpreter =
+  private val messagesInterpreter =
     MessagesInterpreter[IO]
 
-  private val cityRepositoryIOInterpreter =
+  private val cityRepositoryInterpreter =
     CityRepositoryInterpreter[IO]
 
-  private val gameProgressRepositoryIOInterpreter =
-    GameProgressRepositoryIOInterpreter(new File("saved-game/last-progress.prog"))
+  private val gameProgressRepositoryInterpreter =
+    GameProgressRepositoryInterpreter[IO](new File("saved-game/last-progress.prog"))
 
-  private val powerGeneratorIOInterpreter =
+  private val powerGeneratorInterpreter =
     PowerGeneratorInterpreter[IO]
 
-  private val waitIOInterpreter =
+  private val waitInterpreter =
     WaitInterpreter[IO]
 }
