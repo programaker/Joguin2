@@ -5,7 +5,7 @@ import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
 import joguin.alien.Invasion
-import joguin.game.progress.ExperienceR
+import joguin.earth.maincharacter.ExperienceR
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 import joguin.game.step.Explore

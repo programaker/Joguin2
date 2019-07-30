@@ -4,6 +4,8 @@ import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.alien.Invasion
+import joguin.earth.maincharacter.Experience
+import joguin.earth.maincharacter.ExperienceR
 import joguin.earth.maincharacter.MainCharacter
 
 /* TODO => Big GameProgress Refactoring! https://github.com/programaker/Joguin2/issues/4 */

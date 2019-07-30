@@ -4,11 +4,12 @@ import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.NameR
-import joguin.alien.terraformdevice.TerraformDevice
 import joguin.alien.Invasion
 import joguin.alien.PowerR
+import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
 import joguin.earth.maincharacter.AgeR
+import joguin.earth.maincharacter.ExperienceR
 import joguin.earth.maincharacter.Gender
 import joguin.earth.maincharacter.MainCharacter
 

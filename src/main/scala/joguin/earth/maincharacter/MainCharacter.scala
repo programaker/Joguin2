@@ -1,7 +1,6 @@
 package joguin.earth.maincharacter
 
 import joguin.Name
-import joguin.game.progress.Experience
 
 final case class MainCharacter(
   name: Name,
