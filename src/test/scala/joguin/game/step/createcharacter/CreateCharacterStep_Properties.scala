@@ -99,17 +99,17 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.invalidName
     import joguin.testutil.generator.Generators.name
 
-    implicit val a1: Arbitrary[Tag[T1, Int]] = arbTag(Generators.genSmallInt)
-    implicit val a2: Arbitrary[Tag[T2, Int]] = arbTag(AgeGenerators.genInvalidAge)
+    implicit val a1: Arbitrary[Tag[1, Int]] = arbTag(Generators.genSmallInt)
+    implicit val a2: Arbitrary[Tag[2, Int]] = arbTag(AgeGenerators.genInvalidAge)
 
     forAll {
       (
         name: Name,
         gender: Gender,
         age: Age,
-        repetitions: Tag[T1, Int],
+        repetitions: Tag[1, Int],
         invalidName: String,
-        invalidAge: Tag[T2, Int]
+        invalidAge: Tag[2, Int]
       ) =>
         val names = List.fill(repetitions)(invalidName) ++ List(name.value)
         val genders = List.fill(repetitions)(invalidName) ++ List(gender.code)

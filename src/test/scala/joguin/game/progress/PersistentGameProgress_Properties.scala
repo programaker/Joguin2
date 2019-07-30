@@ -41,15 +41,15 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
 
     //Tag[T, A] was necessary here to disambiguate
     //xp and defeatedCount implicits, because both are Ints
-    implicitly[Arbitrary[Tag[T1, Int]]]
-    implicitly[Arbitrary[Tag[T2, Int]]]
+    implicitly[Arbitrary[Tag[1, Int]]]
+    implicitly[Arbitrary[Tag[2, Int]]]
 
     forAll {
       (
         mainChar: PersistentMainCharacter,
-        xp: Tag[T1, Int],
+        xp: Tag[1, Int],
         invasions: Vector[PersistentInvasion],
-        defeatedCount: Tag[T2, Int],
+        defeatedCount: Tag[2, Int],
         defeatedInvasionsTrack: List[Int]
       ) =>
         val invalidStr: String => Boolean = _.trim.isEmpty

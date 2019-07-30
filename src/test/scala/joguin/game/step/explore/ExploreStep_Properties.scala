@@ -84,15 +84,15 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Tag._
     import joguin.testutil.generator.Tag.implicits._
 
-    implicit val a1: Arbitrary[Tag[T1, String]] = arbTag(genValidOption(InvasionGenerators.invasionListSize))
-    implicit val a2: Arbitrary[Tag[T2, String]] = arbTag(Gen.alphaNumStr)
+    implicit val a1: Arbitrary[Tag[1, String]] = arbTag(genValidOption(InvasionGenerators.invasionListSize))
+    implicit val a2: Arbitrary[Tag[2, String]] = arbTag(Gen.alphaNumStr)
 
     forAll {
       (
         gp: GameProgress,
         repetitions: Int,
-        validOption: Tag[T1, String],
-        invalidOption: Tag[T2, String]
+        validOption: Tag[1, String],
+        invalidOption: Tag[2, String]
       ) =>
         val i: Int = gp.invasions.size
         val options = List.fill[String](repetitions)(invalidOption) ++ List[String](validOption)
