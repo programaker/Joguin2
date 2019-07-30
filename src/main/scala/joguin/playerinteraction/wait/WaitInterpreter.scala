@@ -1,6 +1,5 @@
 package joguin.playerinteraction.wait
 
-import cats.MonadError
 import cats.implicits._
 import cats.~>
 import joguin.Lazy
@@ -15,7 +14,7 @@ final class WaitInterpreter[F[_]: Recovery: Lazy] extends (WaitF ~> F) {
   }
 
   private def sleep(duration: FiniteDuration): F[Unit] =
-    MonadError[F, Throwable]
+    Recovery[F]
       .pure(duration)
       .flatMap(d => Lazy[F].lift(Thread.sleep(d.toMillis)))
       .handleError(_ => ())

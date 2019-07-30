@@ -15,6 +15,9 @@ package object joguin {
   type Name = String Refined NameR
 
   type Recovery[F[_]] = MonadError[F, Throwable]
+  object Recovery {
+    def apply[F[_]](implicit F: MonadError[F, Throwable]): Recovery[F] = MonadError[F, Throwable]
+  }
 
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value
