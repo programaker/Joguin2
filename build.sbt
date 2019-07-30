@@ -14,6 +14,7 @@ val scalaTestV = "3.0.8"
 val scalaCheckV = "1.14.0"
 val scalaCheckShapelessV = "1.2.3"
 val catsScalaCheckV = "0.1.1"
+val zioV = "1.0.0-RC10-1"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -46,7 +47,8 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsV,
   "org.typelevel" %% "cats-free" % catsV,
-  "org.typelevel" %% "cats-effect" % catsEffectV,
+
+  "dev.zio" %% "zio" % zioV,
 
   "eu.timepit" %% "refined" % refinedV,
   "eu.timepit" %% "refined-cats" % refinedV,
