@@ -1,13 +1,13 @@
 name := "joguin2"
 version := "2.0"
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.0"
 
-val catsV = "1.6.1"
+val catsV = "2.0.0-M4"
 val catsEffectV = "1.3.1"
 val refinedV = "0.9.8"
 val commonsIoV = "2.6"
-val circeV = "0.11.1"
-val betterMonadicForV = "0.3.0"
+val circeV = "0.12.0-M4"
+val betterMonadicForV = "0.3.1"
 val kindProjectorV = "0.10.3"
 val linterV = "0.1.17"
 val scalaTestV = "3.0.8"
@@ -34,7 +34,6 @@ scalacOptions ++= Seq(
   "-language:implicitConversions",
 
   "-Ywarn-dead-code",
-  "-Ypartial-unification",
   "-Ywarn-value-discard", 
   "-Ywarn-unused:imports",
   "-Ywarn-unused:implicits",
