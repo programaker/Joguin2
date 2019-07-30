@@ -66,7 +66,8 @@ wartremoverWarnings ++= Warts.allBut(
   Wart.Nothing,
   Wart.ImplicitParameter,
   Wart.ImplicitConversion,
-  Wart.Any
+  Wart.Any,
+  Wart.StringPlusAny
 )
 
 mainClass in assembly := Some("joguin.JoguinApplication")
