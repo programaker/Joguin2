@@ -10,7 +10,7 @@ import joguin.game.progress.GameProgressRepositoryIOInterpreter
 import joguin.playerinteraction.interaction.InteractionInterpreter
 import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesInterpreter
-import joguin.playerinteraction.wait.WaitIOInterpreter
+import joguin.playerinteraction.wait.WaitInterpreter
 
 /** GameF composite interpreter to IO */
 object GameIOInterpreter {
@@ -27,7 +27,7 @@ object GameIOInterpreter {
     val i3 = cityRepositoryIOInterpreter or i2
     val i4 = gameProgressRepositoryIOInterpreter or i3
     val i5 = powerGeneratorIOInterpreter or i4
-    WaitIOInterpreter or i5
+    waitIOInterpreter or i5
   }
 
   private val messageSourceIOInterpreter =
@@ -47,4 +47,7 @@ object GameIOInterpreter {
 
   private val powerGeneratorIOInterpreter =
     PowerGeneratorInterpreter[IO]
+
+  private val waitIOInterpreter =
+    WaitInterpreter[IO]
 }

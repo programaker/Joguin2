@@ -1,4 +1,5 @@
 import cats.Eq
+import cats.MonadError
 import cats.implicits._
 import eu.timepit.refined.W
 import eu.timepit.refined.api.Refined
@@ -12,6 +13,8 @@ package object joguin {
 
   type NameR = NonBlankString
   type Name = String Refined NameR
+
+  type Recovery[F[_]] = MonadError[F, Throwable]
 
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value
