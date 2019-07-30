@@ -4,6 +4,10 @@ import cats.Id
 import cats.Monad
 import cats.effect.IO
 
+/** Typeclass to lift a normal value into an Effect context lazily.
+ *
+ * Useful to store impure code inside a proper functional data type without
+ * coupling with any specific IO implementation */
 trait Lazy[F[_]] {
   def lift[A](a: => A): F[A]
 }
