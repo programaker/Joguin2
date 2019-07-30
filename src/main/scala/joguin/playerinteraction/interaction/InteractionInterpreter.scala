@@ -1,12 +1,12 @@
 package joguin.playerinteraction.interaction
 
-import cats.effect.IO
 import cats.~>
+import joguin.Lazy
 
 import scala.io.StdIn.readLine
 
-/** InteractionF root interpreter to IO that interacts with the player through the console */
-object InteractionIOInterpreter[F[_] : Lazy] extends (InteractionF ~> F) {
+/** InteractionF root interpreter to any F that interacts with the player through the console */
+final class InteractionInterpreter[F[_]: Lazy] extends (InteractionF ~> F) {
   override def apply[A](fa: InteractionF[A]): F[A] = fa match {
     case WriteMessage(message) => write(message)
     case ReadAnswer            => read()
@@ -14,4 +14,8 @@ object InteractionIOInterpreter[F[_] : Lazy] extends (InteractionF ~> F) {
 
   private def write(message: String): F[Unit] = Lazy[F].lift(print(message))
   private def read(): F[String] = Lazy[F].lift(readLine())
+}
+
+object InteractionInterpreter {
+  def apply[F[_]: Lazy]: InteractionInterpreter[F] = new InteractionInterpreter[F]
 }

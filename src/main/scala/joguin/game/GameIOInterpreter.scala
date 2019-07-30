@@ -7,7 +7,7 @@ import cats.~>
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryIOInterpreter
-import joguin.playerinteraction.interaction.InteractionIOInterpreter
+import joguin.playerinteraction.interaction.InteractionInterpreter
 import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesInterpreter
 import joguin.playerinteraction.wait.WaitIOInterpreter
@@ -23,7 +23,7 @@ object GameIOInterpreter {
     //in the same order of the Coproduct composition and, without the
     //variables, it would be "upside-down" in relation to the Coproduct
     val i1 = messagesIOInterpreter or messageSourceIOInterpreter
-    val i2 = InteractionIOInterpreter or i1
+    val i2 = interactionIOInterpreter or i1
     val i3 = cityRepositoryIOInterpreter or i2
     val i4 = gameProgressRepositoryIOInterpreter or i3
     val i5 = powerGeneratorIOInterpreter or i4
@@ -33,8 +33,11 @@ object GameIOInterpreter {
   private val messageSourceIOInterpreter =
     MessageSourceInterpreter[IO]
 
+  private val interactionIOInterpreter =
+    InteractionInterpreter[IO]
+
   private val messagesIOInterpreter =
-    new MessagesInterpreter[IO]
+    MessagesInterpreter[IO]
 
   private val cityRepositoryIOInterpreter =
     CityRepositoryInterpreter[IO]
