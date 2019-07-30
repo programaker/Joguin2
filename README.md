@@ -15,7 +15,7 @@ and save the world.
 ## Requirements
 
 * Java 8+
-* Scala 2.12.8+
+* Scala 2.13.0+
 * SBT 1.2.8+
 * A command line interface
 
