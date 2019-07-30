@@ -15,7 +15,7 @@ import joguin.playerinteraction.wait.WaitOps._
 object JoguinApplication extends IOApp {
   override def run(args: List[String]): IO[ExitCode] =
     Game.play
-      .foldMap(GameIOInterpreter.build)
+      .foldMap(GameInterpreter[IO].build)
       .map(_ => ExitCode.Success)
       .handleErrorWith(_ => IO.pure(ExitCode.Error))
 }

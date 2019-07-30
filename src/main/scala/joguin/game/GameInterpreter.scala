@@ -2,8 +2,9 @@ package joguin.game
 
 import java.io.File
 
-import cats.effect.IO
 import cats.~>
+import joguin.Lazy
+import joguin.Recovery
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryInterpreter
@@ -12,9 +13,9 @@ import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesInterpreter
 import joguin.playerinteraction.wait.WaitInterpreter
 
-/** GameF composite interpreter to IO */
-object GameIOInterpreter {
-  def build: GameF ~> IO = {
+/** GameF composite interpreter to any F */
+final class GameInterpreter[F[_]: Recovery: Lazy] {
+  def build: GameF ~> F = {
     //The interpreter composition was written this way (with variables)
     //to match the Coproduct composition (see the game package object) and
     //make the order easier to see.
@@ -31,23 +32,27 @@ object GameIOInterpreter {
   }
 
   private val messageSourceInterpreter =
-    MessageSourceInterpreter[IO]
+    MessageSourceInterpreter[F]
 
   private val interactionInterpreter =
-    InteractionInterpreter[IO]
+    InteractionInterpreter[F]
 
   private val messagesInterpreter =
-    MessagesInterpreter[IO]
+    MessagesInterpreter[F]
 
   private val cityRepositoryInterpreter =
-    CityRepositoryInterpreter[IO]
+    CityRepositoryInterpreter[F]
 
   private val gameProgressRepositoryInterpreter =
-    GameProgressRepositoryInterpreter[IO](new File("saved-game/last-progress.prog"))
+    GameProgressRepositoryInterpreter[F](new File("saved-game/last-progress.prog"))
 
   private val powerGeneratorInterpreter =
-    PowerGeneratorInterpreter[IO]
+    PowerGeneratorInterpreter[F]
 
   private val waitInterpreter =
-    WaitInterpreter[IO]
+    WaitInterpreter[F]
+}
+
+object GameInterpreter {
+  def apply[F[_]: Recovery: Lazy]: GameInterpreter[F] = new GameInterpreter[F]
 }
