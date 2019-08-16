@@ -11,6 +11,7 @@ import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.game.progress.allInvasionsDefeated
 import joguin.game.step.Fight
 import joguin.game.step.GameOver
 import joguin.game.step.GameStep
@@ -43,7 +44,7 @@ final class ExploreStep[F[_]](
       src <- getLocalizedMessageSource(ExploreMessageSource)
       _   <- showInvasions(gameProgress.invasions, gameProgress, src, Some(1))
 
-      nextStep <- if (gameProgress.allInvasionsDefeated) {
+      nextStep <- if (allInvasionsDefeated(gameProgress)) {
         missionAccomplished(src)
       } else {
         chooseOption(src, gameProgress)

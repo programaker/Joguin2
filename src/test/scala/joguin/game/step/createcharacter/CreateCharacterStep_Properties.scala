@@ -8,6 +8,8 @@ import joguin.earth.maincharacter.Gender
 import joguin.earth.maincharacter.MainCharacter
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.game.progress.allInvasionsDefeated
+import joguin.game.progress.isInvasionDefeated
 import joguin.game.step.Explore
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.AgeGenerators
@@ -85,8 +87,8 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
             //GameProgress starts with all cities invaded
             val indexes = (1 to progress.invasions.size).map(refineV[IndexR](_).getOrElse(1: Index))
-            progress.allInvasionsDefeated shouldBe false
-            Inspectors.forAll(indexes)(idx => progress.isInvasionDefeated(idx) shouldBe false)
+            allInvasionsDefeated(progress) shouldBe false
+            Inspectors.forAll(indexes)(idx => isInvasionDefeated(progress, idx) shouldBe false)
         }
     }
   }

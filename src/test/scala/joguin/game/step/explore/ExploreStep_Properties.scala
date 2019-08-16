@@ -3,6 +3,7 @@ package joguin.game.step.explore
 import eu.timepit.refined._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
+import joguin.game.progress.defeatInvasion
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
 import joguin.game.step.Fight
@@ -124,7 +125,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
       val allInvasionsDefeatedGp = (1 to i).foldLeft(gp) { (progress, idx) =>
         refineV[IndexR](idx)
-          .map(progress.defeatInvasion)
+          .map(defeatInvasion(progress, _))
           .getOrElse(progress)
       }
 
@@ -179,7 +180,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.index
 
     forAll { (gp: GameProgress, index: Index) =>
-      val gp1 = gp.defeatInvasion(index)
+      val gp1 = defeatInvasion(gp, index)
 
       val answers = Map(
         whereToGo(gp.invasions.size) -> List("q")

@@ -20,12 +20,12 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion]) =>
       val gp = GameProgress.start(mainCharacter, invasions)
 
-      val gp1 = gp
-        .defeatInvasion(1)
-        .increaseMainCharacterExperience(1000)
-        .defeatInvasion(2)
-        .increaseMainCharacterExperience(500)
+      val f = (defeatInvasion(_, 1))
+        .andThen(increaseMainCharacterExperience(_, 1000))
+        .andThen(defeatInvasion(_, 2))
+        .andThen(increaseMainCharacterExperience(_, 500))
 
+      val gp1 = f(gp)
       PersistentGameProgress.fromGameProgress(gp).toGameProgress.value shouldBe gp
       PersistentGameProgress.fromGameProgress(gp1).toGameProgress.value shouldBe gp1
     }

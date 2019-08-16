@@ -6,7 +6,7 @@ import cats.implicits._
 import eu.timepit.refined._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.ExperienceR
-import joguin.game.progress.GameProgress
+import joguin.game.progress._
 import joguin.game.progress.Index
 import joguin.game.step.Explore
 import joguin.game.step.GameOver
@@ -34,13 +34,12 @@ final class FightStep[F[_]](
   import w._
 
   def play(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =
-    gameProgress
-      .invasionByIndex(selectedInvasion)
+    invasionByIndex(gameProgress, selectedInvasion)
       .map { invasion =>
         for {
           src <- getLocalizedMessageSource(FightMessageSource)
 
-          updatedProgress <- if (gameProgress.isInvasionDefeated(selectedInvasion)) {
+          updatedProgress <- if (isInvasionDefeated(gameProgress, selectedInvasion)) {
             cityAlreadySaved(gameProgress, invasion, src)
           } else {
             fightOrRetreat(gameProgress, invasion, selectedInvasion, src)
@@ -98,14 +97,14 @@ final class FightStep[F[_]](
 
     showFightAnimation(src).flatMap { _ =>
       val up1 = refineV[ExperienceR](deviceDefensePower / 2)
-        .map(gameProgress.increaseMainCharacterExperience)
+        .map(increaseMainCharacterExperience(gameProgress, _))
         .getOrElse(gameProgress)
 
       val newExperience = up1.mainCharacter.experience.value.toString
 
       val (up2, fightOutCome) =
         if (deviceDestroyed) {
-          (up1.defeatInvasion(invasionIndex), getMessageFmt(src)(earth_won, List(newExperience)))
+          (defeatInvasion(up1, invasionIndex), getMessageFmt(src)(earth_won, List(newExperience)))
         } else {
           (up1, getMessageFmt(src)(aliens_won, List(city, newExperience)))
         }

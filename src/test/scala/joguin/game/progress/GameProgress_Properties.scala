@@ -20,7 +20,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
       val invasionAtIndex = invasions(validIndex.value - 1)
-      gp.invasionByIndex(validIndex).value shouldBe invasionAtIndex
+      invasionByIndex(gp, validIndex).value shouldBe invasionAtIndex
     }
   }
 
@@ -31,7 +31,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
 
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
-      gp.invasionByIndex(invalidIndex) shouldBe empty
+      invasionByIndex(gp, invalidIndex) shouldBe empty
     }
   }
 
@@ -42,8 +42,8 @@ final class GameProgress_Properties extends PropertyBasedSpec {
 
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], validIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
-      val gp1 = gp.defeatInvasion(validIndex)
-      gp1.isInvasionDefeated(validIndex) shouldBe true
+      val gp1 = defeatInvasion(gp, validIndex)
+      isInvasionDefeated(gp1, validIndex) shouldBe true
     }
   }
 
@@ -54,8 +54,8 @@ final class GameProgress_Properties extends PropertyBasedSpec {
 
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion], invalidIndex: Index) =>
       val gp = GameProgress.start(mainCharacter, invasions)
-      val gp1 = gp.defeatInvasion(invalidIndex)
-      gp1.isInvasionDefeated(invalidIndex) shouldBe false
+      val gp1 = defeatInvasion(gp, invalidIndex)
+      isInvasionDefeated(gp1, invalidIndex) shouldBe false
     }
   }
 
@@ -69,7 +69,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
       val start = GameProgress.start(mainCharacter, invasions)
 
       val gp1 = (1 to n).foldLeft(start) { (gp, _) =>
-        gp.increaseMainCharacterExperience(xp)
+        increaseMainCharacterExperience(gp, xp)
       }
 
       gp1.mainCharacter.experience.value shouldBe (start.mainCharacter.experience.value + (n * xp.value))
@@ -88,11 +88,11 @@ final class GameProgress_Properties extends PropertyBasedSpec {
       val indexes = (1 to invasionCount).map(refineV[IndexR](_).getOrElse(shouldNotHappen))
 
       val gp1 = indexes.foldLeft(start) { (gp, idx) =>
-        gp.defeatInvasion(idx)
+        defeatInvasion(gp, idx)
       }
 
-      gp1.allInvasionsDefeated shouldBe true
-      Inspectors.forAll(indexes)(idx => gp1.isInvasionDefeated(idx) shouldBe true)
+      allInvasionsDefeated(gp1) shouldBe true
+      Inspectors.forAll(indexes)(idx => isInvasionDefeated(gp1, idx) shouldBe true)
     }
   }
 
