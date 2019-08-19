@@ -3,6 +3,7 @@ package joguin
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.CityRepositoryOps._
 import joguin.game._
+import joguin.Recovery._
 import joguin.game.progress.GameProgressRepositoryOps._
 import joguin.playerinteraction.interaction.InteractionOps._
 import joguin.playerinteraction.message.MessageSourceOps._
