@@ -3,25 +3,21 @@ package joguin.game.step.createcharacter
 import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
-import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.string.ValidInt
 import joguin.alien.AlienArmy
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
-import joguin.earth.maincharacter.Age
-import joguin.earth.maincharacter.AgeR
 import joguin.earth.maincharacter.Gender
 import joguin.earth.maincharacter.MainCharacter
+import joguin.earth.maincharacter.parseAge
 import joguin.game.progress.GameProgress
 import joguin.game.step.Explore
 import joguin.game.step.GameStep
+import joguin.parseName
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.message.CreateCharacterMessageSource
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
-import joguin.Name
-import joguin.NameR
 
 final class CreateCharacterStep[F[_]](
   implicit
@@ -52,7 +48,7 @@ final class CreateCharacterStep[F[_]](
 
       informGender      <- message(inform_character_gender)
       informGenderError <- message(error_invalid_gender)
-      gender            <- ask(informGender, informGenderError, parseGender)
+      gender            <- ask(informGender, informGenderError, Gender.byCode)
 
       informAge      <- message(inform_character_age)
       informAgeError <- message(error_invalid_age)
@@ -65,18 +61,6 @@ final class CreateCharacterStep[F[_]](
 
       gameProgress <- initGameProgress(mc)
     } yield Explore(gameProgress)
-
-  private def parseName(name: String): Option[Name] =
-    refineV[NameR](name).toOption
-
-  private def parseGender(gender: String): Option[Gender] =
-    Gender.byCode(gender)
-
-  private def parseAge(age: String): Option[Age] =
-    refineV[ValidInt](age)
-      .map(_.value.toInt)
-      .flatMap(refineV[AgeR](_))
-      .toOption
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
