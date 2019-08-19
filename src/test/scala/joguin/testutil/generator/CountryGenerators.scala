@@ -7,13 +7,10 @@ import joguin.earth.CountryR
 import org.scalacheck.Gen
 
 object CountryGenerators {
-  def genCountry: Gen[Country] = {
-    val elseCountry: Country = "Fallback Country"
-
+  def genCountry: Gen[Country] =
     Gen.alphaStr
       .map(refineV[CountryR](_))
-      .map(_.getOrElse(elseCountry))
-  }
+      .map(_.getOrElse("Fallback Country": Country))
 
   def genInvalidCountry: Gen[String] =
     NameGenerators.genInvalidName

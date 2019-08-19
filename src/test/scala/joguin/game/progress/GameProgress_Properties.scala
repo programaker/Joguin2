@@ -83,9 +83,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion]) =>
       val start = GameProgress.start(mainCharacter, invasions)
       val invasionCount = invasions.size
-
-      val shouldNotHappen: Index = 1
-      val indexes = (1 to invasionCount).map(refineV[IndexR](_).getOrElse(shouldNotHappen))
+      val indexes = (1 to invasionCount).map(refineV[IndexR](_).getOrElse(1: Index))
 
       val gp1 = indexes.foldLeft(start) { (gp, idx) =>
         defeatInvasion(gp, idx)

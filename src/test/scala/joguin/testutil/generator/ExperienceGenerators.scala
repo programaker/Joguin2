@@ -7,14 +7,11 @@ import joguin.earth.maincharacter.ExperienceR
 import org.scalacheck.Gen
 
 object ExperienceGenerators {
-  def genExperience: Gen[Experience] = {
-    val elseExperience: Experience = 0
-
+  def genExperience: Gen[Experience] =
     Gen
       .choose(min = 0, max = 20000)
       .map(refineV[ExperienceR](_))
-      .map(_.getOrElse(elseExperience))
-  }
+      .map(_.getOrElse(0: Experience))
 
   def genInvalidExperience: Gen[Int] =
     Gen.choose(Int.MinValue, -1)

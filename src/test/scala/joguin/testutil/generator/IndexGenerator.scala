@@ -13,12 +13,9 @@ object IndexGenerator {
   def genInvalidIndex(lastIndex: Int): Gen[Index] =
     genIndex(lastIndex + 1, lastIndex * 2)
 
-  def genIndex(min: Int, max: Int): Gen[Index] = {
-    val elseIndex: Index = 1
-
+  def genIndex(min: Int, max: Int): Gen[Index] =
     Gen
       .choose(min, max)
       .map(refineV[IndexR](_))
-      .map(_.getOrElse(elseIndex))
-  }
+      .map(_.getOrElse(1: Index))
 }

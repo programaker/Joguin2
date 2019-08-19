@@ -96,16 +96,17 @@ final class ExploreStep[F[_]](
     gp: GameProgress
   ): Free[F, GameStep] = {
 
-    val invasionCount: Count = refineV[CountR](gp.invasions.size).getOrElse(0)
+    val invasionCount = refineV[CountR](gp.invasions.size).getOrElse(0: Count)
 
     for {
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield option match {
-      case QuitGame            => Quit(gp)
-      case GoToInvasion(index) => Fight(gp, index)
-    }
+    } yield
+      option match {
+        case QuitGame            => Quit(gp)
+        case GoToInvasion(index) => Fight(gp, index)
+      }
   }
 }
 

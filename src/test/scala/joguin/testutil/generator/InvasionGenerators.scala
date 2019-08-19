@@ -45,13 +45,10 @@ object InvasionGenerators {
       country <- genInvalidCountry
     } yield PersistentInvasion(power, city, country)
 
-  def genDefeatedInvasions: Gen[Count] = {
-    val elseValue: Count = 0
-
+  def genDefeatedInvasions: Gen[Count] =
     Gen
       .choose(min = 0, max = invasionListSize)
-      .map(refineV[CountR](_).getOrElse(elseValue))
-  }
+      .map(refineV[CountR](_).getOrElse(0: Count))
 
   def genDefeatedInvasionsTrack: Gen[List[Index]] =
     genDefeatedInvasions.flatMap { n =>

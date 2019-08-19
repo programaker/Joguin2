@@ -7,13 +7,10 @@ import joguin.NameR
 import org.scalacheck.Gen
 
 object NameGenerators {
-  def genName: Gen[Name] = {
-    val elseName: Name = "Fallback Name"
-
+  def genName: Gen[Name] =
     Gen.alphaStr
       .map(refineV[NameR](_))
-      .map(_.getOrElse(elseName))
-  }
+      .map(_.getOrElse("Fallback Name": Name))
 
   def genInvalidName: Gen[String] =
     Gen.oneOf("", " ", "   ")
