@@ -120,23 +120,3 @@ object ExploreStep {
   ): ExploreStep[F] =
     new ExploreStep[F]
 }
-
-sealed abstract class ExploreOption extends Product with Serializable
-case object QuitGame extends ExploreOption
-final case class GoToInvasion(index: Index) extends ExploreOption
-
-object ExploreOption {
-  def parse(s: String, invasionCount: Count): Option[ExploreOption] =
-    refineV[ExploreOptionR](s.toLowerCase).toOption
-      .map(_.value)
-      .flatMap {
-        case "q" =>
-          Some(QuitGame)
-        case index =>
-          Some(index.toInt)
-            .map(refineV[IndexR](_))
-            .flatMap(_.toOption)
-            .filter(_ <= invasionCount.value)
-            .map(GoToInvasion)
-      }
-}
