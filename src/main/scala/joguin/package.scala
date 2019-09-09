@@ -14,10 +14,12 @@ package object joguin {
 
   type NameR = NonBlankString
   type Name = String Refined NameR
-  def parseName(name: String): Option[Name] = refineV[NameR](name).toOption
 
   type Recovery[F[_]] = MonadError[F, Throwable]
 
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value
+
+  def parseName(name: String): Option[Name] =
+    refineV[NameR](name).toOption
 }

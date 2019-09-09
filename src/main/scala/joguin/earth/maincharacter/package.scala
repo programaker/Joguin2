@@ -12,15 +12,15 @@ package object maincharacter {
   type AgeR = GreaterEqual[W.`18`.T]
   type Age = Int Refined AgeR
 
-  def parseAge(age: String): Option[Age] =
-    refineV[ValidInt](age)
-      .map(_.value.toInt)
-      .flatMap(refineV[AgeR](_))
-      .toOption
-
   type GenderR = MatchesRegex[W.`"""^[FMOfmo]$"""`.T]
   type GenderCode = String Refined GenderR
 
   type ExperienceR = NonNegative
   type Experience = Int Refined ExperienceR
+
+  def parseAge(age: String): Option[Age] =
+    refineV[ValidInt](age)
+      .map(_.value.toInt)
+      .flatMap(refineV[AgeR](_))
+      .toOption
 }
