@@ -1,7 +1,6 @@
 package joguin.game.step.quit
 
 import cats.free.Free
-import eu.timepit.refined._
 import joguin.game.progress.GameProgress
 import joguin.game.step.GameOver
 import joguin.game.step.GameStep

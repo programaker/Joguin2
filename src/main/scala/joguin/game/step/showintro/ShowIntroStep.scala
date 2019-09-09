@@ -3,7 +3,6 @@ package joguin.game.step.showintro
 import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
-import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.game.progress.GameProgress
 import joguin.game.progress.GameProgressRepositoryOps
