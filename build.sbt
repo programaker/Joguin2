@@ -2,7 +2,7 @@ name := "joguin2"
 version := "2.0"
 scalaVersion := "2.13.0"
 
-val catsV = "2.0.0-RC3"
+val catsV = "2.0.0"
 val refinedV = "0.9.9"
 val commonsIoV = "2.6"
 val circeV = "0.12.0-RC4"
