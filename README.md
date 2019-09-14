@@ -16,7 +16,7 @@ and save the world.
 
 * Java 8+
 * Scala 2.13.0+
-* SBT 1.2.8+
+* SBT 1.3.0+
 * A command line interface
 
 ## Building
