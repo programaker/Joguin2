@@ -1,19 +1,19 @@
 name := "joguin2"
 version := "2.0"
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.1"
 
 val catsV = "2.0.0"
-val refinedV = "0.9.9"
+val refinedV = "0.9.10"
 val commonsIoV = "2.6"
-val circeV = "0.12.0-RC4"
+val circeV = "0.12.1"
 val betterMonadicForV = "0.3.1"
 val kindProjectorV = "0.10.3"
 val linterV = "0.1.17"
 val scalaTestV = "3.0.8"
-val scalaCheckV = "1.14.0"
+val scalaCheckV = "1.14.2"
 val scalaCheckShapelessV = "1.2.3"
 val catsScalaCheckV = "0.1.1"
-val zioV = "1.0.0-RC12-1"
+val zioV = "1.0.0-RC13"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
