@@ -15,7 +15,7 @@ import zio.ZIO
 object JoguinApplication extends zio.App {
   override def run(args: List[String]): ZIO[JoguinApplication.Environment, Nothing, Int] =
     Game.play
-      .foldMap(GameInterpreter[Task].build)
+      .foldMap(new GameInterpreter[Task].build)
       .map(_ => 0)
       .catchAll(_ => Task.succeed(1))
 }

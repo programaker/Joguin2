@@ -18,16 +18,19 @@ object ExploreStepInterpreter {
 
   def build: ExploreStepF ~> MessageTrackState = {
     val i1 = messageSourceInterpreter or messagesInterpreter
-    val i2 = InteractionStateInterpreter() or i1
+    val i2 = interactionInterpreter or i1
     waitInterpreter or i2
   }
 
   private val messageSourceInterpreter: MessageSourceInterpreter[MessageTrackState] =
-    MessageSourceInterpreter[MessageTrackState]
+    new MessageSourceInterpreter[MessageTrackState]
 
   private val messagesInterpreter: MessagesInterpreter[MessageTrackState] =
-    MessagesInterpreter[MessageTrackState]
+    new MessagesInterpreter[MessageTrackState]
 
   private val waitInterpreter: WaitInterpreter[MessageTrackState] =
-    WaitInterpreter[MessageTrackState]
+    new WaitInterpreter[MessageTrackState]
+
+  private val interactionInterpreter: InteractionStateInterpreter =
+    new InteractionStateInterpreter
 }

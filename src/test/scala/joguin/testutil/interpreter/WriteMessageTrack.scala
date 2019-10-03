@@ -16,7 +16,7 @@ object WriteMessageTrack {
   def build(answersByQuestion: Map[String, List[String]]): WriteMessageTrack =
     new WriteMessageTrack("", 0, Map.empty, answersByQuestion)
 
-  implicit val stateLazyEff: Lazy[MessageTrackState] = new Lazy[MessageTrackState] {
+  implicit val stateLazy: Lazy[MessageTrackState] = new Lazy[MessageTrackState] {
     override def lift[A](a: => A): MessageTrackState[A] = State.pure(a)
   }
 }

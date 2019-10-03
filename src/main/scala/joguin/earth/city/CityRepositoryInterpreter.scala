@@ -22,7 +22,3 @@ final class CityRepositoryInterpreter[F[_]: Monad] extends (CityRepositoryF ~> F
     )
   )
 }
-
-object CityRepositoryInterpreter {
-  def apply[F[_]: Monad]: CityRepositoryInterpreter[F] = new CityRepositoryInterpreter[F]
-}

@@ -24,7 +24,3 @@ final class PowerGeneratorInterpreter[F[_]: Lazy] extends (PowerGeneratorF ~> F)
       case Left(_)               => min //in case of error, falls back to min value and life goes on...
     }
 }
-
-object PowerGeneratorInterpreter {
-  def apply[F[_]: Lazy]: PowerGeneratorInterpreter[F] = new PowerGeneratorInterpreter[F]
-}

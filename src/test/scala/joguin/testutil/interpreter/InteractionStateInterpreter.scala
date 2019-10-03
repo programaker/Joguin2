@@ -39,7 +39,3 @@ final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackSta
       (newTrack, currentAnswer)
     }
 }
-
-object InteractionStateInterpreter {
-  def apply(): InteractionStateInterpreter = new InteractionStateInterpreter
-}

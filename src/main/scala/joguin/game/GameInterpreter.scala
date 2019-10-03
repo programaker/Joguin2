@@ -32,27 +32,23 @@ final class GameInterpreter[F[_]: Recovery: Lazy] {
   }
 
   private val messageSourceInterpreter =
-    MessageSourceInterpreter[F]
+    new MessageSourceInterpreter[F]
 
   private val interactionInterpreter =
-    InteractionInterpreter[F]
+    new InteractionInterpreter[F]
 
   private val messagesInterpreter =
-    MessagesInterpreter[F]
+    new MessagesInterpreter[F]
 
   private val cityRepositoryInterpreter =
-    CityRepositoryInterpreter[F]
+    new CityRepositoryInterpreter[F]
 
   private val gameProgressRepositoryInterpreter =
-    GameProgressRepositoryInterpreter[F](new File("saved-game/last-progress.prog"))
+    new GameProgressRepositoryInterpreter[F](new File("saved-game/last-progress.prog"))
 
   private val powerGeneratorInterpreter =
-    PowerGeneratorInterpreter[F]
+    new PowerGeneratorInterpreter[F]
 
   private val waitInterpreter =
-    WaitInterpreter[F]
-}
-
-object GameInterpreter {
-  def apply[F[_]: Recovery: Lazy]: GameInterpreter[F] = new GameInterpreter[F]
+    new WaitInterpreter[F]
 }

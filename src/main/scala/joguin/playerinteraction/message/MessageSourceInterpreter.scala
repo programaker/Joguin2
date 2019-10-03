@@ -17,7 +17,3 @@ final class MessageSourceInterpreter[F[_]: Monad] extends (MessageSourceF ~> F) 
     //but it only knows english for now
     Monad[F].pure(LocalizedMessageSource(source, Locale.US))
 }
-
-object MessageSourceInterpreter {
-  def apply[F[_]: Monad]: MessageSourceInterpreter[F] = new MessageSourceInterpreter[F]
-}

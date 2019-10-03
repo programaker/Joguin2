@@ -11,7 +11,3 @@ final class WaitInterpreter[F[_]: Monad] extends (WaitF ~> F) {
     case WaitFor(_) => Monad[F].pure(())
   }
 }
-
-object WaitInterpreter {
-  def apply[F[_]: Monad]: WaitInterpreter[F] = new WaitInterpreter[F]
-}

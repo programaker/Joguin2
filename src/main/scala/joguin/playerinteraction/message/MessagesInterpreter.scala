@@ -51,7 +51,3 @@ final class MessagesInterpreter[F[_]: Monad: Lazy] extends (MessagesF ~> F) {
     //too lazy to map all keys to String
     s"${key.getClass.getSimpleName.replaceAll("\\$", "")}"
 }
-
-object MessagesInterpreter {
-  def apply[F[_]: Monad: Lazy]: MessagesInterpreter[F] = new MessagesInterpreter[F]
-}

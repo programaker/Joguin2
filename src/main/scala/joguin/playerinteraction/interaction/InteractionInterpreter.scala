@@ -15,7 +15,3 @@ final class InteractionInterpreter[F[_]: Lazy] extends (InteractionF ~> F) {
   private def write(message: String): F[Unit] = Lazy[F].lift(print(message))
   private def read(): F[String] = Lazy[F].lift(readLine())
 }
-
-object InteractionInterpreter {
-  def apply[F[_]: Lazy]: InteractionInterpreter[F] = new InteractionInterpreter[F]
-}

@@ -22,20 +22,23 @@ object CreateCharacterStepInterpreter {
 
   def build: CreateCharacterStepF ~> MessageTrackState = {
     val i1 = messageSourceInterpreter or messagesInterpreter
-    val i2 = InteractionStateInterpreter() or i1
+    val i2 = interactionInterpreter or i1
     val i3 = cityRepositoryInterpreter or i2
     powerGeneratorInterpreter or i3
   }
 
   private val messageSourceInterpreter: MessageSourceInterpreter[MessageTrackState] =
-    MessageSourceInterpreter[MessageTrackState]
+    new MessageSourceInterpreter[MessageTrackState]
 
   private val messagesInterpreter: MessagesInterpreter[MessageTrackState] =
-    MessagesInterpreter[MessageTrackState]
+    new MessagesInterpreter[MessageTrackState]
 
   private val cityRepositoryInterpreter: CityRepositoryInterpreter[MessageTrackState] =
-    CityRepositoryInterpreter[MessageTrackState]
+    new CityRepositoryInterpreter[MessageTrackState]
 
   private val powerGeneratorInterpreter: PowerGeneratorInterpreter[MessageTrackState] =
-    PowerGeneratorInterpreter[MessageTrackState]
+    new PowerGeneratorInterpreter[MessageTrackState]
+
+  private val interactionInterpreter: InteractionStateInterpreter =
+    new InteractionStateInterpreter
 }

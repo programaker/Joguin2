@@ -14,9 +14,7 @@ import joguin.game.progress.PersistentGameProgress._
 import org.apache.commons.io.FileUtils
 
 /** GameProgressRepositoryF root interpreter to any F that uses a file for persistence */
-final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](val file: File)
-    extends (GameProgressRepositoryF ~> F) {
-
+final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) extends (GameProgressRepositoryF ~> F) {
   override def apply[A](fa: GameProgressRepositoryF[A]): F[A] = fa match {
     case Save(gameProgress)  => save(gameProgress)
     case SavedProgressExists => savedProgressExists
@@ -56,9 +54,4 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](val file: Fi
       .map(decode[PersistentGameProgress])
       .map(_.map(_.toGameProgress))
       .map(_.getOrElse(None))
-}
-
-object GameProgressRepositoryInterpreter {
-  def apply[F[_]: Recovery: Lazy](file: File): GameProgressRepositoryInterpreter[F] =
-    new GameProgressRepositoryInterpreter[F](file)
 }

@@ -19,7 +19,3 @@ final class WaitInterpreter[F[_]: Recovery: Lazy] extends (WaitF ~> F) {
       .flatMap(d => Lazy[F].lift(Thread.sleep(d.toMillis)))
       .handleError(_ => ())
 }
-
-object WaitInterpreter {
-  def apply[F[_]: Recovery: Lazy]: WaitInterpreter[F] = new WaitInterpreter[F]
-}

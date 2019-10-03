@@ -9,7 +9,7 @@ import joguin.testutil.PropertyBasedSpec
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class AlienArmy_Properties extends PropertyBasedSpec {
-  private val powerGeneratorInterpreter = PowerGeneratorInterpreter[Id]
+  private val powerGeneratorInterpreter = new PowerGeneratorInterpreter[Id]
 
   property("invading a City produces an Invasion with a TerraformDevice, whose power is between 1000 and 20000") {
     import joguin.testutil.generator.Generators.city
@@ -23,5 +23,4 @@ final class AlienArmy_Properties extends PropertyBasedSpec {
       invasion.terraformDevice.defensePower.value should (be >= 1000 and be <= 20000)
     }
   }
-
 }
