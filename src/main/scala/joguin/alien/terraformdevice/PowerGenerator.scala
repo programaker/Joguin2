@@ -10,7 +10,7 @@ final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[P
 
 final class PowerGeneratorOps[C[_]](implicit i: InjectK[PowerGeneratorF, C]) {
   def generatePower(min: Power, max: Power): Free[C, Power] =
-    inject[PowerGeneratorF, C](GeneratePower(min, max))
+    inject(GeneratePower(min, max))
 }
 
 object PowerGeneratorOps {

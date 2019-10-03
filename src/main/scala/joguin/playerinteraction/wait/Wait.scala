@@ -11,7 +11,7 @@ final case class WaitFor(duration: FiniteDuration) extends WaitF[Unit]
 
 final class WaitOps[C[_]](implicit i: InjectK[WaitF, C]) {
   def waitFor(duration: FiniteDuration): Free[C, Unit] =
-    inject[WaitF, C](WaitFor(duration))
+    inject(WaitFor(duration))
 }
 
 object WaitOps {

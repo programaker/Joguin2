@@ -8,7 +8,7 @@ sealed abstract class CityRepositoryF[A] extends Product with Serializable
 case object FindAllCities extends CityRepositoryF[Vector[City]]
 
 final class CityRepositoryOps[C[_]](implicit i: InjectK[CityRepositoryF, C]) {
-  def findAllCities: Free[C, Vector[City]] = inject[CityRepositoryF, C](FindAllCities)
+  def findAllCities: Free[C, Vector[City]] = inject(FindAllCities)
 }
 
 object CityRepositoryOps {

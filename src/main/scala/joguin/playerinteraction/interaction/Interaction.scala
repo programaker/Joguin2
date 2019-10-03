@@ -10,10 +10,10 @@ case object ReadAnswer extends InteractionF[String]
 
 final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
   def writeMessage(message: String): Free[C, Unit] =
-    inject[InteractionF, C](WriteMessage(message))
+    inject(WriteMessage(message))
 
   def readAnswer: Free[C, String] =
-    inject[InteractionF, C](ReadAnswer)
+    inject(ReadAnswer)
 }
 
 object InteractionOps {
