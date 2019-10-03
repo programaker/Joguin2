@@ -67,5 +67,5 @@ final class CreateCharacterStep[F[_]](
     findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
-      .map(startGameProgress(mainCharacter, _))
+      .map(GameProgress.of(mainCharacter, _))
 }

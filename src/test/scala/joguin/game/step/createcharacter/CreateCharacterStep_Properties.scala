@@ -45,7 +45,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runS(writeMessageTrack(answers))
+          .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
           .value
 
@@ -79,7 +79,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val nextStep = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runA(writeMessageTrack(answers))
+          .runA(WriteMessageTrack.of(answers))
 
         inside(nextStep.value) {
           case Explore(progress) =>
@@ -125,7 +125,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runS(writeMessageTrack(answers))
+          .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
           .value
 

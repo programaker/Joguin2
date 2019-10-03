@@ -41,7 +41,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runS(writeMessageTrack(answers))
+        .runS(WriteMessageTrack.of(answers))
         .map(_.indexedMessages)
         .value
 
@@ -70,7 +70,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runA(writeMessageTrack(answers))
+        .runA(WriteMessageTrack.of(answers))
 
       inside(nextStep.value) {
         case Quit(gameProgress) => gameProgress shouldBe gp
@@ -105,7 +105,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         val actualMessages = new ExploreStep[ExploreStepF]
           .play(gp)
           .foldMap(exploreStepInterpreter)
-          .runS(writeMessageTrack(answers))
+          .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
           .value
 
@@ -135,7 +135,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val (actualMessages, nextStep) = new ExploreStep[ExploreStepF]
         .play(allInvasionsDefeatedGp)
         .foldMap(exploreStepInterpreter)
-        .run(writeMessageTrack(answers))
+        .run(WriteMessageTrack.of(answers))
         .map {
           case (track, step) => (track.indexedMessages, step)
         }
@@ -165,7 +165,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runA(writeMessageTrack(answers))
+        .runA(WriteMessageTrack.of(answers))
 
       inside(nextStep.value) {
         case Fight(gameProgress, selectedInvasion) =>
@@ -189,7 +189,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp1)
         .foldMap(exploreStepInterpreter)
-        .runS(writeMessageTrack(answers))
+        .runS(WriteMessageTrack.of(answers))
         .map(_.indexedMessages)
         .value
 

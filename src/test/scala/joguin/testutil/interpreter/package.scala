@@ -9,12 +9,4 @@ package object interpreter {
   implicit val StateLazy: Lazy[MessageTrackState] = new Lazy[MessageTrackState] {
     override def lift[A](a: => A): MessageTrackState[A] = State.pure(a)
   }
-
-  def writeMessageTrack(answersByQuestion: Map[String, List[String]]): WriteMessageTrack =
-    WriteMessageTrack(
-      currentMessage = "",
-      currentIndex = 0,
-      indexedMessages = Map.empty,
-      answersByQuestion = answersByQuestion
-    )
 }

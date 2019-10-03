@@ -10,5 +10,5 @@ object GameProgressGenerators {
     for {
       mainCharacter <- genMainCharacter
       invasionList  <- genInvasionList
-    } yield startGameProgress(mainCharacter, invasionList)
+    } yield GameProgress.of(mainCharacter, invasionList)
 }

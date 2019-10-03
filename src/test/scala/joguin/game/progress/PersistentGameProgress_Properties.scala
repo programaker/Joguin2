@@ -18,7 +18,7 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
     import joguin.testutil.generator.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: Vector[Invasion]) =>
-      val gp = startGameProgress(mainCharacter, invasions)
+      val gp = GameProgress.of(mainCharacter, invasions)
 
       val f = (defeatInvasion(_, 1)) andThen
         (increaseMainCharacterExperience(_, 1000)) andThen
