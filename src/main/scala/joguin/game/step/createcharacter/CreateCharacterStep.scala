@@ -4,7 +4,7 @@ import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined.auto._
-import joguin.alien.AlienArmy
+import joguin.alien._
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
 import joguin.earth.maincharacter.Gender
@@ -64,7 +64,7 @@ final class CreateCharacterStep[F[_]](
 
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
-      .map(_.map(AlienArmy.invade(_)))
+      .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .map(_.toVector) //TODO => Maybe, use Vector everywhere...
       .flatMap(_.sequence)
       .map(GameProgress.start(mainCharacter, _))

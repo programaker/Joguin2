@@ -6,17 +6,17 @@ import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.City
 import joguin.testutil.PropertyBasedSpec
+import eu.timepit.refined.auto._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
-final class AlienArmy_Properties extends PropertyBasedSpec {
+final class InvadeCity_Properties extends PropertyBasedSpec {
   private val powerGeneratorInterpreter = new PowerGeneratorInterpreter[Id]
 
-  property("invading a City produces an Invasion with a TerraformDevice, whose power is between 1000 and 20000") {
+  property("invading a City produces an Invasion with a TerraformDevice, whose power is in given range") {
     import joguin.testutil.generator.Generators.city
 
     forAll { city: City =>
-      val invasion = AlienArmy
-        .invade[PowerGeneratorF](city)
+      val invasion = invadeCity[PowerGeneratorF](city, minPower = 1000, maxPower = 20000)
         .foldMap(powerGeneratorInterpreter)
 
       invasion.city shouldBe city

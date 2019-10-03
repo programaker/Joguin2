@@ -1,7 +1,7 @@
 package joguin.testutil.generator
 
 import eu.timepit.refined.refineV
-import joguin.alien.AlienArmy
+import joguin.alien._
 import joguin.alien.Power
 import joguin.alien.PowerR
 import org.scalacheck.Gen
@@ -9,10 +9,10 @@ import org.scalacheck.Gen
 object PowerGenerators {
   def genPower: Gen[Power] =
     Gen
-      .choose(min = AlienArmy.minPower.value, max = AlienArmy.maxPower.value)
+      .choose(min = MinPower.value, max = MaxPower.value)
       .map(refineV[PowerR](_))
-      .map(_.getOrElse(AlienArmy.minPower: Power))
+      .map(_.getOrElse(MinPower: Power))
 
   def genInvalidPower: Gen[Int] =
-    Gen.choose(-AlienArmy.minPower.value, 0)
+    Gen.choose(-MinPower.value, 0)
 }
