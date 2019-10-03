@@ -102,21 +102,9 @@ final class ExploreStep[F[_]](
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, ExploreOption.parse(_, invasionCount))
-    } yield
-      option match {
-        case QuitGame            => Quit(gp)
-        case GoToInvasion(index) => Fight(gp, index)
-      }
+    } yield option match {
+      case QuitGame            => Quit(gp)
+      case GoToInvasion(index) => Fight(gp, index)
+    }
   }
-}
-
-object ExploreStep {
-  def apply[F[_]](
-    implicit
-    s: MessageSourceOps[F],
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    w: WaitOps[F]
-  ): ExploreStep[F] =
-    new ExploreStep[F]
 }

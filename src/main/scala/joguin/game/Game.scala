@@ -63,11 +63,11 @@ object Game {
     waitOps: WaitOps[GameF]
   ): Free[GameF, Unit] =
     new Game(
-      ShowIntroStep[GameF],
-      CreateCharacterStep[GameF],
-      ExploreStep[GameF],
-      FightStep[GameF],
-      SaveGameStep[GameF],
-      QuitStep[GameF]
+      new ShowIntroStep[GameF],
+      new CreateCharacterStep[GameF],
+      new ExploreStep[GameF],
+      new FightStep[GameF],
+      new SaveGameStep[GameF],
+      new QuitStep[GameF]
     ).play
 }

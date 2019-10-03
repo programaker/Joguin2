@@ -69,15 +69,3 @@ final class CreateCharacterStep[F[_]](
       .flatMap(_.sequence)
       .map(GameProgress.start(mainCharacter, _))
 }
-
-object CreateCharacterStep {
-  def apply[F[_]](
-    implicit
-    s: MessageSourceOps[F],
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    c: CityRepositoryOps[F],
-    p: PowerGeneratorOps[F]
-  ): CreateCharacterStep[F] =
-    new CreateCharacterStep[F]
-}

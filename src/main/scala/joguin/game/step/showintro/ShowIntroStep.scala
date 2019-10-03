@@ -75,14 +75,3 @@ final class ShowIntroStep[F[_]](
     getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }
-
-object ShowIntroStep {
-  def apply[F[_]](
-    implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F],
-    r: GameProgressRepositoryOps[F]
-  ): ShowIntroStep[F] =
-    new ShowIntroStep[F]
-}

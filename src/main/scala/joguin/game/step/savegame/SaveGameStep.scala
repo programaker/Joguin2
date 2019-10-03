@@ -36,14 +36,3 @@ final class SaveGameStep[F[_]](
       _ <- writeMessage(message)
     } yield GameOver
 }
-
-object SaveGameStep {
-  def apply[F[_]](
-    implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F],
-    r: GameProgressRepositoryOps[F]
-  ): SaveGameStep[F] =
-    new SaveGameStep[F]
-}

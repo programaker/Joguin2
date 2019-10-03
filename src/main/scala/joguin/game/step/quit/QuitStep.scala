@@ -37,13 +37,3 @@ final class QuitStep[F[_]](
     }
   }
 }
-
-object QuitStep {
-  def apply[F[_]](
-    implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F]
-  ): QuitStep[F] =
-    new QuitStep[F]
-}
