@@ -7,7 +7,7 @@ import eu.timepit.refined.auto._
 import joguin.alien._
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
-import joguin.earth.maincharacter.Gender
+import joguin.earth.maincharacter._
 import joguin.earth.maincharacter.MainCharacter
 import joguin.earth.maincharacter.parseAge
 import joguin.game.progress.GameProgress
@@ -48,7 +48,7 @@ final class CreateCharacterStep[F[_]](
 
       informGender      <- message(inform_character_gender)
       informGenderError <- message(error_invalid_gender)
-      gender            <- ask(informGender, informGenderError, Gender.parseGender)
+      gender            <- ask(informGender, informGenderError, parseGender)
 
       informAge      <- message(inform_character_age)
       informAgeError <- message(error_invalid_age)
