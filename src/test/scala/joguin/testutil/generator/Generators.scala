@@ -81,7 +81,8 @@ object Generators {
   def genSmallInt: Gen[Int] =
     Gen.choose(min = 1, max = 10)
 
-  def genQuitOption: Gen[String] = Gen.oneOf("q", "Q")
+  def genQuitOption: Gen[String] =
+    Gen.oneOf("q", "Q")
 
   def arbitraryTag[T, A](gen: Gen[A]): Arbitrary[Tag[T, A]] =
     Arbitrary(gen.map(Tag.apply))
