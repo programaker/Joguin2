@@ -3,6 +3,8 @@ package joguin
 import java.io.File
 
 import cats.data.EitherK
+import cats.free.Free
+import cats.free.Free.pure
 import cats.~>
 import joguin.alien.terraformdevice.PowerGeneratorF
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter
@@ -10,6 +12,20 @@ import joguin.earth.city.CityRepositoryF
 import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryF
 import joguin.game.progress.GameProgressRepositoryInterpreter
+import joguin.game.step.CreateCharacter
+import joguin.game.step.Explore
+import joguin.game.step.Fight
+import joguin.game.step.GameOver
+import joguin.game.step.GameStep
+import joguin.game.step.Quit
+import joguin.game.step.SaveGame
+import joguin.game.step.ShowIntro
+import joguin.game.step.createcharacter.CreateCharacterStep
+import joguin.game.step.explore.ExploreStep
+import joguin.game.step.fight.FightStep
+import joguin.game.step.quit.playQuitStep
+import joguin.game.step.savegame.playSaveGame
+import joguin.game.step.showintro.ShowIntroStep
 import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.interaction.InteractionInterpreter
 import joguin.playerinteraction.message.MessageSourceF
@@ -20,6 +36,8 @@ import joguin.playerinteraction.wait.WaitF
 import joguin.playerinteraction.wait.WaitInterpreter
 
 package object game {
+  def playGame: Free[GameF, Unit] = gameLoopFn()(ShowIntro)
+
   //Starting from the "F2" alias, new algebras must be "prepended"
   //to the new Coproduct, to match the InjectK[MyAlgebraF, C] declaration,
   //otherwise, the implicit InjectK instances won't be provided
@@ -47,5 +65,37 @@ package object game {
     val iGame = new WaitInterpreter[F] or i5
 
     iGame
+  }
+
+  private def gameLoopFn(): GameStep => Free[GameF, Unit] = {
+    val showIntro = new ShowIntroStep[GameF]
+    val createCharacter = new CreateCharacterStep[GameF]
+    val explore = new ExploreStep[GameF]
+    val fight = new FightStep[GameF]
+
+    def gameLoop(step: GameStep): Free[GameF, Unit] = step match {
+      case ShowIntro =>
+        showIntro.play.flatMap(gameLoop)
+
+      case CreateCharacter =>
+        createCharacter.play.flatMap(gameLoop)
+
+      case Explore(gameProgress) =>
+        explore.play(gameProgress).flatMap(gameLoop)
+
+      case Fight(gameProgress, selectedInvasion) =>
+        fight.play(gameProgress, selectedInvasion).flatMap(gameLoop)
+
+      case SaveGame(gameProgress) =>
+        playSaveGame[GameF](gameProgress).flatMap(gameLoop)
+
+      case Quit(gameProgress) =>
+        playQuitStep[GameF](gameProgress).flatMap(gameLoop)
+
+      case GameOver =>
+        pure(())
+    }
+
+    gameLoop
   }
 }
