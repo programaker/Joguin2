@@ -93,15 +93,14 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   }
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
-    import Tag._
-    import Tag.implicits._
     import joguin.testutil.generator.Generators.age
     import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.invalidName
     import joguin.testutil.generator.Generators.name
+    import joguin.testutil.generator.Generators.arbitraryTag
 
-    implicit val a1: Arbitrary[Tag[1, Int]] = arbTag(Generators.genSmallInt)
-    implicit val a2: Arbitrary[Tag[2, Int]] = arbTag(AgeGenerators.genInvalidAge)
+    implicit val a1: Arbitrary[Tag[1, Int]] = arbitraryTag(Generators.genSmallInt)
+    implicit val a2: Arbitrary[Tag[2, Int]] = arbitraryTag(AgeGenerators.genInvalidAge)
 
     forAll {
       (

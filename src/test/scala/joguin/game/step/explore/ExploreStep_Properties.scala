@@ -13,6 +13,7 @@ import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.Generators
 import joguin.testutil.generator.InvasionGenerators
 import joguin.testutil.generator.InvasionGenerators._
+import joguin.testutil.generator.Tag
 import joguin.testutil.interpreter._
 import joguin.testutil.interpreter.explore._
 import org.scalacheck.Arbitrary
@@ -80,12 +81,10 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   property("repeats a question to the player until receives a valid answer, informing the error") {
     import joguin.testutil.generator.Generators.gameProgressStart
     import joguin.testutil.generator.Generators.smallInt
-    import joguin.testutil.generator.Tag
-    import joguin.testutil.generator.Tag._
-    import joguin.testutil.generator.Tag.implicits._
+    import joguin.testutil.generator.Generators.arbitraryTag
 
-    implicit val a1: Arbitrary[Tag[1, String]] = arbTag(genValidOption(InvasionGenerators.invasionListSize))
-    implicit val a2: Arbitrary[Tag[2, String]] = arbTag(Gen.alphaNumStr)
+    implicit val a1: Arbitrary[Tag[1, String]] = arbitraryTag(genValidOption(InvasionGenerators.invasionListSize))
+    implicit val a2: Arbitrary[Tag[2, String]] = arbitraryTag(Gen.alphaNumStr)
 
     forAll {
       (

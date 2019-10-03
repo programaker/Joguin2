@@ -32,8 +32,6 @@ final class PersistentGameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("converting an invalid PersistentGameProgress to GameProgress gives None") {
-    import Tag.implicits._
-
     implicitly[Arbitrary[PersistentMainCharacter]]
     implicitly[Arbitrary[Vector[PersistentInvasion]]]
     implicitly[Arbitrary[List[Int]]]
