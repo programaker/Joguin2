@@ -9,6 +9,7 @@ import eu.timepit.refined.auto._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.Experience
 import joguin.earth.maincharacter.ExperienceR
+import joguin.earth.maincharacter.MainCharacter
 
 package object progress {
   type CountR = NonNegative
@@ -16,6 +17,14 @@ package object progress {
 
   type IndexR = Positive
   type Index = Int Refined IndexR
+
+  def startGameProgress(mainCharacter: MainCharacter, invasions: Vector[Invasion]): GameProgress =
+    GameProgress(
+      mainCharacter = mainCharacter,
+      invasions = invasions,
+      defeatedInvasions = 0,
+      defeatedInvasionsTrack = Set.empty
+    )
 
   def invasionByIndex(gp: GameProgress, index: Index): Option[Invasion] =
     //1-based index, to match the invasion list as the player sees it

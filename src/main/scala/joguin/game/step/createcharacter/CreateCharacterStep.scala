@@ -11,6 +11,7 @@ import joguin.earth.maincharacter._
 import joguin.earth.maincharacter.MainCharacter
 import joguin.earth.maincharacter.parseAge
 import joguin.game.progress.GameProgress
+import joguin.game.progress._
 import joguin.game.step.Explore
 import joguin.game.step.GameStep
 import joguin.parseName
@@ -59,12 +60,12 @@ final class CreateCharacterStep[F[_]](
       characterCreated <- messageFmt(character_created, List(name.value))
       _                <- writeMessage(characterCreated)
 
-      gameProgress <- initGameProgress(mc)
+      gameProgress <- initialGameProgress(mc)
     } yield Explore(gameProgress)
 
-  private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
+  private def initialGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
-      .map(GameProgress.start(mainCharacter, _))
+      .map(startGameProgress(mainCharacter, _))
 }

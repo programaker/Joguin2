@@ -1,6 +1,5 @@
 package joguin.game.progress
 
-import eu.timepit.refined.auto._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.MainCharacter
 
@@ -11,13 +10,3 @@ final case class GameProgress(
   defeatedInvasions: Count,
   defeatedInvasionsTrack: Set[Index]
 )
-
-object GameProgress {
-  def start(mainCharacter: MainCharacter, invasions: Vector[Invasion]): GameProgress =
-    GameProgress(
-      mainCharacter = mainCharacter,
-      invasions = invasions,
-      defeatedInvasions = 0,
-      defeatedInvasionsTrack = Set.empty
-    )
-}
