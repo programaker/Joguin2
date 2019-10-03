@@ -17,6 +17,7 @@ import joguin.playerinteraction.message.LocalizedMessageSource
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
+import joguin.playerinteraction.interaction._
 
 import scala.concurrent.duration._
 

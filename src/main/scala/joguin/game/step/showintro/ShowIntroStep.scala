@@ -11,6 +11,7 @@ import joguin.game.step.Explore
 import joguin.game.step.GameOver
 import joguin.game.step.GameStep
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.LocalizedMessageSource
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps

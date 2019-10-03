@@ -6,6 +6,7 @@ import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.message.QuitMessageSource
@@ -20,7 +21,6 @@ package object quit {
     s: MessageSourceOps[F]
   ): Free[F, GameStep] = {
     import QuitMessageSource._
-    import i._
     import m._
     import s._
 

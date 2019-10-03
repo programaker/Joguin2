@@ -7,15 +7,15 @@ import eu.timepit.refined.auto._
 import joguin.alien._
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
-import joguin.earth.maincharacter._
 import joguin.earth.maincharacter.MainCharacter
+import joguin.earth.maincharacter._
 import joguin.earth.maincharacter.parseAge
 import joguin.game.progress.GameProgress
-import joguin.game.progress._
 import joguin.game.step.Explore
 import joguin.game.step.GameStep
 import joguin.parseName
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.CreateCharacterMessageSource
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
