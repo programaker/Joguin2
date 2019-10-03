@@ -48,7 +48,7 @@ final class CreateCharacterStep[F[_]](
 
       informGender      <- message(inform_character_gender)
       informGenderError <- message(error_invalid_gender)
-      gender            <- ask(informGender, informGenderError, Gender.byCode)
+      gender            <- ask(informGender, informGenderError, Gender.parseGender)
 
       informAge      <- message(inform_character_age)
       informAgeError <- message(error_invalid_age)
@@ -65,7 +65,6 @@ final class CreateCharacterStep[F[_]](
   private def initGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
     findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
-      .map(_.toVector) //TODO => Maybe, use Vector everywhere...
       .flatMap(_.sequence)
       .map(GameProgress.start(mainCharacter, _))
 }

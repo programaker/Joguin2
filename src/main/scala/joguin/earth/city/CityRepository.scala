@@ -5,10 +5,10 @@ import cats.free.Free
 import cats.free.Free._
 
 sealed abstract class CityRepositoryF[A] extends Product with Serializable
-case object FindAllCities extends CityRepositoryF[List[City]]
+case object FindAllCities extends CityRepositoryF[Vector[City]]
 
 final class CityRepositoryOps[C[_]](implicit i: InjectK[CityRepositoryF, C]) {
-  def findAllCities: Free[C, List[City]] = inject[CityRepositoryF, C](FindAllCities)
+  def findAllCities: Free[C, Vector[City]] = inject[CityRepositoryF, C](FindAllCities)
 }
 
 object CityRepositoryOps {

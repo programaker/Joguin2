@@ -11,8 +11,8 @@ final class CityRepositoryInterpreter[F[_]: Monad] extends (CityRepositoryF ~> F
     case FindAllCities => allCities
   }
 
-  private val allCities = Monad[F].pure(
-    List(
+  private val allCities: F[Vector[City]] = Monad[F].pure(
+    Vector(
       City("Berlin", "Germany"),
       City("Juiz de Fora", "Brazil"),
       City("Los Angeles", "USA"),

@@ -23,4 +23,12 @@ package object maincharacter {
       .map(_.value.toInt)
       .flatMap(refineV[AgeR](_))
       .toOption
+
+  def parseGender(code: String): Option[Gender] =
+    code.toLowerCase match {
+      case Female.code => Some(Female)
+      case Male.code   => Some(Male)
+      case Other.code  => Some(Other)
+      case _           => None
+    }
 }
