@@ -8,7 +8,7 @@ import zio.Task
  *
  * Useful to store impure code inside a proper functional data type without
  * coupling with any specific IO implementation */
-trait Lazy[F[_]] {
+abstract class Lazy[F[_]] {
   def lift[A](a: => A): F[A]
 }
 
