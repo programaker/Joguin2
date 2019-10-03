@@ -1,6 +1,6 @@
 name := "joguin2"
 version := "2.0"
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.1"
 
 val catsV = "2.0.0"
 val refinedV = "0.9.10"
