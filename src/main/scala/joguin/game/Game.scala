@@ -9,7 +9,7 @@ import joguin.game.step._
 import joguin.game.step.createcharacter.CreateCharacterStep
 import joguin.game.step.explore.ExploreStep
 import joguin.game.step.fight.FightStep
-import joguin.game.step.quit.QuitStep
+import joguin.game.step.quit._
 import joguin.game.step.savegame.SaveGameStep
 import joguin.game.step.showintro.ShowIntroStep
 import joguin.playerinteraction.interaction.InteractionOps
@@ -22,8 +22,7 @@ final class Game(
   createCharacter: CreateCharacterStep[GameF],
   explore: ExploreStep[GameF],
   fight: FightStep[GameF],
-  saveGame: SaveGameStep[GameF],
-  quit: QuitStep[GameF]
+  saveGame: SaveGameStep[GameF]
 ) {
   def play: Free[GameF, Unit] = gameLoop(ShowIntro)
 
@@ -44,7 +43,7 @@ final class Game(
       saveGame.play(gameProgress).flatMap(gameLoop)
 
     case Quit(gameProgress) =>
-      quit.play(gameProgress).flatMap(gameLoop)
+      playQuitStep[GameF](gameProgress).flatMap(gameLoop)
 
     case GameOver =>
       pure(())
@@ -67,7 +66,6 @@ object Game {
       new CreateCharacterStep[GameF],
       new ExploreStep[GameF],
       new FightStep[GameF],
-      new SaveGameStep[GameF],
-      new QuitStep[GameF]
+      new SaveGameStep[GameF]
     ).play
 }
