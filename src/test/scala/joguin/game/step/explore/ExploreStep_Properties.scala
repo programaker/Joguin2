@@ -38,7 +38,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(i) -> List(chosenCity.toString)
       )
 
-      val actualMessages = ExploreStep[ExploreStepF]
+      val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
         .runS(WriteMessageTrack.build(answers))
@@ -67,7 +67,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(i) -> List(quitOption)
       )
 
-      val nextStep = ExploreStep[ExploreStepF]
+      val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
         .runA(WriteMessageTrack.build(answers))
@@ -102,7 +102,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
           whereToGo(i) -> options
         )
 
-        val actualMessages = ExploreStep[ExploreStepF]
+        val actualMessages = new ExploreStep[ExploreStepF]
           .play(gp)
           .foldMap(exploreStepInterpreter)
           .runS(WriteMessageTrack.build(answers))
@@ -132,7 +132,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       //no player interactions in this scenario
       val answers: Map[String, List[String]] = Map.empty
 
-      val (actualMessages, nextStep) = ExploreStep[ExploreStepF]
+      val (actualMessages, nextStep) = new ExploreStep[ExploreStepF]
         .play(allInvasionsDefeatedGp)
         .foldMap(exploreStepInterpreter)
         .run(WriteMessageTrack.build(answers))
@@ -162,7 +162,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(gp.invasions.size) -> List(index.toString)
       )
 
-      val nextStep = ExploreStep[ExploreStepF]
+      val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
         .runA(WriteMessageTrack.build(answers))
@@ -186,7 +186,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(gp.invasions.size) -> List("q")
       )
 
-      val actualMessages = ExploreStep[ExploreStepF]
+      val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp1)
         .foldMap(exploreStepInterpreter)
         .runS(WriteMessageTrack.build(answers))
