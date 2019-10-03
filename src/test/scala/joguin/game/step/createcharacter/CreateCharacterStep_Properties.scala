@@ -17,7 +17,7 @@ import joguin.testutil.generator.Generators
 import joguin.testutil.generator.Tag
 import joguin.testutil.interpreter.CreateCharacterStepInterpreter
 import joguin.testutil.interpreter.CreateCharacterStepInterpreter.CreateCharacterStepF
-import joguin.testutil.interpreter.WriteMessageTrack
+import joguin.testutil.interpreter._
 import org.scalacheck.Arbitrary
 import org.scalatest.Inside._
 import org.scalatest.Inspectors
@@ -45,7 +45,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runS(WriteMessageTrack.build(answers))
+          .runS(writeMessageTrack(answers))
           .map(_.indexedMessages)
           .value
 
@@ -79,7 +79,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val nextStep = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runA(WriteMessageTrack.build(answers))
+          .runA(writeMessageTrack(answers))
 
         inside(nextStep.value) {
           case Explore(progress) =>
@@ -125,7 +125,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
           .foldMap(createCharacterInterpreter)
-          .runS(WriteMessageTrack.build(answers))
+          .runS(writeMessageTrack(answers))
           .map(_.indexedMessages)
           .value
 

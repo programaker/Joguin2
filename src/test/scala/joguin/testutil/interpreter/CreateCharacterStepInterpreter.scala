@@ -11,7 +11,6 @@ import joguin.playerinteraction.message.MessageSourceF
 import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesF
 import joguin.playerinteraction.message.MessagesInterpreter
-import joguin.testutil.interpreter.WriteMessageTrack.MessageTrackState
 
 /** CreateCharacterStepF composite interpreter to State. To test the game step in isolation from the whole game */
 object CreateCharacterStepInterpreter {

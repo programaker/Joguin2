@@ -5,7 +5,6 @@ import cats.~>
 import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.interaction.ReadAnswer
 import joguin.playerinteraction.interaction.WriteMessage
-import joguin.testutil.interpreter.WriteMessageTrack._
 
 /** InteractionF interpreter for State. For test purposes only */
 final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackState) {
@@ -17,7 +16,7 @@ final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackSta
   private def writeMessage(message: String): MessageTrackState[Unit] =
     State { track =>
       val newMessage = message
-      val newMap = track.indexedMessages + (track.currentIndex -> message)
+      val newMap = track.indexedMessages.updated(track.currentIndex, message)
       val newIndex = track.currentIndex + 1
       val newTrack = track.copy(currentMessage = newMessage, currentIndex = newIndex, indexedMessages = newMap)
       (newTrack, ())

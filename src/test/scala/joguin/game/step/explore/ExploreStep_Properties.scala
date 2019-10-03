@@ -15,7 +15,7 @@ import joguin.testutil.generator.InvasionGenerators
 import joguin.testutil.generator.InvasionGenerators._
 import joguin.testutil.interpreter.ExploreStepInterpreter
 import joguin.testutil.interpreter.ExploreStepInterpreter.ExploreStepF
-import joguin.testutil.interpreter.WriteMessageTrack
+import joguin.testutil.interpreter._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.Inside.inside
@@ -41,7 +41,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runS(WriteMessageTrack.build(answers))
+        .runS(writeMessageTrack(answers))
         .map(_.indexedMessages)
         .value
 
@@ -70,7 +70,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runA(WriteMessageTrack.build(answers))
+        .runA(writeMessageTrack(answers))
 
       inside(nextStep.value) {
         case Quit(gameProgress) => gameProgress shouldBe gp
@@ -105,7 +105,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         val actualMessages = new ExploreStep[ExploreStepF]
           .play(gp)
           .foldMap(exploreStepInterpreter)
-          .runS(WriteMessageTrack.build(answers))
+          .runS(writeMessageTrack(answers))
           .map(_.indexedMessages)
           .value
 
@@ -135,7 +135,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val (actualMessages, nextStep) = new ExploreStep[ExploreStepF]
         .play(allInvasionsDefeatedGp)
         .foldMap(exploreStepInterpreter)
-        .run(WriteMessageTrack.build(answers))
+        .run(writeMessageTrack(answers))
         .map {
           case (track, step) => (track.indexedMessages, step)
         }
@@ -165,7 +165,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val nextStep = new ExploreStep[ExploreStepF]
         .play(gp)
         .foldMap(exploreStepInterpreter)
-        .runA(WriteMessageTrack.build(answers))
+        .runA(writeMessageTrack(answers))
 
       inside(nextStep.value) {
         case Fight(gameProgress, selectedInvasion) =>
@@ -189,7 +189,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       val actualMessages = new ExploreStep[ExploreStepF]
         .play(gp1)
         .foldMap(exploreStepInterpreter)
-        .runS(WriteMessageTrack.build(answers))
+        .runS(writeMessageTrack(answers))
         .map(_.indexedMessages)
         .value
 
