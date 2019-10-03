@@ -2,7 +2,7 @@ package joguin
 
 import cats.Id
 import cats.Monad
-import zio.Task
+import cats.effect.IO
 
 /** Typeclass to lift a normal value into an Effect context lazily.
  *
@@ -19,7 +19,7 @@ object Lazy {
     override def lift[A](a: => A): Id[A] = Monad[Id].pure(a)
   }
 
-  implicit val zioLazy: Lazy[Task] = new Lazy[Task] {
-    override def lift[A](a: => A): Task[A] = Task.effect(a)
+  implicit val ioLazy: Lazy[IO] = new Lazy[IO] {
+    override def lift[A](a: => A): IO[A] = IO(a)
   }
 }

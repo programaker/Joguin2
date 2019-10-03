@@ -1,17 +1,14 @@
 package joguin
 
-import joguin.Recovery._
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
 import joguin.game._
-import zio.Task
-import zio.ZIO
 
-object JoguinApplication extends zio.App {
-  override def run(args: List[String]): ZIO[JoguinApplication.Environment, Nothing, Int] = {
-    val saveProgressFile = "saved-game/last-progress.prog"
-
+object JoguinApplication extends IOApp {
+  override def run(args: List[String]): IO[ExitCode] =
     playGame
-      .foldMap(gameInterpreter[Task](saveProgressFile))
-      .map(_ => 0)
-      .catchAll(_ => Task.succeed(1))
-  }
+      .foldMap(gameInterpreter[IO](saveProgressFile = "saved-game/last-progress.prog"))
+      .map(_ => ExitCode.Success)
+      .handleErrorWith(_ => IO.pure(ExitCode.Error))
 }
