@@ -3,9 +3,9 @@ package joguin.game.step.explore
 import eu.timepit.refined._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
-import joguin.game.progress.defeatInvasion
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.game.progress.defeatInvasion
 import joguin.game.step.Fight
 import joguin.game.step.GameOver
 import joguin.game.step.Quit
@@ -13,9 +13,8 @@ import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.Generators
 import joguin.testutil.generator.InvasionGenerators
 import joguin.testutil.generator.InvasionGenerators._
-import joguin.testutil.interpreter.ExploreStepInterpreter
-import joguin.testutil.interpreter.ExploreStepInterpreter.ExploreStepF
 import joguin.testutil.interpreter._
+import joguin.testutil.interpreter.explore._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.Inside.inside
@@ -209,8 +208,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     }
   }
 
-  private val exploreStepInterpreter =
-    ExploreStepInterpreter.build
+  private val exploreStepInterpreter = exploreStepTestInterpreter()
 
   private def invadedCityMessage(index: Int, city: City): String =
     s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"

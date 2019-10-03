@@ -15,8 +15,7 @@ import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.AgeGenerators
 import joguin.testutil.generator.Generators
 import joguin.testutil.generator.Tag
-import joguin.testutil.interpreter.CreateCharacterStepInterpreter
-import joguin.testutil.interpreter.CreateCharacterStepInterpreter.CreateCharacterStepF
+import joguin.testutil.interpreter.createcharacter._
 import joguin.testutil.interpreter._
 import org.scalacheck.Arbitrary
 import org.scalatest.Inside._
@@ -142,7 +141,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
     }
   }
 
-  private val createCharacterInterpreter = CreateCharacterStepInterpreter.build
+  private val createCharacterInterpreter = createCharacterStepTestInterpreter()
 
   private val askToCreateCharacter = "\nCreate your main character\n"
 
