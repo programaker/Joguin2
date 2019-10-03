@@ -45,7 +45,7 @@ final class ShowIntroStep[F[_]](
       answer <- ask(
         startMessage,
         errorMessage,
-        ShowIntroOption.parse(_, hasSavedProgress)
+        parseShowIntroOption(_, hasSavedProgress)
       )
     } yield answer
 

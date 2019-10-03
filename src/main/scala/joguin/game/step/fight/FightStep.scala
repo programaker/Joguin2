@@ -74,7 +74,7 @@ final class FightStep[F[_]](
 
       giveOrder    <- getMessage(src)(give_order)
       errorMessage <- getMessage(src)(error_invalid_option)
-      option       <- ask(giveOrder, errorMessage, FightOption.parse)
+      option       <- ask(giveOrder, errorMessage, parseFightOption)
     } yield option
 
     option.flatMap {

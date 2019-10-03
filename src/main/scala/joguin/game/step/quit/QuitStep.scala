@@ -28,7 +28,7 @@ final class QuitStep[F[_]](
       src            <- messageSource
       wantToSaveGame <- getMessage(src)(want_to_save_game)
       invalidOption  <- getMessage(src)(error_invalid_option)
-      answer         <- ask(wantToSaveGame, invalidOption, QuitOption.parse)
+      answer         <- ask(wantToSaveGame, invalidOption, parseQuitOption)
     } yield answer
 
     answer.map {
