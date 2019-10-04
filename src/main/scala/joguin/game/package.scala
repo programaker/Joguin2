@@ -25,7 +25,7 @@ import joguin.game.step.explore.ExploreStep
 import joguin.game.step.fight.FightStep
 import joguin.game.step.quit.playQuitStep
 import joguin.game.step.savegame.playSaveGameStep
-import joguin.game.step.showintro.ShowIntroStep
+import joguin.game.step.showintro._
 import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.interaction.InteractionInterpreter
 import joguin.playerinteraction.message.MessageSourceF
@@ -68,13 +68,12 @@ package object game {
   }
 
   private def gameLoopFn(): GameStep => Free[GameF, Unit] = {
-    val showIntro = new ShowIntroStep[GameF]
     val explore = new ExploreStep[GameF]
     val fight = new FightStep[GameF]
 
     def gameLoop(step: GameStep): Free[GameF, Unit] = step match {
       case ShowIntro =>
-        showIntro.play.flatMap(gameLoop)
+        playShowIntroStep[GameF].flatMap(gameLoop)
 
       case CreateCharacter =>
         playCreateCharacterStep[GameF].flatMap(gameLoop)
