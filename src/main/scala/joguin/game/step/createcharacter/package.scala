@@ -1,40 +1,39 @@
-package joguin.game.step.createcharacter
+package joguin.game.step
 
 import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined.auto._
-import joguin.alien._
+import joguin.alien.MaxPower
+import joguin.alien.MinPower
+import joguin.alien.invadeCity
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.earth.city.CityRepositoryOps
 import joguin.earth.maincharacter.MainCharacter
-import joguin.earth.maincharacter._
 import joguin.earth.maincharacter.parseAge
+import joguin.earth.maincharacter.parseGender
 import joguin.game.progress.GameProgress
-import joguin.game.step.Explore
-import joguin.game.step.GameStep
 import joguin.parseName
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.interaction._
+import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.CreateCharacterMessageSource
 import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 
-final class CreateCharacterStep[F[_]](
-  implicit
-  s: MessageSourceOps[F],
-  m: MessagesOps[F],
-  i: InteractionOps[F],
-  c: CityRepositoryOps[F],
-  p: PowerGeneratorOps[F]
-) {
-  import CreateCharacterMessageSource._
-  import c._
-  import i._
-  import m._
-  import s._
+package object createcharacter {
+  def playCreateCharacterStep[F[_]](
+    implicit
+    s: MessageSourceOps[F],
+    m: MessagesOps[F],
+    i: InteractionOps[F],
+    c: CityRepositoryOps[F],
+    p: PowerGeneratorOps[F]
+  ): Free[F, GameStep] = {
+    import CreateCharacterMessageSource._
+    import i._
+    import m._
+    import s._
 
-  def play: Free[F, GameStep] =
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
       message    <- pure(getMessage(src)(_))
@@ -62,9 +61,12 @@ final class CreateCharacterStep[F[_]](
 
       gameProgress <- initialGameProgress(mc)
     } yield Explore(gameProgress)
+  }
 
-  private def initialGameProgress(mainCharacter: MainCharacter): Free[F, GameProgress] =
-    findAllCities
+  private def initialGameProgress[F[_]](
+    mainCharacter: MainCharacter
+  )(implicit c: CityRepositoryOps[F], p: PowerGeneratorOps[F]): Free[F, GameProgress] =
+    c.findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
       .map(GameProgress.of(mainCharacter, _))

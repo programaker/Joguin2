@@ -9,7 +9,7 @@ import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.message.SaveGameMessageSource
 
 package object savegame {
-  def playSaveGame[F[_]](gameProgress: GameProgress)(
+  def playSaveGameStep[F[_]](gameProgress: GameProgress)(
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],

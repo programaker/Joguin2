@@ -42,7 +42,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           askAge    -> List(age.toString)
         )
 
-        val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
+        val actualMessages = playCreateCharacterStep[CreateCharacterStepF]
           .foldMap(createCharacterInterpreter)
           .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
@@ -76,7 +76,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           askAge    -> List(age.toString)
         )
 
-        val nextStep = new CreateCharacterStep[CreateCharacterStepF].play
+        val nextStep = playCreateCharacterStep[CreateCharacterStepF]
           .foldMap(createCharacterInterpreter)
           .runA(WriteMessageTrack.of(answers))
 
@@ -121,7 +121,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
           askAge    -> ages
         )
 
-        val actualMessages = new CreateCharacterStep[CreateCharacterStepF].play
+        val actualMessages = playCreateCharacterStep[CreateCharacterStepF]
           .foldMap(createCharacterInterpreter)
           .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
