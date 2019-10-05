@@ -22,6 +22,7 @@ import joguin.playerinteraction.message.ExploreMessageSource
 import joguin.playerinteraction.message.LocalizedMessageSource
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
+import joguin.game.progress._
 
 import scala.concurrent.duration._
 
@@ -57,30 +58,19 @@ final class ExploreStep[F[_]](
   ): Free[F, Unit] =
     (invasions.headOption, index)
       .mapN { (invasion, idx) =>
-        showInvasion(invasion, gameProgress, src, idx)
+        val key = if (isInvasionDefeated(gameProgress, idx)) {
+          human_dominated_city
+        } else {
+          alien_dominated_city
+        }
+
+        getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
+          .flatMap(writeMessage)
           .flatMap { _ =>
             showInvasions(invasions.drop(1), gameProgress, src, refineV[IndexR](idx + 1).toOption)
           }
       }
       .getOrElse(pure(()))
-
-  private def showInvasion(
-    invasion: Invasion,
-    gameProgress: GameProgress,
-    src: LocalizedMessageSource[ExploreMessageSource.type],
-    idx: Index
-  ): Free[F, Unit] = {
-
-    //TODO => Move "isInvasionDefeated" to somewhere else, like a HumanArmy report
-    val key = if (gameProgress.defeatedInvasionsTrack.contains(idx)) {
-      human_dominated_city
-    } else {
-      alien_dominated_city
-    }
-
-    getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
-      .flatMap(writeMessage)
-  }
 
   private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
     for {
