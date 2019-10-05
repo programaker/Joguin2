@@ -2,10 +2,6 @@ package joguin.playerinteraction.message
 
 import java.util.Locale
 
-import cats.InjectK
-import cats.free.Free
-import cats.free.Free._
-
 sealed abstract class MessageSource extends Product with Serializable {
   type Key
 }
@@ -80,18 +76,3 @@ case object SaveGameMessageSource extends MessageSource {
 }
 
 final case class LocalizedMessageSource[T <: MessageSource](source: T, locale: Locale)
-
-sealed abstract class MessageSourceF[A] extends Product with Serializable
-
-final case class GetLocalizedMessageSource[T <: MessageSource](source: T)
-    extends MessageSourceF[LocalizedMessageSource[T]]
-
-final class MessageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]) {
-  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =
-    inject[MessageSourceF, C](GetLocalizedMessageSource(source))
-}
-
-object MessageSourceOps {
-  implicit def messageSourceOps[C[_]](implicit i: InjectK[MessageSourceF, C]): MessageSourceOps[C] =
-    new MessageSourceOps[C]
-}

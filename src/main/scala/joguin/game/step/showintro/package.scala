@@ -13,7 +13,6 @@ import joguin.game.progress.GameProgressRepositoryOps
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.LocalizedMessageSource
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.message.ShowIntroMessageSource
 import joguin.playerinteraction.message.ShowIntroMessageSource.welcome_back
@@ -26,14 +25,12 @@ package object showintro {
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],
-    s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
   ): Free[F, GameStep] = {
     import ShowIntroMessageSource._
     import i._
     import m._
     import r._
-    import s._
 
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 

@@ -28,8 +28,6 @@ import joguin.game.step.savegame.playSaveGameStep
 import joguin.game.step.showintro._
 import joguin.playerinteraction.interaction.InteractionF
 import joguin.playerinteraction.interaction.InteractionInterpreter
-import joguin.playerinteraction.message.MessageSourceF
-import joguin.playerinteraction.message.MessageSourceInterpreter
 import joguin.playerinteraction.message.MessagesF
 import joguin.playerinteraction.message.MessagesInterpreter
 import joguin.playerinteraction.wait.WaitF
@@ -41,12 +39,11 @@ package object game {
   //Starting from the "F2" alias, new algebras must be "prepended"
   //to the new Coproduct, to match the InjectK[MyAlgebraF, C] declaration,
   //otherwise, the implicit InjectK instances won't be provided
-  type F1[A] = EitherK[MessagesF, MessageSourceF, A]
-  type F2[A] = EitherK[InteractionF, F1, A]
-  type F3[A] = EitherK[CityRepositoryF, F2, A]
-  type F4[A] = EitherK[GameProgressRepositoryF, F3, A]
-  type F5[A] = EitherK[PowerGeneratorF, F4, A]
-  type GameF[A] = EitherK[WaitF, F5, A]
+  type F1[A] = EitherK[MessagesF, InteractionF, A]
+  type F2[A] = EitherK[CityRepositoryF, F1, A]
+  type F3[A] = EitherK[GameProgressRepositoryF, F2, A]
+  type F4[A] = EitherK[PowerGeneratorF, F3, A]
+  type GameF[A] = EitherK[WaitF, F4, A]
 
   /** GameF composite interpreter to any F */
   def gameInterpreter[F[_]: Recovery: Lazy](saveProgressFile: String): GameF ~> F = {
@@ -57,12 +54,11 @@ package object game {
     //This is important, as the interpreter composition must be
     //in the same order of the Coproduct composition and, without the
     //variables, it would be "upside-down" in relation to the Coproduct
-    val i1 = new MessagesInterpreter[F] or new MessageSourceInterpreter[F]
-    val i2 = new InteractionInterpreter[F] or i1
-    val i3 = new CityRepositoryInterpreter[F] or i2
-    val i4 = new GameProgressRepositoryInterpreter[F](new File(saveProgressFile)) or i3
-    val i5 = new PowerGeneratorInterpreter[F] or i4
-    val iGame = new WaitInterpreter[F] or i5
+    val i1 = new MessagesInterpreter[F] or new InteractionInterpreter[F]
+    val i2 = new CityRepositoryInterpreter[F] or i1
+    val i3 = new GameProgressRepositoryInterpreter[F](new File(saveProgressFile)) or i2
+    val i4 = new PowerGeneratorInterpreter[F] or i3
+    val iGame = new WaitInterpreter[F] or i4
 
     iGame
   }

@@ -17,18 +17,16 @@ import joguin.game.step.GameOver
 import joguin.game.step.GameStep
 import joguin.game.step.Quit
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.ExploreMessageSource
 import joguin.playerinteraction.message.LocalizedMessageSource
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
-import joguin.playerinteraction.interaction._
 
 import scala.concurrent.duration._
 
 final class ExploreStep[F[_]](
   implicit
-  s: MessageSourceOps[F],
   m: MessagesOps[F],
   i: InteractionOps[F],
   w: WaitOps[F]
@@ -36,7 +34,6 @@ final class ExploreStep[F[_]](
   import ExploreMessageSource._
   import i._
   import m._
-  import s._
   import w._
 
   def play(gameProgress: GameProgress): Free[F, GameStep] =

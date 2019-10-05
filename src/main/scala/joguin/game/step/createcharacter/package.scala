@@ -17,13 +17,11 @@ import joguin.parseName
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.CreateCharacterMessageSource
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 
 package object createcharacter {
   def playCreateCharacterStep[F[_]](
     implicit
-    s: MessageSourceOps[F],
     m: MessagesOps[F],
     i: InteractionOps[F],
     c: CityRepositoryOps[F],
@@ -32,7 +30,6 @@ package object createcharacter {
     import CreateCharacterMessageSource._
     import i._
     import m._
-    import s._
 
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)

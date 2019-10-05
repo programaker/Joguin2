@@ -13,9 +13,15 @@ import joguin.Lazy
 /** MessagesF root interpreter to any F that uses ResourceBundle to read messages from app resources */
 final class MessagesInterpreter[F[_]: Monad: Lazy] extends (MessagesF ~> F) {
   override def apply[A](fa: MessagesF[A]): F[A] = fa match {
-    case GetMessage(source, key)          => message(source, key, Nil)
-    case GetMessageFmt(source, key, args) => message(source, key, args)
+    case GetLocalizedMessageSource(source) => getLocalizedMessageSource(source)
+    case GetMessage(source, key)           => message(source, key, Nil)
+    case GetMessageFmt(source, key, args)  => message(source, key, args)
   }
+
+  private def getLocalizedMessageSource[T <: MessageSource](source: T): F[LocalizedMessageSource[T]] =
+    //This opens the possibility of internationalization,
+    //but it only knows english for now
+    Monad[F].pure(LocalizedMessageSource(source, Locale.US))
 
   private def message[T <: MessageSource](
     source: LocalizedMessageSource[T],

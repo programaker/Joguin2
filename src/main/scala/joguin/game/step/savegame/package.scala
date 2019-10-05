@@ -4,7 +4,6 @@ import cats.free.Free
 import joguin.game.progress.GameProgress
 import joguin.game.progress.GameProgressRepositoryOps
 import joguin.playerinteraction.interaction.InteractionOps
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.message.SaveGameMessageSource
 
@@ -13,14 +12,12 @@ package object savegame {
     implicit
     i: InteractionOps[F],
     m: MessagesOps[F],
-    s: MessageSourceOps[F],
     r: GameProgressRepositoryOps[F]
   ): Free[F, GameStep] = {
     import SaveGameMessageSource._
     import i._
     import m._
     import r._
-    import s._
 
     for {
       success <- save(gameProgress)

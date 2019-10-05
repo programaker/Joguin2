@@ -6,6 +6,8 @@ import cats.free.Free._
 
 sealed abstract class MessagesF[A] extends Product with Serializable
 
+final case class GetLocalizedMessageSource[T <: MessageSource](source: T) extends MessagesF[LocalizedMessageSource[T]]
+
 final case class GetMessage[T <: MessageSource](
   source: LocalizedMessageSource[T],
   key: T#Key
@@ -18,6 +20,9 @@ final case class GetMessageFmt[T <: MessageSource](
 ) extends MessagesF[String]
 
 final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
+  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =
+    inject[MessagesF, C](GetLocalizedMessageSource(source))
+
   def getMessage[T <: MessageSource](source: LocalizedMessageSource[T])(key: T#Key): Free[C, String] =
     inject[MessagesF, C](GetMessage(source, key))
 

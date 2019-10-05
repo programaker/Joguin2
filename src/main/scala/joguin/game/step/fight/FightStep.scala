@@ -6,24 +6,22 @@ import cats.implicits._
 import eu.timepit.refined._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.ExperienceR
-import joguin.game.progress._
 import joguin.game.progress.Index
+import joguin.game.progress._
 import joguin.game.step.Explore
 import joguin.game.step.GameOver
 import joguin.game.step.GameStep
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.FightMessageSource
 import joguin.playerinteraction.message.LocalizedMessageSource
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
-import joguin.playerinteraction.interaction._
 
 import scala.concurrent.duration._
 
 final class FightStep[F[_]](
   implicit
-  s: MessageSourceOps[F],
   m: MessagesOps[F],
   i: InteractionOps[F],
   w: WaitOps[F]
@@ -31,7 +29,6 @@ final class FightStep[F[_]](
   import FightMessageSource._
   import i._
   import m._
-  import s._
   import w._
 
   def play(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =

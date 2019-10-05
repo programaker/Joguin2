@@ -7,7 +7,6 @@ import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
-import joguin.playerinteraction.message.MessageSourceOps
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.message.QuitMessageSource
 
@@ -15,14 +14,11 @@ package object quit {
   type QuitOptionR = MatchesRegex[W.`"""^[yn]$"""`.T]
 
   def playQuitStep[F[_]](gameProgress: GameProgress)(
-    implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    s: MessageSourceOps[F]
+    implicit m: MessagesOps[F],
+    i: InteractionOps[F]
   ): Free[F, GameStep] = {
     import QuitMessageSource._
     import m._
-    import s._
 
     val messageSource = getLocalizedMessageSource(QuitMessageSource)
 
@@ -39,7 +35,7 @@ package object quit {
     }
   }
 
-  def parseQuitOption(s: String): Option[QuitOption] =
+  private def parseQuitOption(s: String): Option[QuitOption] =
     refineV[QuitOptionR](s.toLowerCase).toOption.map(_.value match {
       case "y" => Yes
       case "n" => No
