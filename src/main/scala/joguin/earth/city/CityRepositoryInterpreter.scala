@@ -3,6 +3,7 @@ package joguin.earth.city
 import cats.Monad
 import cats.~>
 import eu.timepit.refined.auto._
+import joguin.earth.city.CityRepositoryF.FindAllCities
 
 /** CityRepositoryF interpreter to any Monad that returns a hardcoded list of cities.
  * Having no restriction about the target Monad, it can be used for both production and test */

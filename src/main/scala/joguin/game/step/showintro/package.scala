@@ -10,12 +10,14 @@ import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
 import joguin.game.progress.GameProgressRepositoryOps
+import joguin.game.step.GameStep._
+import joguin.game.step.showintro.ShowIntroOption._
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.ShowIntroMessageSource._
+import joguin.playerinteraction.message.MessageSource._
 import joguin.playerinteraction.message.MessagesOps
-import joguin.playerinteraction.message.ShowIntroMessageSource
-import joguin.playerinteraction.message.ShowIntroMessageSource.welcome_back
 
 package object showintro {
   type ShowIntroOptionR = MatchesRegex[W.`"""^[nqr]$"""`.T]
@@ -27,7 +29,6 @@ package object showintro {
     m: MessagesOps[F],
     r: GameProgressRepositoryOps[F]
   ): Free[F, GameStep] = {
-    import ShowIntroMessageSource._
     import i._
     import m._
     import r._

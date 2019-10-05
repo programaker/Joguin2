@@ -11,18 +11,18 @@ import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.game.progress._
 import joguin.game.progress.allInvasionsDefeated
-import joguin.game.step.Fight
-import joguin.game.step.GameOver
 import joguin.game.step.GameStep
-import joguin.game.step.Quit
+import joguin.game.step.GameStep._
+import joguin.game.step.explore.ExploreOption.GoToInvasion
+import joguin.game.step.explore.ExploreOption.QuitGame
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
-import joguin.playerinteraction.message.ExploreMessageSource
 import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
-import joguin.game.progress._
 
 import scala.concurrent.duration._
 

@@ -13,10 +13,12 @@ import joguin.earth.maincharacter.MainCharacter
 import joguin.earth.maincharacter.parseAge
 import joguin.earth.maincharacter.parseGender
 import joguin.game.progress.GameProgress
+import joguin.game.step.GameStep._
 import joguin.parseName
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
-import joguin.playerinteraction.message.CreateCharacterMessageSource
+import joguin.playerinteraction.message.MessageSource.CreateCharacterMessageSource
+import joguin.playerinteraction.message.MessageSource.CreateCharacterMessageSource._
 import joguin.playerinteraction.message.MessagesOps
 
 package object createcharacter {
@@ -27,7 +29,6 @@ package object createcharacter {
     c: CityRepositoryOps[F],
     p: PowerGeneratorOps[F]
   ): Free[F, GameStep] = {
-    import CreateCharacterMessageSource._
     import i._
     import m._
 

@@ -8,13 +8,15 @@ import joguin.alien.Invasion
 import joguin.earth.maincharacter.ExperienceR
 import joguin.game.progress.Index
 import joguin.game.progress._
-import joguin.game.step.Explore
-import joguin.game.step.GameOver
 import joguin.game.step.GameStep
+import joguin.game.step.GameStep.Explore
+import joguin.game.step.GameStep.GameOver
+import joguin.game.step.fight.FightOption.FightAliens
+import joguin.game.step.fight.FightOption.Retreat
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
-import joguin.playerinteraction.message.FightMessageSource
 import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.FightMessageSource
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
 

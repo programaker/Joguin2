@@ -10,13 +10,13 @@ import joguin.game.progress.Index
 import joguin.game.progress.IndexR
 import joguin.game.progress.allInvasionsDefeated
 import joguin.game.progress.isInvasionDefeated
-import joguin.game.step.Explore
+import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generator.AgeGenerators
 import joguin.testutil.generator.Generators
 import joguin.testutil.generator.Tag
-import joguin.testutil.interpreter.createcharacter._
 import joguin.testutil.interpreter._
+import joguin.testutil.interpreter.createcharacter._
 import org.scalacheck.Arbitrary
 import org.scalatest.Inside._
 import org.scalatest.Inspectors
@@ -94,10 +94,10 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
     import joguin.testutil.generator.Generators.age
+    import joguin.testutil.generator.Generators.arbitraryTag
     import joguin.testutil.generator.Generators.gender
     import joguin.testutil.generator.Generators.invalidName
     import joguin.testutil.generator.Generators.name
-    import joguin.testutil.generator.Generators.arbitraryTag
 
     implicit val a1: Arbitrary[Tag[1, Int]] = arbitraryTag(Generators.genSmallInt)
     implicit val a2: Arbitrary[Tag[2, Int]] = arbitraryTag(AgeGenerators.genInvalidAge)

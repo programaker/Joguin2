@@ -22,9 +22,9 @@ package object interpreter {
   val PowerGeneratorInterpreter: PowerGeneratorInterpreter[MessageTrackState] =
     new PowerGeneratorInterpreter[MessageTrackState]
 
-  val InteractionInterpreter: InteractionStateInterpreter =
-    new InteractionStateInterpreter
+  val InteractionInterpreter: InteractionStateTestInterpreter =
+    new InteractionStateTestInterpreter
 
-  val WaitInterpreter: WaitInterpreter[MessageTrackState] =
-    new WaitInterpreter[MessageTrackState]
+  val WaitInterpreter: WaitTestInterpreter[MessageTrackState] =
+    new WaitTestInterpreter[MessageTrackState]
 }

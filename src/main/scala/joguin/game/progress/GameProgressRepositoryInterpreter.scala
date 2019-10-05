@@ -10,6 +10,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import joguin.Lazy
 import joguin.Recovery
+import joguin.game.progress.GameProgressRepositoryF._
 import joguin.game.progress.PersistentGameProgress._
 import org.apache.commons.io.FileUtils
 

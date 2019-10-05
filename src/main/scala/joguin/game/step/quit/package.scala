@@ -5,10 +5,13 @@ import eu.timepit.refined.W
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
+import joguin.game.step.GameStep.GameOver
+import joguin.game.step.GameStep.SaveGame
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
+import joguin.playerinteraction.message.MessageSource.QuitMessageSource
+import joguin.playerinteraction.message.MessageSource.QuitMessageSource._
 import joguin.playerinteraction.message.MessagesOps
-import joguin.playerinteraction.message.QuitMessageSource
 
 package object quit {
   type QuitOptionR = MatchesRegex[W.`"""^[yn]$"""`.T]
@@ -17,13 +20,10 @@ package object quit {
     implicit m: MessagesOps[F],
     i: InteractionOps[F]
   ): Free[F, GameStep] = {
-    import QuitMessageSource._
     import m._
 
-    val messageSource = getLocalizedMessageSource(QuitMessageSource)
-
     val answer = for {
-      src            <- messageSource
+      src            <- getLocalizedMessageSource(QuitMessageSource)
       wantToSaveGame <- getMessage(src)(want_to_save_game)
       invalidOption  <- getMessage(src)(error_invalid_option)
       answer         <- ask(wantToSaveGame, invalidOption, parseQuitOption)

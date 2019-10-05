@@ -7,6 +7,7 @@ import eu.timepit.refined.numeric.NonNegative
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined.string.ValidInt
+import joguin.earth.maincharacter.Gender._
 
 package object maincharacter {
   type AgeR = GreaterEqual[W.`18`.T]

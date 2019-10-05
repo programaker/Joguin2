@@ -3,9 +3,11 @@ package joguin.game.step
 import cats.free.Free
 import joguin.game.progress.GameProgress
 import joguin.game.progress.GameProgressRepositoryOps
+import joguin.game.step.GameStep.GameOver
 import joguin.playerinteraction.interaction.InteractionOps
+import joguin.playerinteraction.message.MessageSource.SaveGameMessageSource
+import joguin.playerinteraction.message.MessageSource.SaveGameMessageSource._
 import joguin.playerinteraction.message.MessagesOps
-import joguin.playerinteraction.message.SaveGameMessageSource
 
 package object savegame {
   def playSaveGameStep[F[_]](gameProgress: GameProgress)(
@@ -14,7 +16,6 @@ package object savegame {
     m: MessagesOps[F],
     r: GameProgressRepositoryOps[F]
   ): Free[F, GameStep] = {
-    import SaveGameMessageSource._
     import i._
     import m._
     import r._

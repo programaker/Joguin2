@@ -3,11 +3,11 @@ package joguin.testutil.interpreter
 import cats.data.State
 import cats.~>
 import joguin.playerinteraction.interaction.InteractionF
-import joguin.playerinteraction.interaction.ReadAnswer
-import joguin.playerinteraction.interaction.WriteMessage
+import joguin.playerinteraction.interaction.InteractionF.ReadAnswer
+import joguin.playerinteraction.interaction.InteractionF.WriteMessage
 
 /** InteractionF root interpreter for State. For test purposes only */
-final class InteractionStateInterpreter extends (InteractionF ~> MessageTrackState) {
+final class InteractionStateTestInterpreter extends (InteractionF ~> MessageTrackState) {
   override def apply[A](fa: InteractionF[A]): MessageTrackState[A] = fa match {
     case WriteMessage(message) => writeMessage(message)
     case ReadAnswer            => readAnswer

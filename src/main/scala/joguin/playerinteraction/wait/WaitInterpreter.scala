@@ -4,6 +4,7 @@ import cats.implicits._
 import cats.~>
 import joguin.Lazy
 import joguin.Recovery
+import joguin.playerinteraction.wait.WaitF.WaitFor
 
 import scala.concurrent.duration.FiniteDuration
 

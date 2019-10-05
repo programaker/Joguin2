@@ -8,6 +8,7 @@ import eu.timepit.refined.refineV
 import joguin.Lazy
 import joguin.alien.Power
 import joguin.alien.PowerR
+import joguin.alien.terraformdevice.PowerGeneratorF.GeneratePower
 
 /** PowerGeneratorF root interpreter to any F that produces random numbers between min and max */
 final class PowerGeneratorInterpreter[F[_]: Lazy] extends (PowerGeneratorF ~> F) {

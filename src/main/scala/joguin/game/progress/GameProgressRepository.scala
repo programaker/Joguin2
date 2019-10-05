@@ -3,11 +3,15 @@ package joguin.game.progress
 import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
+import joguin.game.progress.GameProgressRepositoryF._
 
 sealed abstract class GameProgressRepositoryF[A] extends Product with Serializable
-final case class Save(gameProgress: GameProgress) extends GameProgressRepositoryF[Boolean]
-case object SavedProgressExists extends GameProgressRepositoryF[Boolean]
-case object Restore extends GameProgressRepositoryF[Option[GameProgress]]
+
+object GameProgressRepositoryF {
+  final case class Save(gameProgress: GameProgress) extends GameProgressRepositoryF[Boolean]
+  case object SavedProgressExists extends GameProgressRepositoryF[Boolean]
+  case object Restore extends GameProgressRepositoryF[Option[GameProgress]]
+}
 
 final class GameProgressRepositoryOps[C[_]](implicit i: InjectK[GameProgressRepositoryF, C]) {
   def save(gameProgress: GameProgress): Free[C, Boolean] = inject(Save(gameProgress))

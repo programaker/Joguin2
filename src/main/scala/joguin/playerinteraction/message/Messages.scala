@@ -3,21 +3,26 @@ package joguin.playerinteraction.message
 import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
+import joguin.playerinteraction.message.MessagesF.GetLocalizedMessageSource
+import joguin.playerinteraction.message.MessagesF.GetMessage
+import joguin.playerinteraction.message.MessagesF.GetMessageFmt
 
 sealed abstract class MessagesF[A] extends Product with Serializable
 
-final case class GetLocalizedMessageSource[T <: MessageSource](source: T) extends MessagesF[LocalizedMessageSource[T]]
+object MessagesF {
+  final case class GetLocalizedMessageSource[T <: MessageSource](source: T) extends MessagesF[LocalizedMessageSource[T]]
 
-final case class GetMessage[T <: MessageSource](
-  source: LocalizedMessageSource[T],
-  key: T#Key
-) extends MessagesF[String]
+  final case class GetMessage[T <: MessageSource](
+    source: LocalizedMessageSource[T],
+    key: T#Key
+  ) extends MessagesF[String]
 
-final case class GetMessageFmt[T <: MessageSource](
-  source: LocalizedMessageSource[T],
-  key: T#Key,
-  args: List[String]
-) extends MessagesF[String]
+  final case class GetMessageFmt[T <: MessageSource](
+    source: LocalizedMessageSource[T],
+    key: T#Key,
+    args: List[String]
+  ) extends MessagesF[String]
+}
 
 final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
   def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =

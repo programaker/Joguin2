@@ -2,6 +2,7 @@ package joguin.playerinteraction.interaction
 
 import cats.~>
 import joguin.Lazy
+import joguin.playerinteraction.interaction.InteractionF._
 
 import scala.io.StdIn.readLine
 

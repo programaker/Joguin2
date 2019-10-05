@@ -3,10 +3,15 @@ package joguin.playerinteraction.interaction
 import cats.InjectK
 import cats.free.Free
 import cats.free.Free._
+import joguin.playerinteraction.interaction.InteractionF.ReadAnswer
+import joguin.playerinteraction.interaction.InteractionF.WriteMessage
 
 sealed abstract class InteractionF[A] extends Product with Serializable
-final case class WriteMessage(message: String) extends InteractionF[Unit]
-case object ReadAnswer extends InteractionF[String]
+
+object InteractionF {
+  final case class WriteMessage(message: String) extends InteractionF[Unit]
+  case object ReadAnswer extends InteractionF[String]
+}
 
 final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
   def writeMessage(message: String): Free[C, Unit] =

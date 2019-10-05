@@ -9,6 +9,8 @@ import cats.Monad
 import cats.implicits._
 import cats.~>
 import joguin.Lazy
+import joguin.playerinteraction.message.MessageSource._
+import joguin.playerinteraction.message.MessagesF._
 
 /** MessagesF root interpreter to any F that uses ResourceBundle to read messages from app resources */
 final class MessagesInterpreter[F[_]: Monad: Lazy] extends (MessagesF ~> F) {

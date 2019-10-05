@@ -4,9 +4,13 @@ import cats.InjectK
 import cats.free.Free
 import cats.free.Free.inject
 import joguin.alien.Power
+import joguin.alien.terraformdevice.PowerGeneratorF.GeneratePower
 
 sealed abstract class PowerGeneratorF[A] extends Product with Serializable
-final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[Power]
+
+object PowerGeneratorF {
+  final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[Power]
+}
 
 final class PowerGeneratorOps[C[_]](implicit i: InjectK[PowerGeneratorF, C]) {
   def generatePower(min: Power, max: Power): Free[C, Power] =

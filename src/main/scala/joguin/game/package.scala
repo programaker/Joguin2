@@ -12,14 +12,8 @@ import joguin.earth.city.CityRepositoryF
 import joguin.earth.city.CityRepositoryInterpreter
 import joguin.game.progress.GameProgressRepositoryF
 import joguin.game.progress.GameProgressRepositoryInterpreter
-import joguin.game.step.CreateCharacter
-import joguin.game.step.Explore
-import joguin.game.step.Fight
-import joguin.game.step.GameOver
 import joguin.game.step.GameStep
-import joguin.game.step.Quit
-import joguin.game.step.SaveGame
-import joguin.game.step.ShowIntro
+import joguin.game.step.GameStep._
 import joguin.game.step.createcharacter._
 import joguin.game.step.explore.ExploreStep
 import joguin.game.step.fight.FightStep
@@ -47,6 +41,8 @@ package object game {
 
   /** GameF composite interpreter to any F */
   def gameInterpreter[F[_]: Recovery: Lazy](saveProgressFile: String): GameF ~> F = {
+    val file = new File(saveProgressFile)
+
     //The interpreter composition was written this way (with variables)
     //to match the Coproduct composition (see the types above) and
     //make the order easier to see.
@@ -56,7 +52,7 @@ package object game {
     //variables, it would be "upside-down" in relation to the Coproduct
     val i1 = new MessagesInterpreter[F] or new InteractionInterpreter[F]
     val i2 = new CityRepositoryInterpreter[F] or i1
-    val i3 = new GameProgressRepositoryInterpreter[F](new File(saveProgressFile)) or i2
+    val i3 = new GameProgressRepositoryInterpreter[F](file) or i2
     val i4 = new PowerGeneratorInterpreter[F] or i3
     val iGame = new WaitInterpreter[F] or i4
 
@@ -68,26 +64,13 @@ package object game {
     val fight = new FightStep[GameF]
 
     def gameLoop(step: GameStep): Free[GameF, Unit] = step match {
-      case ShowIntro =>
-        playShowIntroStep[GameF].flatMap(gameLoop)
-
-      case CreateCharacter =>
-        playCreateCharacterStep[GameF].flatMap(gameLoop)
-
-      case Explore(gameProgress) =>
-        explore.play(gameProgress).flatMap(gameLoop)
-
-      case Fight(gameProgress, selectedInvasion) =>
-        fight.play(gameProgress, selectedInvasion).flatMap(gameLoop)
-
-      case SaveGame(gameProgress) =>
-        playSaveGameStep[GameF](gameProgress).flatMap(gameLoop)
-
-      case Quit(gameProgress) =>
-        playQuitStep[GameF](gameProgress).flatMap(gameLoop)
-
-      case GameOver =>
-        pure(())
+      case ShowIntro                             => playShowIntroStep[GameF].flatMap(gameLoop)
+      case CreateCharacter                       => playCreateCharacterStep[GameF].flatMap(gameLoop)
+      case Explore(gameProgress)                 => explore.play(gameProgress).flatMap(gameLoop)
+      case Fight(gameProgress, selectedInvasion) => fight.play(gameProgress, selectedInvasion).flatMap(gameLoop)
+      case SaveGame(gameProgress)                => playSaveGameStep[GameF](gameProgress).flatMap(gameLoop)
+      case Quit(gameProgress)                    => playQuitStep[GameF](gameProgress).flatMap(gameLoop)
+      case GameOver                              => pure(())
     }
 
     gameLoop
