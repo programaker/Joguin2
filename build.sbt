@@ -53,6 +53,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeV,
   "io.circe" %% "circe-generic" % circeV,
   "io.circe" %% "circe-parser" % circeV,
+  "io.circe" %% "circe-refined" % circeV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
   "org.scalacheck" %% "scalacheck" % scalaCheckV % "test",

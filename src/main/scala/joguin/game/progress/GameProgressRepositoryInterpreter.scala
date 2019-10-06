@@ -6,16 +6,19 @@ import java.nio.charset.StandardCharsets._
 import cats.implicits._
 import cats.~>
 import io.circe.generic.auto._
-import io.circe.parser._
+import io.circe.jawn
 import io.circe.syntax._
 import joguin.Lazy
 import joguin.Recovery
 import joguin.game.progress.GameProgressRepositoryF._
-import joguin.game.progress.PersistentGameProgress._
 import org.apache.commons.io.FileUtils
 
 /** GameProgressRepositoryF root interpreter to any F that uses a file for persistence */
 final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) extends (GameProgressRepositoryF ~> F) {
+  //Despite IntelliJ telling that `import io.circe.refined._` is not being used,
+  //it is required to make Circe work with Refined Types
+  import io.circe.refined._
+
   override def apply[A](fa: GameProgressRepositoryF[A]): F[A] = fa match {
     case Save(gameProgress)  => save(gameProgress)
     case SavedProgressExists => savedProgressExists
@@ -43,7 +46,6 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
   private def writeToFile(gameProgress: GameProgress): F[Boolean] =
     Recovery[F]
       .pure(gameProgress)
-      .map(fromGameProgress)
       .map(_.asJson.noSpaces)
       .flatMap(json => Lazy[F].lift(FileUtils.write(file, json, UTF_8)))
       .map(_ => true)
@@ -52,7 +54,6 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
   private def readFile: F[Option[GameProgress]] =
     Lazy[F]
       .lift(FileUtils.readFileToString(file, UTF_8))
-      .map(decode[PersistentGameProgress])
-      .map(_.map(_.toGameProgress))
-      .map(_.getOrElse(None))
+      .map(jawn.decode[GameProgress])
+      .map(_.toOption)
 }
