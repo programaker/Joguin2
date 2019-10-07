@@ -26,7 +26,7 @@ package object progress {
     gp.defeatedInvasionsTrack.contains(index)
 
   def increaseMainCharacterExperience(gp: GameProgress, experiencePoints: Experience): GameProgress =
-    refineV[ExperienceR](gp.mainCharacter.experience.value + experiencePoints.value)
+    refineV[ExperienceR](gp.mainCharacter.experience + experiencePoints)
       .map(updatedXp => gp.copy(mainCharacter = gp.mainCharacter.copy(experience = updatedXp))) //TODO => Lenses!
       .getOrElse(gp)
 
@@ -34,7 +34,7 @@ package object progress {
     gp.invasions.lengthCompare(gp.defeatedInvasions.value) === 0
 
   def defeatInvasion(gp: GameProgress, index: Index): GameProgress =
-    if (index.value > gp.invasions.size) {
+    if (gp.invasions.lengthIs < index) {
       gp
     } else {
       refineV[CountR](gp.defeatedInvasions + 1)
