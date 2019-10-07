@@ -12,7 +12,7 @@ import org.scalatest.OptionValues._
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class GameProgress_Properties extends PropertyBasedSpec {
 
-  property("getting an Invasion by a valid Index (between 1 and total Invasions), gives Some(Invasion)") {
+  property("getting an Invasion by a valid Index gives Some(Invasion)") {
     import joguin.testutil.generator.Generators.index
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
@@ -24,7 +24,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("getting an Invasion by an invalid Index (> total Invasions), gives None") {
+  property("getting an Invasion by an invalid Index gives None") {
     import joguin.testutil.generator.Generators.invalidIndex
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
@@ -35,7 +35,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("defeating an Invasion by a valid Index (between 1 and total Invasions), marks that Invasion as defeated") {
+  property("defeating an Invasion by a valid Index marks that Invasion as defeated") {
     import joguin.testutil.generator.Generators.index
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
@@ -47,7 +47,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("defeating an Invasion by an invalid Index (> total Invasions), does nothing") {
+  property("defeating an Invasion by an invalid Index does nothing") {
     import joguin.testutil.generator.Generators.invalidIndex
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
@@ -59,7 +59,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     }
   }
 
-  property("increasing MC's experience by a given amount gives a GameProgress with the increased experience") {
+  property("increasing MainCharacter's experience gives a GameProgress with the increased experience") {
     import joguin.testutil.generator.Generators.experience
     import joguin.testutil.generator.Generators.invasionList
     import joguin.testutil.generator.Generators.mainCharacter
