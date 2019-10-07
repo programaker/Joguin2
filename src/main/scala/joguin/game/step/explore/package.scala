@@ -15,15 +15,13 @@ package object explore {
 
   def parseExploreOption(s: String, invasionCount: Count): Option[ExploreOption] =
     refineV[ExploreOptionR](s.toLowerCase).toOption
-      .map(_.value)
-      .flatMap {
+      .flatMap(_.value match {
         case "q" =>
           Some(QuitGame)
         case index =>
           Some(index.toInt)
-            .map(refineV[IndexR](_))
-            .flatMap(_.toOption)
-            .filter(_ <= invasionCount.value)
+            .flatMap(refineV[IndexR](_).toOption)
+            .filter(_ <= invasionCount)
             .map(GoToInvasion)
-      }
+      })
 }

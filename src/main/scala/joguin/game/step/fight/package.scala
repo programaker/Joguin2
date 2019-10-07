@@ -12,9 +12,8 @@ package object fight {
 
   def parseFightOption(s: String): Option[FightOption] =
     refineV[FightOptionR](s.toLowerCase).toOption
-      .map(_.value)
-      .map {
+      .map(_.value match {
         case "f" => FightAliens
         case "r" => Retreat
-      }
+      })
 }

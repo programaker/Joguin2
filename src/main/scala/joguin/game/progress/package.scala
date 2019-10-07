@@ -23,7 +23,7 @@ package object progress {
     gp.invasions.get(index - 1)
 
   def isInvasionDefeated(gp: GameProgress, index: Index): Boolean =
-    invasionByIndex(gp, index).forall(_.defeated)
+    invasionByIndex(gp, index).fold(false)(_.defeated)
 
   def increaseMainCharacterExperience(gp: GameProgress, experiencePoints: Experience): GameProgress =
     refineV[ExperienceR](gp.mainCharacter.experience + experiencePoints)
@@ -35,9 +35,9 @@ package object progress {
 
   def defeatInvasion(gp: GameProgress, index: Index): GameProgress =
     invasionByIndex(gp, index)
-      .map(_.copy(defeated = true))
-      .map { defeatedInvasion =>
-        gp.copy(invasions = gp.invasions.updated(index, defeatedInvasion))
+      .map { invasion =>
+        val defeatedInvasion = invasion.copy(defeated = true)
+        gp.copy(invasions = gp.invasions.updated(index - 1, defeatedInvasion))
       }
       .getOrElse(gp)
 }

@@ -72,7 +72,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
         increaseMainCharacterExperience(gp, xp)
       }
 
-      gp1.mainCharacter.experience shouldBe (start.mainCharacter.experience + (n * xp.value))
+      gp1.mainCharacter.experience.value shouldBe (start.mainCharacter.experience.value + (n * xp.value))
     }
   }
 
