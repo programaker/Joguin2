@@ -67,5 +67,5 @@ package object createcharacter {
     c.findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
-      .map(GameProgress.of(mainCharacter, _))
+      .map(GameProgress(mainCharacter, _))
 }

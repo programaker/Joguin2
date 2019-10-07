@@ -23,5 +23,5 @@ package object alien {
   ): Free[F, Invasion] =
     p.generatePower(minPower, maxPower)
       .map(TerraformDevice)
-      .map(Invasion(_, city))
+      .map(Invasion(_, city, defeated = false))
 }

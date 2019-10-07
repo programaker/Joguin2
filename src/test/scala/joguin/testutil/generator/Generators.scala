@@ -28,13 +28,10 @@ object Generators {
     Arbitrary(genMainCharacter)
 
   implicit val invasionList: Arbitrary[Vector[Invasion]] =
-    Arbitrary(genInvasionList)
+    Arbitrary(genInvasionList(defeated = false))
 
-  implicit val defeatedInvasions: Arbitrary[Count] =
-    Arbitrary(genDefeatedInvasions)
-
-  implicit val defeatedInvasionsTrack: Arbitrary[List[Index]] =
-    Arbitrary(genDefeatedInvasionsTrack)
+  implicit val defeatedInvasions: Arbitrary[Vector[Invasion]] =
+    Arbitrary(genInvasionList(defeated = true))
 
   implicit val index: Arbitrary[Index] =
     Arbitrary(genValidIndex(invasionListSize))

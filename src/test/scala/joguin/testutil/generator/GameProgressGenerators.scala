@@ -9,6 +9,6 @@ object GameProgressGenerators {
   def genGameProgressStart: Gen[GameProgress] =
     for {
       mainCharacter <- genMainCharacter
-      invasionList  <- genInvasionList
-    } yield GameProgress.of(mainCharacter, invasionList)
+      invasionList  <- genInvasionList(defeated = false)
+    } yield GameProgress(mainCharacter, invasionList)
 }
