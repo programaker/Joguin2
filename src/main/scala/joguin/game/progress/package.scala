@@ -23,7 +23,7 @@ package object progress {
     gp.invasions.get(index - 1)
 
   def isInvasionDefeated(gp: GameProgress, index: Index): Boolean =
-    invasionByIndex(gp, index).fold(false)(_.defeated)
+    invasionByIndex(gp, index).exists(_.defeated)
 
   def increaseMainCharacterExperience(gp: GameProgress, experiencePoints: Experience): GameProgress =
     refineV[ExperienceR](gp.mainCharacter.experience + experiencePoints)
