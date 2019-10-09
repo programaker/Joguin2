@@ -17,6 +17,14 @@ package object joguin {
 
   type Recovery[F[_]] = MonadError[F, Throwable]
 
+  /** I would like to use IndexedSeq instead of Vector, to be able to
+   * easily replace it with other Seqs with fast apply and size, but
+   * There is no Foldable instance for it - which provides the nice
+   * get[A]: Long => Option[A] function.
+   *
+   * So, type alias to the rescue! */
+  type IdxSeq[A] = Vector[A]
+
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value
 

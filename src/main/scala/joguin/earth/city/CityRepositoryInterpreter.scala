@@ -3,6 +3,7 @@ package joguin.earth.city
 import cats.Monad
 import cats.~>
 import eu.timepit.refined.auto._
+import joguin.IdxSeq
 import joguin.earth.city.CityRepositoryF.FindAllCities
 
 /** CityRepositoryF interpreter to any Monad that returns a hardcoded list of cities.
@@ -12,7 +13,7 @@ final class CityRepositoryInterpreter[F[_]: Monad] extends (CityRepositoryF ~> F
     case FindAllCities => allCities
   }
 
-  private val allCities: F[Vector[City]] = Monad[F].pure(
+  private val allCities: F[IdxSeq[City]] = Monad[F].pure(
     Vector(
       City("Berlin", "Germany"),
       City("Juiz de Fora", "Brazil"),

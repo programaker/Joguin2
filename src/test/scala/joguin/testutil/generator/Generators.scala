@@ -1,5 +1,6 @@
 package joguin.testutil.generator
 
+import joguin.IdxSeq
 import joguin.Name
 import joguin.alien.Invasion
 import joguin.earth.city.City
@@ -27,17 +28,17 @@ object Generators {
   implicit val mainCharacter: Arbitrary[MainCharacter] =
     Arbitrary(genMainCharacter)
 
-  implicit val invasionList: Arbitrary[Vector[Invasion]] =
-    Arbitrary(genInvasionList(defeated = false))
+  implicit val invasionSeq: Arbitrary[IdxSeq[Invasion]] =
+    Arbitrary(genInvasionSeq(defeated = false))
 
-  implicit val defeatedInvasions: Arbitrary[Vector[Invasion]] =
-    Arbitrary(genInvasionList(defeated = true))
+  implicit val defeatedInvasions: Arbitrary[IdxSeq[Invasion]] =
+    Arbitrary(genInvasionSeq(defeated = true))
 
   implicit val index: Arbitrary[Index] =
-    Arbitrary(genValidIndex(invasionListSize))
+    Arbitrary(genValidIndex(invasionSeqSize))
 
   implicit val invalidIndex: Arbitrary[Index] =
-    Arbitrary(genInvalidIndex(invasionListSize))
+    Arbitrary(genInvalidIndex(invasionSeqSize))
 
   implicit val experience: Arbitrary[Experience] =
     Arbitrary(genExperience)

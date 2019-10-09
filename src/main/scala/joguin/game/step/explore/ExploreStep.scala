@@ -5,6 +5,7 @@ import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
+import joguin.IdxSeq
 import joguin.alien.Invasion
 import joguin.game.progress.Count
 import joguin.game.progress.CountR
@@ -51,7 +52,7 @@ final class ExploreStep[F[_]](
     } yield nextStep
 
   private def showInvasions(
-    invasions: Vector[Invasion],
+    invasions: IdxSeq[Invasion],
     gameProgress: GameProgress,
     src: LocalizedMessageSource[ExploreMessageSource.type],
     index: Option[Index]
