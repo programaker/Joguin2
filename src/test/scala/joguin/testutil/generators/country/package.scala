@@ -4,6 +4,7 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import joguin.earth.Country
 import joguin.earth.CountryR
+import joguin.testutil.generators.name._
 import org.scalacheck.Gen
 
 package object country {
@@ -12,5 +13,5 @@ package object country {
       .map(refineV[CountryR](_))
       .map(_.getOrElse("Fallback Country"))
 
-  def genInvalidCountry: Gen[String] = NameGenerators.genInvalidName
+  def genInvalidCountry: Gen[String] = genInvalidName
 }

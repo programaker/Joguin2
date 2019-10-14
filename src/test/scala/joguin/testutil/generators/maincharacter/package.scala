@@ -1,7 +1,7 @@
 package joguin.testutil.generators
 
 import joguin.earth.maincharacter.MainCharacter
-import joguin.testutil.generators.NameGenerators.genName
+import name._
 import joguin.testutil.generators.age.genAge
 import joguin.testutil.generators.experience.genExperience
 import joguin.testutil.generators.gender.genGender
