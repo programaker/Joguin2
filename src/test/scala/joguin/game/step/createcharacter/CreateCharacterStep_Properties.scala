@@ -12,8 +12,7 @@ import joguin.game.progress.allInvasionsDefeated
 import joguin.game.progress.isInvasionDefeated
 import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
-import joguin.testutil.generators.age._
-import joguin.testutil.generators.Generators
+import joguin.testutil.generators._
 import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
 import joguin.testutil.interpreter.createcharacter._
@@ -26,9 +25,9 @@ import org.scalatest.OptionValues._
 final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
   property("displays messages to the player in the correct order") {
-    import joguin.testutil.generators.Generators.age
-    import joguin.testutil.generators.Generators.gender
-    import joguin.testutil.generators.Generators.name
+    import age.validAge
+    import gender.gender
+    import name.validName
 
     forAll {
       (
@@ -57,9 +56,9 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   }
 
   property("goes to the Explore step, starting the GameProgress with the created MainCharacter") {
-    import joguin.testutil.generators.Generators.age
-    import joguin.testutil.generators.Generators.gender
-    import joguin.testutil.generators.Generators.name
+    import age.validAge
+    import gender.gender
+    import name.validName
 
     forAll {
       (
@@ -93,13 +92,13 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   }
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
-    import joguin.testutil.generators.Generators.age
-    import joguin.testutil.generators.Generators.arbitraryTag
-    import joguin.testutil.generators.Generators.gender
-    import joguin.testutil.generators.Generators.invalidName
-    import joguin.testutil.generators.Generators.name
+    import age._
+    import gender._
+    import name._
+    import other.arbitraryTag
+    import other.genSmallInt
 
-    implicit val a1: Arbitrary[Tag[1, Int]] = arbitraryTag(Generators.genSmallInt)
+    implicit val a1: Arbitrary[Tag[1, Int]] = arbitraryTag(genSmallInt)
     implicit val a2: Arbitrary[Tag[2, Int]] = arbitraryTag(genInvalidAge)
 
     forAll {

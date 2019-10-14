@@ -2,17 +2,20 @@ package joguin.testutil.generators
 
 import joguin.earth.maincharacter.MainCharacter
 import name._
-import joguin.testutil.generators.age.genAge
-import joguin.testutil.generators.experience.genExperience
+import joguin.testutil.generators.age.genValidAge
+import joguin.testutil.generators.experience.genValidExperience
 import joguin.testutil.generators.gender.genGender
+import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
 package object maincharacter {
+  implicit val mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
+
   def genMainCharacter: Gen[MainCharacter] =
     for {
-      name   <- genName
+      name   <- genValidName
       gender <- genGender
-      age    <- genAge
-      xp     <- genExperience
+      age    <- genValidAge
+      xp     <- genValidExperience
     } yield MainCharacter(name, gender, age, xp)
 }

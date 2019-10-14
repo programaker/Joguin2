@@ -4,9 +4,17 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import joguin.game.progress.Index
 import joguin.game.progress.IndexR
+import joguin.testutil.generators.invasion._
+import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
 package object index {
+  implicit val validIndex: Arbitrary[Index] =
+    Arbitrary(genValidIndex(InvasionSeqSize))
+
+  implicit val invalidIndex: Arbitrary[Index] =
+    Arbitrary(genInvalidIndex(InvasionSeqSize))
+
   def genValidIndex(lastIndex: Int): Gen[Index] =
     genIndex(1, lastIndex)
 

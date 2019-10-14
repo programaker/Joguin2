@@ -8,7 +8,7 @@ import joguin.testutil.generators.name._
 import org.scalacheck.Gen
 
 package object country {
-  def genCountry: Gen[Country] =
+  def genValidCountry: Gen[Country] =
     Gen.alphaStr
       .map(refineV[CountryR](_))
       .map(_.getOrElse("Fallback Country"))

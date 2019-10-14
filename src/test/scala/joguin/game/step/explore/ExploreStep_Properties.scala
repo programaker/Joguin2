@@ -8,8 +8,7 @@ import joguin.game.progress.IndexR
 import joguin.game.progress.defeatInvasion
 import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
-import joguin.testutil.generators.Generators
-import joguin.testutil.generators.invasion._
+import joguin.testutil.generators._
 import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
 import joguin.testutil.interpreter.explore._
@@ -22,7 +21,8 @@ import org.scalatest.OptionValues._
 final class ExploreStep_Properties extends PropertyBasedSpec {
 
   property("displays messages to the player in the correct order") {
-    import joguin.testutil.generators.Generators.gameProgressStart
+    import gameprogress._
+    import invasion._
     implicit val i1: Arbitrary[Int] = Arbitrary(Gen.choose(1, InvasionSeqSize))
 
     forAll { (gp: GameProgress, chosenCity: Int) =>
@@ -54,8 +54,8 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("goes to Quit step passing the current progress if the player chooses to quit") {
-    import joguin.testutil.generators.Generators.gameProgressStart
-    import joguin.testutil.generators.Generators.quitOption
+    import gameprogress._
+    import other.quitOption
 
     forAll { (gp: GameProgress, quitOption: String) =>
       val i: Int = gp.invasions.size
@@ -76,9 +76,10 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
-    import joguin.testutil.generators.Generators.arbitraryTag
-    import joguin.testutil.generators.Generators.gameProgressStart
-    import joguin.testutil.generators.Generators.smallInt
+    import other.arbitraryTag
+    import gameprogress._
+    import other.smallInt
+    import invasion._
 
     implicit val a1: Arbitrary[Tag[1, String]] = arbitraryTag(genValidOption(InvasionSeqSize))
     implicit val a2: Arbitrary[Tag[2, String]] = arbitraryTag(Gen.alphaNumStr)
@@ -110,7 +111,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("tells the player that the mission has been accomplished and the game has ended") {
-    import joguin.testutil.generators.Generators.gameProgressStart
+    import gameprogress._
 
     forAll { gp: GameProgress =>
       val cities = gp.invasions.map(_.city)
@@ -149,8 +150,8 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("goes to the Fight game step passing the current progress if the player chooses a city") {
-    import joguin.testutil.generators.Generators.gameProgressStart
-    import joguin.testutil.generators.Generators.index
+    import gameprogress._
+    import index.validIndex
 
     forAll { (gp: GameProgress, index: Index) =>
       val answers = Map(
@@ -171,8 +172,8 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   }
 
   property("going back from Fight with an invasion defeated, displays the corresponding city as saved") {
-    import joguin.testutil.generators.Generators.gameProgressStart
-    import joguin.testutil.generators.Generators.index
+    import gameprogress._
+    import index.validIndex
 
     forAll { (gp: GameProgress, index: Index) =>
       val gp1 = defeatInvasion(gp, index)
@@ -226,7 +227,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
   private def genValidOption(lastCity: Int): Gen[String] =
     Gen.oneOf(
-      Generators.genQuitOption,
+      other.genQuitOption,
       Gen.oneOf(1 to lastCity).map(_.toString)
     )
 

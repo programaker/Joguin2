@@ -4,10 +4,17 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import joguin.earth.maincharacter.Experience
 import joguin.earth.maincharacter.ExperienceR
+import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
 package object experience {
-  def genExperience: Gen[Experience] =
+  implicit val validExperience: Arbitrary[Experience] =
+    Arbitrary(genValidExperience)
+
+  implicit val invalidExperience: Arbitrary[Int] =
+    Arbitrary(genInvalidExperience)
+
+  def genValidExperience: Gen[Experience] =
     Gen
       .choose(min = 0, max = 20000)
       .map(refineV[ExperienceR](_))

@@ -9,7 +9,7 @@ import joguin.alien.PowerR
 import org.scalacheck.Gen
 
 package object powergenerator {
-  def genPower: Gen[Power] =
+  def genValidPower: Gen[Power] =
     Gen
       .choose(min = MinPower: Int, max = MaxPower: Int)
       .map(refineV[PowerR](_))
