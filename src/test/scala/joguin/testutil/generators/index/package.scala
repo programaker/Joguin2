@@ -6,7 +6,7 @@ import joguin.game.progress.Index
 import joguin.game.progress.IndexR
 import org.scalacheck.Gen
 
-object IndexGenerator {
+package object index {
   def genValidIndex(lastIndex: Int): Gen[Index] =
     genIndex(1, lastIndex)
 
@@ -17,5 +17,5 @@ object IndexGenerator {
     Gen
       .choose(min, max)
       .map(refineV[IndexR](_))
-      .map(_.getOrElse(1: Index))
+      .map(_.getOrElse(1))
 }
