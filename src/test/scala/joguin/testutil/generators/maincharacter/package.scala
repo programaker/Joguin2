@@ -2,12 +2,12 @@ package joguin.testutil.generators
 
 import joguin.earth.maincharacter.MainCharacter
 import joguin.testutil.generators.NameGenerators.genName
-import joguin.testutil.generators.age._
-import joguin.testutil.generators.experience._
-import joguin.testutil.generators.gender._
+import joguin.testutil.generators.age.genAge
+import joguin.testutil.generators.experience.genExperience
+import joguin.testutil.generators.gender.genGender
 import org.scalacheck.Gen
 
-object MainCharacterGenerators {
+package object maincharacter {
   def genMainCharacter: Gen[MainCharacter] =
     for {
       name   <- genName

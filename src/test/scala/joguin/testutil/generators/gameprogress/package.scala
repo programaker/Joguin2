@@ -1,8 +1,8 @@
 package joguin.testutil.generators
 
 import joguin.game.progress.GameProgress
-import joguin.testutil.generators.MainCharacterGenerators.genMainCharacter
 import joguin.testutil.generators.invasion._
+import joguin.testutil.generators.maincharacter._
 import org.scalacheck.Gen
 
 package object gameprogress {
