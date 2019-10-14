@@ -1,4 +1,4 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 import joguin.earth.maincharacter.Gender
 import joguin.earth.maincharacter.Gender._

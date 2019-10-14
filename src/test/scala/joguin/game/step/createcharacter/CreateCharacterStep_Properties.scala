@@ -12,9 +12,9 @@ import joguin.game.progress.allInvasionsDefeated
 import joguin.game.progress.isInvasionDefeated
 import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
-import joguin.testutil.generator.AgeGenerators
-import joguin.testutil.generator.Generators
-import joguin.testutil.generator.Tag
+import joguin.testutil.generators.age._
+import joguin.testutil.generators.Generators
+import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
 import joguin.testutil.interpreter.createcharacter._
 import org.scalacheck.Arbitrary
@@ -26,9 +26,9 @@ import org.scalatest.OptionValues._
 final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
   property("displays messages to the player in the correct order") {
-    import joguin.testutil.generator.Generators.age
-    import joguin.testutil.generator.Generators.gender
-    import joguin.testutil.generator.Generators.name
+    import joguin.testutil.generators.Generators.age
+    import joguin.testutil.generators.Generators.gender
+    import joguin.testutil.generators.Generators.name
 
     forAll {
       (
@@ -57,9 +57,9 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   }
 
   property("goes to the Explore step, starting the GameProgress with the created MainCharacter") {
-    import joguin.testutil.generator.Generators.age
-    import joguin.testutil.generator.Generators.gender
-    import joguin.testutil.generator.Generators.name
+    import joguin.testutil.generators.Generators.age
+    import joguin.testutil.generators.Generators.gender
+    import joguin.testutil.generators.Generators.name
 
     forAll {
       (
@@ -93,14 +93,14 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   }
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
-    import joguin.testutil.generator.Generators.age
-    import joguin.testutil.generator.Generators.arbitraryTag
-    import joguin.testutil.generator.Generators.gender
-    import joguin.testutil.generator.Generators.invalidName
-    import joguin.testutil.generator.Generators.name
+    import joguin.testutil.generators.Generators.age
+    import joguin.testutil.generators.Generators.arbitraryTag
+    import joguin.testutil.generators.Generators.gender
+    import joguin.testutil.generators.Generators.invalidName
+    import joguin.testutil.generators.Generators.name
 
     implicit val a1: Arbitrary[Tag[1, Int]] = arbitraryTag(Generators.genSmallInt)
-    implicit val a2: Arbitrary[Tag[2, Int]] = arbitraryTag(AgeGenerators.genInvalidAge)
+    implicit val a2: Arbitrary[Tag[2, Int]] = arbitraryTag(genInvalidAge)
 
     forAll {
       (

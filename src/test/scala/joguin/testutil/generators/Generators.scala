@@ -1,4 +1,4 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 import joguin.IdxSeq
 import joguin.Name
@@ -6,17 +6,17 @@ import joguin.alien.Invasion
 import joguin.earth.city.City
 import joguin.earth.maincharacter._
 import joguin.game.progress._
-import joguin.testutil.generator.CityGenerators._
-import joguin.testutil.generator.ExperienceGenerators._
-import joguin.testutil.generator.IndexGenerator._
-import joguin.testutil.generator.InvasionGenerators._
-import joguin.testutil.generator.MainCharacterGenerators._
-import joguin.testutil.generator.NameGenerators._
-import joguin.testutil.generator.GenderGenerators._
-import joguin.testutil.generator.AgeGenerators._
-import joguin.testutil.generator.GameProgressGenerators._
+import joguin.testutil.generators.CityGenerators._
+import joguin.testutil.generators.ExperienceGenerators._
+import joguin.testutil.generators.IndexGenerator._
+import joguin.testutil.generators.InvasionGenerators._
+import joguin.testutil.generators.MainCharacterGenerators._
+import joguin.testutil.generators.NameGenerators._
+import joguin.testutil.generators.GenderGenerators._
+import joguin.testutil.generators.GameProgressGenerators._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
+import age._
 
 object Generators {
   implicit val city: Arbitrary[City] =

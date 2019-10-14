@@ -1,4 +1,4 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 final case class Tag[T, A](value: A) extends AnyVal {
   override def toString: String = s"$value"

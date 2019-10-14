@@ -1,8 +1,8 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 import joguin.earth.city.City
-import joguin.testutil.generator.CountryGenerators.genCountry
-import joguin.testutil.generator.NameGenerators.genName
+import joguin.testutil.generators.CountryGenerators.genCountry
+import joguin.testutil.generators.NameGenerators.genName
 import org.scalacheck.Gen
 
 object CityGenerators {

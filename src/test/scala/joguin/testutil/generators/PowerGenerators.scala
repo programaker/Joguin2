@@ -1,4 +1,4 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 import eu.timepit.refined.refineV
 import joguin.alien._

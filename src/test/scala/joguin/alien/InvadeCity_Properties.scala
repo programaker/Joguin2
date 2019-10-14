@@ -13,7 +13,7 @@ final class InvadeCity_Properties extends PropertyBasedSpec {
   private val powerGeneratorInterpreter = new PowerGeneratorInterpreter[Id]
 
   property("invading a City produces an Invasion with a TerraformDevice, whose power is in given range") {
-    import joguin.testutil.generator.Generators.city
+    import joguin.testutil.generators.Generators.city
 
     forAll { city: City =>
       val invasion = invadeCity[PowerGeneratorF](city, minPower = 1000, maxPower = 20000)

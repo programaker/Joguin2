@@ -14,9 +14,9 @@ import org.scalatest.OptionValues._
 final class GameProgress_Properties extends PropertyBasedSpec {
 
   property("getting an Invasion by a valid Index gives Some(Invasion)") {
-    import joguin.testutil.generator.Generators.index
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.index
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], validIndex: Index) =>
       val gp = GameProgress(mainCharacter, invasions)
@@ -26,9 +26,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("getting an Invasion by an invalid Index gives None") {
-    import joguin.testutil.generator.Generators.invalidIndex
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.invalidIndex
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], invalidIndex: Index) =>
       val gp = GameProgress(mainCharacter, invasions)
@@ -37,9 +37,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("defeating an Invasion by a valid Index marks that Invasion as defeated") {
-    import joguin.testutil.generator.Generators.index
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.index
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], validIndex: Index) =>
       val gp = GameProgress(mainCharacter, invasions)
@@ -49,9 +49,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("defeating an Invasion by an invalid Index does nothing") {
-    import joguin.testutil.generator.Generators.invalidIndex
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.invalidIndex
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], invalidIndex: Index) =>
       val gp = GameProgress(mainCharacter, invasions)
@@ -61,10 +61,10 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("increasing MainCharacter's experience gives a GameProgress with the increased experience") {
-    import joguin.testutil.generator.Generators.experience
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
-    import joguin.testutil.generator.Generators.smallInt
+    import joguin.testutil.generators.Generators.experience
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.smallInt
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], xp: Experience, n: Int) =>
       val start = GameProgress(mainCharacter, invasions)
@@ -78,8 +78,8 @@ final class GameProgress_Properties extends PropertyBasedSpec {
   }
 
   property("tells if all Invasions were defeated") {
-    import joguin.testutil.generator.Generators.invasionSeq
-    import joguin.testutil.generator.Generators.mainCharacter
+    import joguin.testutil.generators.Generators.invasionSeq
+    import joguin.testutil.generators.Generators.mainCharacter
 
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion]) =>
       val start = GameProgress(mainCharacter, invasions)

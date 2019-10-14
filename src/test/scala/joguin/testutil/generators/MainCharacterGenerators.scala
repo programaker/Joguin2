@@ -1,10 +1,10 @@
-package joguin.testutil.generator
+package joguin.testutil.generators
 
 import joguin.earth.maincharacter.MainCharacter
-import joguin.testutil.generator.AgeGenerators.genAge
-import joguin.testutil.generator.ExperienceGenerators.genExperience
-import joguin.testutil.generator.GenderGenerators.genGender
-import joguin.testutil.generator.NameGenerators.genName
+import joguin.testutil.generators.ExperienceGenerators.genExperience
+import joguin.testutil.generators.GenderGenerators.genGender
+import joguin.testutil.generators.NameGenerators.genName
+import joguin.testutil.generators.age._
 import org.scalacheck.Gen
 
 object MainCharacterGenerators {
