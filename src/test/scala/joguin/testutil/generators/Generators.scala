@@ -6,7 +6,6 @@ import joguin.alien.Invasion
 import joguin.earth.city.City
 import joguin.earth.maincharacter._
 import joguin.game.progress._
-import joguin.testutil.generators.GenderGenerators._
 import joguin.testutil.generators.IndexGenerator._
 import joguin.testutil.generators.InvasionGenerators._
 import joguin.testutil.generators.MainCharacterGenerators._
@@ -15,6 +14,7 @@ import joguin.testutil.generators.age._
 import joguin.testutil.generators.city._
 import joguin.testutil.generators.experience._
 import joguin.testutil.generators.gameprogress._
+import joguin.testutil.generators.gender._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
