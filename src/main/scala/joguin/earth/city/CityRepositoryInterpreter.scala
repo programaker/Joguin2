@@ -14,7 +14,7 @@ final class CityRepositoryInterpreter[F[_]: Monad] extends (CityRepositoryF ~> F
   }
 
   private val allCities: F[IdxSeq[City]] = Monad[F].pure(
-    Vector(
+    IdxSeq(
       City("Berlin", "Germany"),
       City("Juiz de Fora", "Brazil"),
       City("Los Angeles", "USA"),

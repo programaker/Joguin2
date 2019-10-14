@@ -23,7 +23,8 @@ package object joguin {
    * get[A]: Long => Option[A] function.
    *
    * So, type alias to the rescue! */
-  type IdxSeq[A] = Vector[A]
+  type IdxSeq[+A] = Vector[A]
+  val IdxSeq: Vector.type = Vector
 
   implicit def refinedEq[T: Eq, R]: Eq[Refined[T, R]] =
     (x: Refined[T, R], y: Refined[T, R]) => x.value === y.value

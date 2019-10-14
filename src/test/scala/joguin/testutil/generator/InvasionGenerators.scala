@@ -11,7 +11,7 @@ object InvasionGenerators {
   val invasionSeqSize: Int = 10
 
   def genInvasionSeq(defeated: Boolean): Gen[IdxSeq[Invasion]] =
-    Gen.containerOfN[Vector, Invasion](invasionSeqSize, genInvasion(defeated))
+    Gen.containerOfN[IdxSeq, Invasion](invasionSeqSize, genInvasion(defeated))
 
   def genInvasion(defeated: Boolean): Gen[Invasion] =
     for {
