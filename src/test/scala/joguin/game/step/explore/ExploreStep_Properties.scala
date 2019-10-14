@@ -9,8 +9,7 @@ import joguin.game.progress.defeatInvasion
 import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generators.Generators
-import joguin.testutil.generators.InvasionGenerators
-import joguin.testutil.generators.InvasionGenerators._
+import joguin.testutil.generators.invasion._
 import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
 import joguin.testutil.interpreter.explore._
@@ -24,7 +23,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
 
   property("displays messages to the player in the correct order") {
     import joguin.testutil.generators.Generators.gameProgressStart
-    implicit val i1: Arbitrary[Int] = Arbitrary(Gen.choose(1, invasionSeqSize))
+    implicit val i1: Arbitrary[Int] = Arbitrary(Gen.choose(1, InvasionSeqSize))
 
     forAll { (gp: GameProgress, chosenCity: Int) =>
       val i = gp.invasions.size
@@ -81,7 +80,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
     import joguin.testutil.generators.Generators.gameProgressStart
     import joguin.testutil.generators.Generators.smallInt
 
-    implicit val a1: Arbitrary[Tag[1, String]] = arbitraryTag(genValidOption(InvasionGenerators.invasionSeqSize))
+    implicit val a1: Arbitrary[Tag[1, String]] = arbitraryTag(genValidOption(InvasionSeqSize))
     implicit val a2: Arbitrary[Tag[2, String]] = arbitraryTag(Gen.alphaNumStr)
 
     forAll {

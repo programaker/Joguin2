@@ -6,7 +6,6 @@ import joguin.alien.Invasion
 import joguin.earth.city.City
 import joguin.earth.maincharacter._
 import joguin.game.progress._
-import joguin.testutil.generators.InvasionGenerators._
 import joguin.testutil.generators.MainCharacterGenerators._
 import joguin.testutil.generators.NameGenerators._
 import joguin.testutil.generators.age._
@@ -15,6 +14,7 @@ import joguin.testutil.generators.experience._
 import joguin.testutil.generators.gameprogress._
 import joguin.testutil.generators.gender._
 import joguin.testutil.generators.index._
+import joguin.testutil.generators.invasion._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
@@ -35,10 +35,10 @@ object Generators {
     Arbitrary(genInvasionSeq(defeated = true))
 
   implicit val index: Arbitrary[Index] =
-    Arbitrary(genValidIndex(invasionSeqSize))
+    Arbitrary(genValidIndex(InvasionSeqSize))
 
   implicit val invalidIndex: Arbitrary[Index] =
-    Arbitrary(genInvalidIndex(invasionSeqSize))
+    Arbitrary(genInvalidIndex(InvasionSeqSize))
 
   implicit val experience: Arbitrary[Experience] =
     Arbitrary(genExperience)

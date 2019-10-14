@@ -3,15 +3,15 @@ package joguin.testutil.generators
 import joguin.IdxSeq
 import joguin.alien.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
-import joguin.testutil.generators.PowerGenerators._
-import joguin.testutil.generators.city._
+import joguin.testutil.generators.PowerGenerators.genPower
+import joguin.testutil.generators.city.genCity
 import org.scalacheck.Gen
 
-object InvasionGenerators {
-  val invasionSeqSize: Int = 10
+package object invasion {
+  val InvasionSeqSize: Int = 10
 
   def genInvasionSeq(defeated: Boolean): Gen[IdxSeq[Invasion]] =
-    Gen.containerOfN[IdxSeq, Invasion](invasionSeqSize, genInvasion(defeated))
+    Gen.containerOfN[IdxSeq, Invasion](InvasionSeqSize, genInvasion(defeated))
 
   def genInvasion(defeated: Boolean): Gen[Invasion] =
     for {
