@@ -1,11 +1,11 @@
 package joguin.testutil.generators
 
-import joguin.game.progress._
-import joguin.testutil.generators.InvasionGenerators._
-import joguin.testutil.generators.MainCharacterGenerators._
+import joguin.game.progress.GameProgress
+import joguin.testutil.generators.InvasionGenerators.genInvasionSeq
+import joguin.testutil.generators.MainCharacterGenerators.genMainCharacter
 import org.scalacheck.Gen
 
-object GameProgressGenerators {
+package object gameprogress {
   def genGameProgressStart: Gen[GameProgress] =
     for {
       mainCharacter <- genMainCharacter
