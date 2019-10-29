@@ -15,7 +15,6 @@ import joguin.game.step.fight.FightOption.FightAliens
 import joguin.game.step.fight.FightOption.Retreat
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
-import joguin.playerinteraction.message.LocalizedMessageSource
 import joguin.playerinteraction.message.MessageSource.FightMessageSource
 import joguin.playerinteraction.message.MessagesOps
 import joguin.playerinteraction.wait.WaitOps
