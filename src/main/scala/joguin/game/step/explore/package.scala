@@ -9,8 +9,12 @@ import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.Count
 import joguin.game.progress.IndexR
 import joguin.game.step.explore.ExploreOption._
+import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
 
 package object explore {
+  type LocalizedExploreMessageSource = LocalizedMessageSource[ExploreMessageSource.type]
+
   type ExploreOptionR = MatchesRegex[W.`"""^[1-9][0-9]*$"""`.T] Or Equal[W.`"q"`.T]
 
   def parseExploreOption(s: String, invasionCount: Count): Option[ExploreOption] =

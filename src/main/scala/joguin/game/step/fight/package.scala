@@ -6,8 +6,12 @@ import eu.timepit.refined.generic.Equal
 import eu.timepit.refined.refineV
 import joguin.game.step.fight.FightOption.FightAliens
 import joguin.game.step.fight.FightOption.Retreat
+import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.FightMessageSource
 
 package object fight {
+  type LocalizedFightMessageSource = LocalizedMessageSource[FightMessageSource.type]
+
   type FightOptionR = Equal[W.`"f"`.T] Or Equal[W.`"r"`.T]
 
   def parseFightOption(s: String): Option[FightOption] =

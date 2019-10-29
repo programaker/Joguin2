@@ -15,11 +15,13 @@ import joguin.game.step.showintro.ShowIntroOption._
 import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.LocalizedMessageSource
+import joguin.playerinteraction.message.MessageSource.ShowIntroMessageSource
 import joguin.playerinteraction.message.MessageSource.ShowIntroMessageSource._
-import joguin.playerinteraction.message.MessageSource._
 import joguin.playerinteraction.message.MessagesOps
 
 package object showintro {
+  type LocalizedShowIntroMessageSource = LocalizedMessageSource[ShowIntroMessageSource.type]
+
   type ShowIntroOptionR = MatchesRegex[W.`"""^[nqr]$"""`.T]
   type ShowIntroOptionNoRestoreR = MatchesRegex[W.`"""^[nq]$"""`.T]
 
@@ -85,10 +87,9 @@ package object showintro {
     })
   }
 
-  private def welcomeBack[F[_]](
-    gp: GameProgress,
-    src: LocalizedMessageSource[ShowIntroMessageSource.type]
-  )(implicit m: MessagesOps[F]): Free[F, GameStep] = {
+  private def welcomeBack[F[_]](gp: GameProgress, src: LocalizedShowIntroMessageSource)(
+    implicit m: MessagesOps[F]
+  ): Free[F, GameStep] = {
 
     val name: String = gp.mainCharacter.name
     val experience: Int = gp.mainCharacter.experience

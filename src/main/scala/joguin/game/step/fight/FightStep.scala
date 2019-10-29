@@ -51,7 +51,7 @@ final class FightStep[F[_]](
   private def cityAlreadySaved(
     gameProgress: GameProgress,
     invasion: Invasion,
-    src: LocalizedMessageSource[FightMessageSource.type]
+    src: LocalizedFightMessageSource
   ): Free[F, GameProgress] =
     getMessageFmt(src)(city_already_saved, List(invasion.city.name.value))
       .flatMap(writeMessage)
@@ -61,7 +61,7 @@ final class FightStep[F[_]](
     gameProgress: GameProgress,
     invasion: Invasion,
     invasionIndex: Index,
-    src: LocalizedMessageSource[FightMessageSource.type]
+    src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
 
     val device = invasion.terraformDevice.defensePower.value.toString
@@ -87,7 +87,7 @@ final class FightStep[F[_]](
     gameProgress: GameProgress,
     invasion: Invasion,
     invasionIndex: Index,
-    src: LocalizedMessageSource[FightMessageSource.type]
+    src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
 
     val characterExperience = gameProgress.mainCharacter.experience.value //TODO => Lenses!
@@ -113,7 +113,7 @@ final class FightStep[F[_]](
     }
   }
 
-  private def showFightAnimation(src: LocalizedMessageSource[FightMessageSource.type]): Free[F, Unit] = {
+  private def showFightAnimation(src: LocalizedFightMessageSource): Free[F, Unit] = {
     val time = 100.milliseconds
 
     for {

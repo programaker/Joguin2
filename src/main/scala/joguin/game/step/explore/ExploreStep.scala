@@ -54,7 +54,7 @@ final class ExploreStep[F[_]](
   private def showInvasions(
     invasions: IdxSeq[Invasion],
     gameProgress: GameProgress,
-    src: LocalizedMessageSource[ExploreMessageSource.type],
+    src: LocalizedExploreMessageSource,
     index: Option[Index]
   ): Free[F, Unit] =
     (invasions.headOption, index)
@@ -73,27 +73,24 @@ final class ExploreStep[F[_]](
       }
       .getOrElse(pure(()))
 
-  private def missionAccomplished(src: LocalizedMessageSource[ExploreMessageSource.type]): Free[F, GameStep] =
+  private def missionAccomplished(src: LocalizedExploreMessageSource): Free[F, GameStep] =
     for {
       message <- getMessage(src)(mission_accomplished)
       _       <- writeMessage(message)
       _       <- waitFor(10.seconds)
     } yield GameOver
 
-  private def chooseOption(
-    src: LocalizedMessageSource[ExploreMessageSource.type],
-    gp: GameProgress
-  ): Free[F, GameStep] = {
-
+  private def chooseOption(src: LocalizedExploreMessageSource, gp: GameProgress): Free[F, GameStep] = {
     val invasionCount = refineV[CountR](gp.invasions.size).getOrElse(0: Count)
 
     for {
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, parseExploreOption(_, invasionCount))
-    } yield option match {
-      case QuitGame            => Quit(gp)
-      case GoToInvasion(index) => Fight(gp, index)
-    }
+    } yield
+      option match {
+        case QuitGame            => Quit(gp)
+        case GoToInvasion(index) => Fight(gp, index)
+      }
   }
 }
