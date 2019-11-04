@@ -74,7 +74,9 @@ final class GameProgress_Properties extends PropertyBasedSpec {
         increaseMainCharacterExperience(gp, xp)
       }
 
-      gp1.mainCharacter.experience.value shouldBe (start.mainCharacter.experience.value + (n * xp.value))
+      val startXp: Int = ExperienceField.get(start)
+      val increasedXp: Int = ExperienceField.get(gp1)
+      increasedXp shouldBe (startXp + (n * xp))
     }
   }
 

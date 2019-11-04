@@ -1,12 +1,13 @@
 package joguin.alien
 
 import cats.Id
+import eu.timepit.refined.auto._
+import joguin.alien.invasion._
 import joguin.alien.terraformdevice.PowerGeneratorF
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter
 import joguin.alien.terraformdevice.PowerGeneratorOps._
 import joguin.earth.city.City
 import joguin.testutil.PropertyBasedSpec
-import eu.timepit.refined.auto._
 import joguin.testutil.generators._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
@@ -20,8 +21,10 @@ final class InvadeCity_Properties extends PropertyBasedSpec {
       val invasion = invadeCity[PowerGeneratorF](city, minPower = 1000, maxPower = 20000)
         .foldMap(powerGeneratorInterpreter)
 
+      val generatedPower: Int = DefensePowerField.get(invasion)
+
       invasion.city shouldBe city
-      invasion.terraformDevice.defensePower.value should (be >= 1000 and be <= 20000)
+      generatedPower should (be >= 1000 and be <= 20000)
     }
   }
 }
