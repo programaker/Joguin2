@@ -4,6 +4,7 @@ import cats.free.Free
 import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
+import eu.timepit.refined.auto._
 import joguin.alien.Invasion
 import joguin.earth.maincharacter.ExperienceR
 import joguin.game.progress.Index
@@ -89,7 +90,7 @@ final class FightStep[F[_]](
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
 
-    val characterExperience = gameProgress.mainCharacter.experience.value //TODO => Lenses!
+    val characterExperience = ExperienceField.get(gameProgress): Int
     val deviceDefensePower = invasion.terraformDevice.defensePower.value
     val city = invasion.city.name.value
     val deviceDestroyed = characterExperience >= deviceDefensePower
