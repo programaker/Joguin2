@@ -13,6 +13,7 @@ val scalaTestV = "3.0.8"
 val scalaCheckV = "1.14.2"
 val scalaCheckShapelessV = "1.2.3"
 val catsScalaCheckV = "0.1.1"
+val monocleV = "2.0.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -53,7 +54,11 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeV,
   "io.circe" %% "circe-generic" % circeV,
   "io.circe" %% "circe-parser" % circeV,
-  "io.circe" %% "circe-refined" % circeV,
+	"io.circe" %% "circe-refined" % circeV,
+	
+	"com.github.julien-truffaut"  %%  "monocle-core" % monocleV,
+	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
+	"com.github.julien-truffaut"  %%  "monocle-refined" % monocleV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
   "org.scalacheck" %% "scalacheck" % scalaCheckV % "test",
