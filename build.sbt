@@ -58,7 +58,6 @@ libraryDependencies ++= Seq(
 	
 	"com.github.julien-truffaut"  %%  "monocle-core" % monocleV,
 	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
-	"com.github.julien-truffaut"  %%  "monocle-refined" % monocleV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
   "org.scalacheck" %% "scalacheck" % scalaCheckV % "test",
