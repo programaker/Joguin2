@@ -1,7 +1,8 @@
 package joguin.testutil.generators
 
 import joguin.IdxSeq
-import joguin.alien.Invasion
+import joguin.alien.invasion
+import joguin.alien.invasion.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.testutil.generators.city.genValidCity
 import joguin.testutil.generators.powergenerator._
@@ -24,5 +25,5 @@ package object invasion {
     for {
       power <- genValidPower
       city  <- genValidCity
-    } yield Invasion(TerraformDevice(power), city, defeated)
+    } yield invasion.Invasion(TerraformDevice(power), city, defeated)
 }

@@ -6,7 +6,8 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.NonNegative
 import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.refineV
-import joguin.alien.Invasion
+import joguin.Name
+import joguin.alien.invasion.Invasion
 import joguin.earth.maincharacter.Experience
 import joguin.earth.maincharacter.ExperienceR
 import monocle.Lens
@@ -20,6 +21,7 @@ package object progress {
   type Index = Int Refined IndexR
 
   val ExperienceField: Lens[GameProgress, Experience] = GenLens[GameProgress](_.mainCharacter.experience)
+  val CharacterNameField: Lens[GameProgress, Name] = GenLens[GameProgress](_.mainCharacter.name)
 
   def invasionByIndex(gp: GameProgress, index: Index): Option[Invasion] =
     //1-based index, to match the invasion list as the player sees it
@@ -31,7 +33,7 @@ package object progress {
 
   def increaseMainCharacterExperience(gp: GameProgress, experiencePoints: Experience): GameProgress =
     refineV[ExperienceR](ExperienceField.get(gp) + experiencePoints)
-      .map(updatedXp => ExperienceField.set(updatedXp)(gp))
+      .map(ExperienceField.set(_)(gp))
       .getOrElse(gp)
 
   def allInvasionsDefeated(gp: GameProgress): Boolean =

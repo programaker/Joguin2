@@ -3,7 +3,7 @@ package joguin.game.progress
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.IdxSeq
-import joguin.alien.Invasion
+import joguin.alien.invasion.Invasion
 import joguin.earth.maincharacter.Experience
 import joguin.earth.maincharacter.MainCharacter
 import joguin.testutil.PropertyBasedSpec

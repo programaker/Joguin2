@@ -4,6 +4,8 @@ import cats.free.Free
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric.Positive
+import joguin.alien.invasion
+import joguin.alien.invasion.Invasion
 import joguin.alien.terraformdevice.PowerGeneratorOps
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City
@@ -23,5 +25,5 @@ package object alien {
   ): Free[F, Invasion] =
     p.generatePower(minPower, maxPower)
       .map(TerraformDevice)
-      .map(Invasion(_, city, defeated = false))
+      .map(invasion.Invasion(_, city, defeated = false))
 }

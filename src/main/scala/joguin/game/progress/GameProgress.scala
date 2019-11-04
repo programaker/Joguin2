@@ -1,7 +1,7 @@
 package joguin.game.progress
 
 import joguin.IdxSeq
-import joguin.alien.Invasion
+import joguin.alien.invasion.Invasion
 import joguin.earth.maincharacter.MainCharacter
 
 final case class GameProgress(

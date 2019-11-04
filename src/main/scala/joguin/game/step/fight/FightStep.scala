@@ -5,7 +5,7 @@ import cats.free.Free._
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
-import joguin.alien.Invasion
+import joguin.alien.invasion._
 import joguin.earth.maincharacter.ExperienceR
 import joguin.game.progress.Index
 import joguin.game.progress._
@@ -53,7 +53,7 @@ final class FightStep[F[_]](
     invasion: Invasion,
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] =
-    getMessageFmt(src)(city_already_saved, List(invasion.city.name.value))
+    getMessageFmt(src)(city_already_saved, List(CityNameField.get(invasion)))
       .flatMap(writeMessage)
       .map(_ => gameProgress)
 
@@ -64,9 +64,9 @@ final class FightStep[F[_]](
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
 
-    val device = invasion.terraformDevice.defensePower.value.toString
-    val character = gameProgress.mainCharacter.name.value
-    val city = invasion.city.name.value
+    val device = DefensePowerField.get(invasion).toString
+    val character: String = CharacterNameField.get(gameProgress)
+    val city: String = CityNameField.get(invasion)
 
     val option = for {
       report <- getMessageFmt(src)(report, List(character, city, device))
@@ -90,9 +90,9 @@ final class FightStep[F[_]](
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
 
-    val characterExperience = ExperienceField.get(gameProgress): Int
-    val deviceDefensePower = invasion.terraformDevice.defensePower.value
-    val city = invasion.city.name.value
+    val characterExperience: Int = ExperienceField.get(gameProgress)
+    val deviceDefensePower: Int = DefensePowerField.get(invasion)
+    val city: String = CityNameField.get(invasion)
     val deviceDestroyed = characterExperience >= deviceDefensePower
 
     showFightAnimation(src).flatMap { _ =>
@@ -100,7 +100,7 @@ final class FightStep[F[_]](
         .map(increaseMainCharacterExperience(gameProgress, _))
         .getOrElse(gameProgress)
 
-      val newExperience = up1.mainCharacter.experience.value.toString
+      val newExperience = ExperienceField.get(up1).toString
 
       val (up2, fightOutCome) =
         if (deviceDestroyed) {

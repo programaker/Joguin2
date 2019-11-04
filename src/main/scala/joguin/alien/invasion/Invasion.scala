@@ -1,4 +1,4 @@
-package joguin.alien
+package joguin.alien.invasion
 
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.earth.city.City

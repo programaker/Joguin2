@@ -6,7 +6,7 @@ import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.IdxSeq
-import joguin.alien.Invasion
+import joguin.alien.invasion.Invasion
 import joguin.game.progress.Count
 import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
@@ -86,9 +86,10 @@ final class ExploreStep[F[_]](
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, parseExploreOption(_, invasionCount))
-    } yield option match {
-      case QuitGame            => Quit(gp)
-      case GoToInvasion(index) => Fight(gp, index)
-    }
+    } yield
+      option match {
+        case QuitGame            => Quit(gp)
+        case GoToInvasion(index) => Fight(gp, index)
+      }
   }
 }
