@@ -8,7 +8,7 @@ import eu.timepit.refined.W
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
-import joguin.game.progress.GameProgress
+import joguin.game.progress._
 import joguin.game.progress.GameProgressRepositoryOps
 import joguin.game.step.GameStep._
 import joguin.game.step.showintro.ShowIntroOption._
@@ -91,8 +91,8 @@ package object showintro {
     implicit m: MessagesOps[F]
   ): Free[F, GameStep] = {
 
-    val name: String = gp.mainCharacter.name
-    val experience: Int = gp.mainCharacter.experience
+    val name: String = CharacterNameField.get(gp)
+    val experience: Int = ExperienceField.get(gp)
     m.getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))
   }
 }

@@ -6,7 +6,7 @@ import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.IdxSeq
-import joguin.alien.invasion.Invasion
+import joguin.alien.invasion._
 import joguin.game.progress.Count
 import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
@@ -64,7 +64,7 @@ final class ExploreStep[F[_]](
           alien_dominated_city
         }
 
-        getMessageFmt(src)(key, List(idx.toString, invasion.city.name, invasion.city.country))
+        getMessageFmt(src)(key, List(idx.toString, CityNameField.get(invasion), CountryField.get(invasion)))
           .flatMap(writeMessage)
           .flatMap { _ =>
             showInvasions(invasions.drop(1), gameProgress, src, refineV[IndexR](idx + 1).toOption)
