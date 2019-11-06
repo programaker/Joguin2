@@ -8,4 +8,5 @@ package object invasion {
   val DefensePowerField: Lens[Invasion, Power] = GenLens[Invasion](_.terraformDevice.defensePower)
   val CityNameField: Lens[Invasion, Name] = GenLens[Invasion](_.city.name)
   val CountryField: Lens[Invasion, Name] = GenLens[Invasion](_.city.country)
+  val DefeatedField: Lens[Invasion, Boolean] = GenLens[Invasion](_.defeated)
 }
