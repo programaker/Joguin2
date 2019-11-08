@@ -24,19 +24,19 @@ object MessagesF {
   ) extends MessagesF[String]
 }
 
-final class MessagesOps[C[_]](implicit i: InjectK[MessagesF, C]) {
-  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[C, LocalizedMessageSource[T]] =
-    inject[MessagesF, C](GetLocalizedMessageSource(source))
+final class MessagesOps[F[_]](implicit i: InjectK[MessagesF, F]) {
+  def getLocalizedMessageSource[T <: MessageSource](source: T): Free[F, LocalizedMessageSource[T]] =
+    inject[MessagesF, F](GetLocalizedMessageSource(source))
 
-  def getMessage[T <: MessageSource](source: LocalizedMessageSource[T])(key: T#Key): Free[C, String] =
-    inject[MessagesF, C](GetMessage(source, key))
+  def getMessage[T <: MessageSource](source: LocalizedMessageSource[T])(key: T#Key): Free[F, String] =
+    inject[MessagesF, F](GetMessage(source, key))
 
   def getMessageFmt[T <: MessageSource](
     source: LocalizedMessageSource[T]
-  )(key: T#Key, args: List[String]): Free[C, String] =
-    inject[MessagesF, C](GetMessageFmt(source, key, args))
+  )(key: T#Key, args: List[String]): Free[F, String] =
+    inject[MessagesF, F](GetMessageFmt(source, key, args))
 }
 
 object MessagesOps {
-  implicit def messagesOps[C[_]](implicit i: InjectK[MessagesF, C]): MessagesOps[C] = new MessagesOps[C]
+  implicit def messagesOps[F[_]](implicit i: InjectK[MessagesF, F]): MessagesOps[F] = new MessagesOps[F]
 }

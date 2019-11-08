@@ -13,15 +13,15 @@ object GameProgressRepositoryF {
   case object Restore extends GameProgressRepositoryF[Option[GameProgress]]
 }
 
-final class GameProgressRepositoryOps[C[_]](implicit i: InjectK[GameProgressRepositoryF, C]) {
-  def save(gameProgress: GameProgress): Free[C, Boolean] = inject(Save(gameProgress))
-  def savedProgressExists: Free[C, Boolean] = inject(SavedProgressExists)
-  def restore: Free[C, Option[GameProgress]] = inject(Restore)
+final class GameProgressRepositoryOps[F[_]](implicit i: InjectK[GameProgressRepositoryF, F]) {
+  def save(gameProgress: GameProgress): Free[F, Boolean] = inject(Save(gameProgress))
+  def savedProgressExists: Free[F, Boolean] = inject(SavedProgressExists)
+  def restore: Free[F, Option[GameProgress]] = inject(Restore)
 }
 
 object GameProgressRepositoryOps {
-  implicit def gameProgressRepositoryOps[C[_]](
-    implicit i: InjectK[GameProgressRepositoryF, C]
-  ): GameProgressRepositoryOps[C] =
-    new GameProgressRepositoryOps[C]
+  implicit def gameProgressRepositoryOps[F[_]](
+    implicit i: InjectK[GameProgressRepositoryF, F]
+  ): GameProgressRepositoryOps[F] =
+    new GameProgressRepositoryOps[F]
 }

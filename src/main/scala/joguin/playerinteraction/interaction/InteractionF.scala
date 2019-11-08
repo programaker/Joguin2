@@ -13,15 +13,15 @@ object InteractionF {
   case object ReadAnswer extends InteractionF[String]
 }
 
-final class InteractionOps[C[_]](implicit i: InjectK[InteractionF, C]) {
-  def writeMessage(message: String): Free[C, Unit] =
+final class InteractionOps[F[_]](implicit i: InjectK[InteractionF, F]) {
+  def writeMessage(message: String): Free[F, Unit] =
     inject(WriteMessage(message))
 
-  def readAnswer: Free[C, String] =
+  def readAnswer: Free[F, String] =
     inject(ReadAnswer)
 }
 
 object InteractionOps {
-  implicit def interactionOps[C[_]](implicit i: InjectK[InteractionF, C]): InteractionOps[C] =
-    new InteractionOps[C]
+  implicit def interactionOps[F[_]](implicit i: InjectK[InteractionF, F]): InteractionOps[F] =
+    new InteractionOps[F]
 }

@@ -12,11 +12,11 @@ object CityRepositoryF {
   case object FindAllCities extends CityRepositoryF[IdxSeq[City]]
 }
 
-final class CityRepositoryOps[C[_]](implicit i: InjectK[CityRepositoryF, C]) {
-  def findAllCities: Free[C, IdxSeq[City]] = inject(FindAllCities)
+final class CityRepositoryOps[F[_]](implicit i: InjectK[CityRepositoryF, F]) {
+  def findAllCities: Free[F, IdxSeq[City]] = inject(FindAllCities)
 }
 
 object CityRepositoryOps {
-  implicit def cityRepositoryOps[C[_]](implicit i: InjectK[CityRepositoryF, C]): CityRepositoryOps[C] =
-    new CityRepositoryOps[C]
+  implicit def cityRepositoryOps[F[_]](implicit i: InjectK[CityRepositoryF, F]): CityRepositoryOps[F] =
+    new CityRepositoryOps[F]
 }
