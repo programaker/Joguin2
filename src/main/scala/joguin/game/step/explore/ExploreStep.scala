@@ -18,24 +18,17 @@ import joguin.game.step.GameStep
 import joguin.game.step.GameStep._
 import joguin.game.step.explore.ExploreOption.GoToInvasion
 import joguin.game.step.explore.ExploreOption.QuitGame
-import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
-import joguin.playerinteraction.message.MessagesOps
-import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._
 
-final class ExploreStep[F[_]](
-  implicit
-  m: MessagesOps[F],
-  i: InteractionOps[F],
-  w: WaitOps[F]
-) {
+final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
   import ExploreMessageSource._
-  import i._
-  import m._
-  import w._
+  import env._
+  import I._
+  import M._
+  import W._
 
   def play(gameProgress: GameProgress): Free[F, GameStep] =
     for {
@@ -86,10 +79,9 @@ final class ExploreStep[F[_]](
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, parseExploreOption(_, invasionCount))
-    } yield
-      option match {
-        case QuitGame            => Quit(gp)
-        case GoToInvasion(index) => Fight(gp, index)
-      }
+    } yield option match {
+      case QuitGame            => Quit(gp)
+      case GoToInvasion(index) => Fight(gp, index)
+    }
   }
 }
