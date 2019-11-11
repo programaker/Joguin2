@@ -9,10 +9,8 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress._
-import joguin.game.progress.GameProgressRepositoryOps
 import joguin.game.step.GameStep._
 import joguin.game.step.showintro.ShowIntroOption._
-import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.LocalizedMessageSource
 import joguin.playerinteraction.message.MessageSource.ShowIntroMessageSource
@@ -25,15 +23,11 @@ package object showintro {
   type ShowIntroOptionR = MatchesRegex[W.`"""^[nqr]$"""`.T]
   type ShowIntroOptionNoRestoreR = MatchesRegex[W.`"""^[nq]$"""`.T]
 
-  def playShowIntroStep[F[_]](
-    implicit
-    i: InteractionOps[F],
-    m: MessagesOps[F],
-    r: GameProgressRepositoryOps[F]
-  ): Free[F, GameStep] = {
-    import i._
-    import m._
-    import r._
+  def playShowIntroStep[F[_]](implicit env: ShowIntroStepEnv[F]): Free[F, GameStep] = {
+    import env._
+    import gameProgressRepositoryOps._
+    import interactionOps._
+    import messageOps._
 
     val messageSource = getLocalizedMessageSource(ShowIntroMessageSource)
 
