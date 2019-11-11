@@ -22,6 +22,7 @@ package object createcharacter {
     import env._
     import interactionOps._
     import messageOps._
+    import cityRepositoryOps._
 
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
@@ -48,18 +49,10 @@ package object createcharacter {
       characterCreated <- messageFmt(character_created, List(name.value))
       _                <- writeMessage(characterCreated)
 
-      gameProgress <- initialGameProgress(mc)
+      gameProgress <- findAllCities
+        .map(_.map(invadeCity(_, MinPower, MaxPower)))
+        .flatMap(_.sequence)
+        .map(GameProgress(mc, _))
     } yield Explore(gameProgress)
-  }
-
-  private def initialGameProgress[F[_]](
-    mainCharacter: MainCharacter
-  )(implicit env: CreateCharacterStepEnv[F]): Free[F, GameProgress] = {
-    import env._
-
-    cityRepositoryOps.findAllCities
-      .map(_.map(invadeCity(_, MinPower, MaxPower)))
-      .flatMap(_.sequence)
-      .map(GameProgress(mainCharacter, _))
   }
 }
