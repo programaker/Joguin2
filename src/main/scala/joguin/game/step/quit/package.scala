@@ -7,20 +7,16 @@ import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
 import joguin.game.step.GameStep.GameOver
 import joguin.game.step.GameStep.SaveGame
-import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSource.QuitMessageSource
 import joguin.playerinteraction.message.MessageSource.QuitMessageSource._
-import joguin.playerinteraction.message.MessagesOps
 
 package object quit {
   type QuitOptionR = MatchesRegex[W.`"""^[yn]$"""`.T]
 
-  def playQuitStep[F[_]](gameProgress: GameProgress)(
-    implicit m: MessagesOps[F],
-    i: InteractionOps[F]
-  ): Free[F, GameStep] = {
-    import m._
+  def playQuitStep[F[_]](gameProgress: GameProgress)(implicit env: QuitStepEnv[F]): Free[F, GameStep] = {
+    import env._
+    import messageOps._
 
     val answer = for {
       src            <- getLocalizedMessageSource(QuitMessageSource)
