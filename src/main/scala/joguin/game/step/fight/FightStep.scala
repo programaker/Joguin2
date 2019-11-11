@@ -14,24 +14,17 @@ import joguin.game.step.GameStep.Explore
 import joguin.game.step.GameStep.GameOver
 import joguin.game.step.fight.FightOption.FightAliens
 import joguin.game.step.fight.FightOption.Retreat
-import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSource.FightMessageSource
-import joguin.playerinteraction.message.MessagesOps
-import joguin.playerinteraction.wait.WaitOps
 
 import scala.concurrent.duration._
 
-final class FightStep[F[_]](
-  implicit
-  m: MessagesOps[F],
-  i: InteractionOps[F],
-  w: WaitOps[F]
-) {
+final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
   import FightMessageSource._
-  import i._
-  import m._
-  import w._
+  import env._
+  import interactionOps._
+  import messageOps._
+  import waitOps._
 
   def play(gameProgress: GameProgress, selectedInvasion: Index): Free[F, GameStep] =
     invasionByIndex(gameProgress, selectedInvasion)
