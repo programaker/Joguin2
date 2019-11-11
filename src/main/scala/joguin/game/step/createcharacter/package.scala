@@ -20,8 +20,8 @@ import joguin.playerinteraction.message.MessageSource.CreateCharacterMessageSour
 package object createcharacter {
   def playCreateCharacterStep[F[_]](implicit env: CreateCharacterStepEnv[F]): Free[F, GameStep] = {
     import env._
-    import I._
-    import M._
+    import interactionOps._
+    import messageOps._
 
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
@@ -57,7 +57,7 @@ package object createcharacter {
   )(implicit env: CreateCharacterStepEnv[F]): Free[F, GameProgress] = {
     import env._
 
-    C.findAllCities
+    cityRepositoryOps.findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
       .map(GameProgress(mainCharacter, _))

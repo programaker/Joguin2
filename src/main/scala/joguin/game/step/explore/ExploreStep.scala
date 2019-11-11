@@ -26,9 +26,9 @@ import scala.concurrent.duration._
 final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
   import ExploreMessageSource._
   import env._
-  import I._
-  import M._
-  import W._
+  import interactionOps._
+  import messageOps._
+  import waitOps._
 
   def play(gameProgress: GameProgress): Free[F, GameStep] =
     for {
@@ -79,9 +79,10 @@ final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
       message      <- getMessageFmt(src)(where_do_you_want_to_go, List("1", invasionCount.toString))
       errorMessage <- getMessage(src)(error_invalid_option)
       option       <- ask(message, errorMessage, parseExploreOption(_, invasionCount))
-    } yield option match {
-      case QuitGame            => Quit(gp)
-      case GoToInvasion(index) => Fight(gp, index)
-    }
+    } yield
+      option match {
+        case QuitGame            => Quit(gp)
+        case GoToInvasion(index) => Fight(gp, index)
+      }
   }
 }

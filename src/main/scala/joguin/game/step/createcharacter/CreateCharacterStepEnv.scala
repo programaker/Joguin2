@@ -11,10 +11,10 @@ final class CreateCharacterStepEnv[F[_]](
   c: CityRepositoryOps[F],
   p: PowerGeneratorOps[F]
 ) {
-  implicit val M: MessagesOps[F] = m
-  implicit val I: InteractionOps[F] = i
-  implicit val C: CityRepositoryOps[F] = c
-  implicit val P: PowerGeneratorOps[F] = p
+  implicit val messageOps: MessagesOps[F] = m
+  implicit val interactionOps: InteractionOps[F] = i
+  implicit val cityRepositoryOps: CityRepositoryOps[F] = c
+  implicit val powerGeneratorOps: PowerGeneratorOps[F] = p
 }
 
 object CreateCharacterStepEnv {

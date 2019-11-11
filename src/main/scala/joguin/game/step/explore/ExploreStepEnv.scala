@@ -9,9 +9,9 @@ final class ExploreStepEnv[F[_]](
   i: InteractionOps[F],
   w: WaitOps[F]
 ) {
-  implicit val M: MessagesOps[F] = m
-  implicit val I: InteractionOps[F] = i
-  implicit val W: WaitOps[F] = w
+  implicit val messageOps: MessagesOps[F] = m
+  implicit val interactionOps: InteractionOps[F] = i
+  implicit val waitOps: WaitOps[F] = w
 }
 
 object ExploreStepEnv {
