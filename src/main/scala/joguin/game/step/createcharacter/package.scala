@@ -7,30 +7,21 @@ import eu.timepit.refined.auto._
 import joguin.alien.MaxPower
 import joguin.alien.MinPower
 import joguin.alien.invadeCity
-import joguin.alien.terraformdevice.PowerGeneratorOps
-import joguin.earth.city.CityRepositoryOps
 import joguin.earth.maincharacter.MainCharacter
 import joguin.earth.maincharacter.parseAge
 import joguin.earth.maincharacter.parseGender
 import joguin.game.progress.GameProgress
 import joguin.game.step.GameStep._
 import joguin.parseName
-import joguin.playerinteraction.interaction.InteractionOps
 import joguin.playerinteraction.interaction.ask
 import joguin.playerinteraction.message.MessageSource.CreateCharacterMessageSource
 import joguin.playerinteraction.message.MessageSource.CreateCharacterMessageSource._
-import joguin.playerinteraction.message.MessagesOps
 
 package object createcharacter {
-  def playCreateCharacterStep[F[_]](
-    implicit
-    m: MessagesOps[F],
-    i: InteractionOps[F],
-    c: CityRepositoryOps[F],
-    p: PowerGeneratorOps[F]
-  ): Free[F, GameStep] = {
-    import i._
-    import m._
+  def playCreateCharacterStep[F[_]](implicit env: CreateCharacterStepEnv[F]): Free[F, GameStep] = {
+    import env._
+    import I._
+    import M._
 
     for {
       src        <- getLocalizedMessageSource(CreateCharacterMessageSource)
@@ -63,9 +54,12 @@ package object createcharacter {
 
   private def initialGameProgress[F[_]](
     mainCharacter: MainCharacter
-  )(implicit c: CityRepositoryOps[F], p: PowerGeneratorOps[F]): Free[F, GameProgress] =
-    c.findAllCities
+  )(implicit env: CreateCharacterStepEnv[F]): Free[F, GameProgress] = {
+    import env._
+
+    C.findAllCities
       .map(_.map(invadeCity(_, MinPower, MaxPower)))
       .flatMap(_.sequence)
       .map(GameProgress(mainCharacter, _))
+  }
 }
