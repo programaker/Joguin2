@@ -129,16 +129,16 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
       _ <- writeMessage("\n")
       _ <- writeMessage(attacker)
 
-      _ <- showWeaponUse(weapon, 1, 31)
+      _ <- showWeaponUse(weapon, 31)
 
       _ <- writeMessage(strike)
       _ <- writeMessage("\n")
     } yield ()
 
-  private def showWeaponUse(weapon: String, start: Int, end: Int): Free[F, Unit] =
-    if (start <= end) {
-      val res = for {
-        _ <- if (start % 2 === 0) {
+  private def showWeaponUse(weapon: String, count: Int): Free[F, Unit] =
+    LazyList.range(1, count + 1).foldLeftM(()) { (_, i) =>
+      for {
+        _ <- if (i % 2 === 0) {
           writeMessage(weapon)
         } else {
           writeMessage(" ")
@@ -146,9 +146,5 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
 
         _ <- waitFor(50.milliseconds)
       } yield ()
-
-      res.flatMap(_ => showWeaponUse(weapon, start + 1, end))
-    } else {
-      pure(())
     }
 }
