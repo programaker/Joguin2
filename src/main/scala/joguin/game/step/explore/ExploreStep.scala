@@ -10,9 +10,6 @@ import joguin.alien.invasion._
 import joguin.game.progress.Count
 import joguin.game.progress.CountR
 import joguin.game.progress.GameProgress
-import joguin.game.progress.Index
-import joguin.game.progress.IndexR
-import joguin.game.progress._
 import joguin.game.progress.allInvasionsDefeated
 import joguin.game.step.GameStep
 import joguin.game.step.GameStep._
@@ -34,7 +31,7 @@ final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
     for {
       _   <- writeMessage("\n")
       src <- getLocalizedMessageSource(ExploreMessageSource)
-      _   <- showInvasions(gameProgress.invasions, gameProgress, src, Some(1))
+      _   <- showInvasions(gameProgress.invasions, src)
 
       nextStep <- if (allInvasionsDefeated(gameProgress)) {
         missionAccomplished(src)
@@ -43,27 +40,23 @@ final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
       }
     } yield nextStep
 
-  private def showInvasions(
-    invasions: IdxSeq[Invasion],
-    gameProgress: GameProgress,
-    src: LocalizedExploreMessageSource,
-    index: Option[Index]
-  ): Free[F, Unit] =
-    (invasions.headOption, index)
-      .mapN { (invasion, idx) =>
-        val key = if (isInvasionDefeated(gameProgress, idx)) {
-          human_dominated_city
-        } else {
-          alien_dominated_city
-        }
+  private def showInvasions(invasions: IdxSeq[Invasion], src: LocalizedExploreMessageSource): Free[F, Unit] = {
+    val zero = ((), 1)
 
-        getMessageFmt(src)(key, List(idx.toString, CityNameField.get(invasion), CountryField.get(invasion)))
-          .flatMap(writeMessage)
-          .flatMap { _ =>
-            showInvasions(invasions.drop(1), gameProgress, src, refineV[IndexR](idx + 1).toOption)
-          }
+    val folded = invasions.foldLeftM(zero) { (tuple, invasion) =>
+      val key = if (invasion.defeated) {
+        human_dominated_city
+      } else {
+        alien_dominated_city
       }
-      .getOrElse(pure(()))
+
+      val (_, idx) = tuple
+      val args: List[String] = List(idx.toString, CityNameField.get(invasion), CountryField.get(invasion))
+      getMessageFmt(src)(key, args).flatMap(writeMessage).map((_, idx + 1))
+    }
+
+    folded.map(_._1)
+  }
 
   private def missionAccomplished(src: LocalizedExploreMessageSource): Free[F, GameStep] =
     for {
