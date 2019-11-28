@@ -56,17 +56,18 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
     invasionIndex: Index,
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
-
     val device = DefensePowerField.get(invasion).toString
     val character: String = CharacterNameField.get(gameProgress)
     val city: String = CityNameField.get(invasion)
 
     val option = for {
+      message <- pure(getMessage(src)(_))
+
       report <- getMessageFmt(src)(report, List(character, city, device))
       _      <- writeMessage(report)
 
-      giveOrder    <- getMessage(src)(give_order)
-      errorMessage <- getMessage(src)(error_invalid_option)
+      giveOrder    <- message(give_order)
+      errorMessage <- message(error_invalid_option)
       option       <- ask(giveOrder, errorMessage, parseFightOption)
     } yield option
 
@@ -82,7 +83,6 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
     invasionIndex: Index,
     src: LocalizedFightMessageSource
   ): Free[F, GameProgress] = {
-
     val characterExperience: Int = ExperienceField.get(gameProgress)
     val deviceDefensePower: Int = DefensePowerField.get(invasion)
     val city: String = CityNameField.get(invasion)
@@ -110,11 +110,13 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
     val time = 100.milliseconds
 
     for {
-      earth       <- getMessage(src)(animation_earth)
-      earthWeapon <- getMessage(src)(animation_earth_weapon)
-      alien       <- getMessage(src)(animation_alien)
-      alienWeapon <- getMessage(src)(animation_alien_weapon)
-      strike      <- getMessage(src)(animation_strike)
+      message <- pure(getMessage(src)(_))
+
+      earth       <- message(animation_earth)
+      earthWeapon <- message(animation_earth_weapon)
+      alien       <- message(animation_alien)
+      alienWeapon <- message(animation_alien_weapon)
+      strike      <- message(animation_strike)
 
       _ <- showAttack(earth, earthWeapon, strike)
       _ <- waitFor(time)
@@ -138,12 +140,7 @@ final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
   private def showWeaponUse(weapon: String, count: Int): Free[F, Unit] =
     LazyList.range(1, count + 1).foldLeftM(()) { (_, i) =>
       for {
-        _ <- if (i % 2 === 0) {
-          writeMessage(weapon)
-        } else {
-          writeMessage(" ")
-        }
-
+        _ <- if (i % 2 === 0) writeMessage(weapon) else writeMessage(" ")
         _ <- waitFor(50.milliseconds)
       } yield ()
     }
