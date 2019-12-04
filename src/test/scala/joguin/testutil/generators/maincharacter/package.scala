@@ -7,15 +7,12 @@ import joguin.testutil.generators.experience.genValidExperience
 import joguin.testutil.generators.gender.genGender
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
+import org.scalacheck.cats.implicits._
+import cats.implicits._
 
 package object maincharacter {
   implicit val mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
 
   def genMainCharacter: Gen[MainCharacter] =
-    for {
-      name   <- genValidName
-      gender <- genGender
-      age    <- genValidAge
-      xp     <- genValidExperience
-    } yield MainCharacter(name, gender, age, xp)
+    (genValidName, genGender, genValidAge, genValidExperience).mapN(MainCharacter)
 }

@@ -12,7 +12,7 @@ val kindProjectorV = "0.10.3"
 val scalaTestV = "3.1.0"
 val scalatestPlusScalaCheckV = "3.1.0.0"
 val scalaCheckShapelessV = "1.2.3"
-val catsScalaCheckV = "0.1.1"
+val catsScalaCheckV = "0.2.0"
 val monocleV = "2.0.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
@@ -60,8 +60,12 @@ libraryDependencies ++= Seq(
 	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
+
   "org.scalatestplus" %% "scalacheck-1-14" % scalatestPlusScalaCheckV % "test",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessV % "test"
+
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessV % "test",
+
+  "io.chrisdavenport" %% "cats-scalacheck" % catsScalaCheckV % "test"
 )
 
 wartremoverWarnings ++= Warts.allBut(
