@@ -11,7 +11,6 @@ import joguin.testutil.PropertyBasedSpec
 import joguin.testutil.generators._
 import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
-import joguin.testutil.interpreter.explore._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.Inside.inside
@@ -19,7 +18,6 @@ import org.scalatest.OptionValues._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class ExploreStep_Properties extends PropertyBasedSpec {
-
   property("displays messages to the player in the correct order") {
     import gameprogress._
     import invasion._
@@ -35,9 +33,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(i) -> List(chosenCity.toString)
       )
 
-      val actualMessages = new ExploreStep[ExploreStepF]
+      val actualMessages = new ExploreStep[MessageInteractionWaitF]
         .play(gp)
-        .foldMap(exploreStepInterpreter)
+        .foldMap(messageInteractionWaitInterpreter)
         .runS(WriteMessageTrack.of(answers))
         .map(_.indexedMessages)
         .value
@@ -64,9 +62,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(i) -> List(quitOption)
       )
 
-      val nextStep = new ExploreStep[ExploreStepF]
+      val nextStep = new ExploreStep[MessageInteractionWaitF]
         .play(gp)
-        .foldMap(exploreStepInterpreter)
+        .foldMap(messageInteractionWaitInterpreter)
         .runA(WriteMessageTrack.of(answers))
 
       inside(nextStep.value) {
@@ -98,9 +96,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
           whereToGo(i) -> options
         )
 
-        val actualMessages = new ExploreStep[ExploreStepF]
+        val actualMessages = new ExploreStep[MessageInteractionWaitF]
           .play(gp)
-          .foldMap(exploreStepInterpreter)
+          .foldMap(messageInteractionWaitInterpreter)
           .runS(WriteMessageTrack.of(answers))
           .map(_.indexedMessages)
           .value
@@ -128,9 +126,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       //no player interactions in this scenario
       val answers: Map[String, List[String]] = Map.empty
 
-      val (actualMessages, nextStep) = new ExploreStep[ExploreStepF]
+      val (actualMessages, nextStep) = new ExploreStep[MessageInteractionWaitF]
         .play(allInvasionsDefeatedGp)
-        .foldMap(exploreStepInterpreter)
+        .foldMap(messageInteractionWaitInterpreter)
         .run(WriteMessageTrack.of(answers))
         .map {
           case (track, step) => (track.indexedMessages, step)
@@ -158,9 +156,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(gp.invasions.size) -> List(index.toString)
       )
 
-      val nextStep = new ExploreStep[ExploreStepF]
+      val nextStep = new ExploreStep[MessageInteractionWaitF]
         .play(gp)
-        .foldMap(exploreStepInterpreter)
+        .foldMap(messageInteractionWaitInterpreter)
         .runA(WriteMessageTrack.of(answers))
 
       inside(nextStep.value) {
@@ -182,9 +180,9 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
         whereToGo(gp.invasions.size) -> List("q")
       )
 
-      val actualMessages = new ExploreStep[ExploreStepF]
+      val actualMessages = new ExploreStep[MessageInteractionWaitF]
         .play(gp1)
-        .foldMap(exploreStepInterpreter)
+        .foldMap(messageInteractionWaitInterpreter)
         .runS(WriteMessageTrack.of(answers))
         .map(_.indexedMessages)
         .value
@@ -204,8 +202,6 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       }
     }
   }
-
-  private val exploreStepInterpreter = exploreStepTestInterpreter()
 
   private def invadedCityMessage(index: Int, city: City): String =
     s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
@@ -230,5 +226,4 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
       other.genQuitOption,
       Gen.oneOf(1 to lastCity).map(_.toString)
     )
-
 }
