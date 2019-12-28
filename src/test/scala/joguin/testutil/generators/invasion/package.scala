@@ -1,13 +1,14 @@
 package joguin.testutil.generators
 
+import cats.implicits._
 import joguin.IdxSeq
-import joguin.alien.invasion
 import joguin.alien.invasion.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
 import joguin.testutil.generators.city.genValidCity
 import joguin.testutil.generators.powergenerator._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
+import org.scalacheck.cats.implicits._
 
 package object invasion {
   val InvasionSeqSize: Int = 10
@@ -22,8 +23,5 @@ package object invasion {
     Gen.containerOfN[IdxSeq, Invasion](InvasionSeqSize, genInvasion(defeated))
 
   def genInvasion(defeated: Boolean): Gen[Invasion] =
-    for {
-      power <- genValidPower
-      city  <- genValidCity
-    } yield invasion.Invasion(TerraformDevice(power), city, defeated)
+    (genValidPower, genValidCity).mapN((power, city) => Invasion(TerraformDevice(power), city, defeated))
 }

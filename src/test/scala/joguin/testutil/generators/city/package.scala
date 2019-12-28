@@ -5,16 +5,14 @@ import joguin.testutil.generators.name._
 import joguin.testutil.generators.country._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
+import org.scalacheck.cats.implicits._
+import cats.implicits._
 
 package object city {
   implicit val validCity: Arbitrary[City] = Arbitrary(genValidCity)
   implicit val invalidCity: Arbitrary[String] = Arbitrary(genInvalidCity)
 
-  def genValidCity: Gen[City] =
-    for {
-      name    <- genValidName
-      country <- genValidCountry
-    } yield City(name, country)
+  def genValidCity: Gen[City] = (genValidName, genValidCountry).mapN(City)
 
   def genInvalidCity: Gen[String] = genInvalidName
 }
