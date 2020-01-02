@@ -6,8 +6,17 @@ import joguin.testutil.PropertyBasedSpec
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class FightStep_Properties extends PropertyBasedSpec {
+  property("repeats a question until receiving a valid answer") {}
 
-  private def report(character: String, city: String, devicePower: Power) =
+  property("player chooses to retreat") {}
+
+  property("player goes to a saved city") {}
+
+  property("player chooses to fight and wins") {}
+
+  property("player chooses to fight and loses") {}
+
+  private def report(character: String, city: String, devicePower: Power): String =
     s"\nCommander $character, we are getting closer to the Terraform Device of $city.\n" +
       "It is huge! Soon its automatic defense system will detect us and start to attack!\n" +
       s"According to our analysis, the defense power of this Device is $devicePower.\n"
@@ -24,17 +33,17 @@ final class FightStep_Properties extends PropertyBasedSpec {
 
   private val errorInvalidOption = "Invalid option\n"
 
-  private def earthWon(xp: Experience) =
+  private def earthWon(xp: Experience): String =
     "\nCongratulations! Thanks to your command, our army has destroyed the Terraform Device!\n" +
       "Go ahead and save more cities!\n" +
       s"You have now $xp experience points.\n"
 
-  private def aliensWon(city: String, xp: Experience) =
+  private def aliensWon(city: String, xp: Experience): String =
     "\nOur army was defeated! This Terraform Device is too powerful!\n" +
       s"Retreat for now and try to save $city another time.\n" +
       s"You have now $xp experience points.\n"
 
-  private def locationAlreadySaved(city: String) =
+  private def locationAlreadySaved(city: String): String =
     s"\nGood to see $city being rebuilt after the destruction of the Terraform Device!\n" +
       "Life is slowly getting back to normal!\n"
 }
