@@ -13,7 +13,7 @@ val scalaTestV = "3.1.0"
 val scalatestPlusScalaCheckV = "3.1.0.1"
 val scalaCheckShapelessV = "1.2.3"
 val catsScalaCheckV = "0.2.0"
-val monocleV = "2.0.0"
+val monocleV = "2.0.1"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
