@@ -4,3 +4,4 @@
 .vscode
 target
 saved-game
+project/metals.sbt
