@@ -3,18 +3,28 @@ package joguin.game.step.fight
 import joguin.alien.Power
 import joguin.earth.maincharacter.Experience
 import joguin.testutil.PropertyBasedSpec
+import joguin.game.progress.GameProgress
+import joguin.game.progress.Index
+import joguin.testutil.generators._
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class FightStep_Properties extends PropertyBasedSpec {
-  property("repeats a question until receiving a valid answer") {}
-
   property("player chooses to retreat") {}
 
   property("player goes to a saved city") {}
 
   property("player chooses to fight and wins") {}
 
-  property("player chooses to fight and loses") {}
+	property("player chooses to fight and loses") {}
+	
+	property("repeats a question until receiving a valid answer") {
+		import gameprogress._
+		import index.validIndex
+
+		forAll { (gp: GameProgress, idx: Index) => 
+			
+		}
+	}
 
   private def report(character: String, city: String, devicePower: Power): String =
     s"\nCommander $character, we are getting closer to the Terraform Device of $city.\n" +
