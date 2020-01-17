@@ -16,11 +16,11 @@ import joguin.game.step.fight.FightOption.FightAliens
 import joguin.game.step.fight.FightOption.Retreat
 import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSource.FightMessageSource
+import joguin.playerinteraction.message.MessageSource.FightMessageSource._
 
 import scala.concurrent.duration._
 
 final class FightStep[F[_]](implicit env: FightStepEnv[F]) {
-  import FightMessageSource._
   import env._
   import interactionOps._
   import messageOps._

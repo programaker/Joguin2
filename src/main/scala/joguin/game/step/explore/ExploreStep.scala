@@ -17,11 +17,11 @@ import joguin.game.step.explore.ExploreOption.GoToInvasion
 import joguin.game.step.explore.ExploreOption.QuitGame
 import joguin.playerinteraction.interaction._
 import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
+import joguin.playerinteraction.message.MessageSource.ExploreMessageSource._
 
 import scala.concurrent.duration._
 
 final class ExploreStep[F[_]](implicit env: ExploreStepEnv[F]) {
-  import ExploreMessageSource._
   import env._
   import interactionOps._
   import messageOps._
