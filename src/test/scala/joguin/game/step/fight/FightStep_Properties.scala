@@ -6,6 +6,9 @@ import joguin.testutil.PropertyBasedSpec
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
 import joguin.testutil.generators._
+import joguin.testutil.interpreter._
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
 
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 final class FightStep_Properties extends PropertyBasedSpec {
@@ -15,16 +18,39 @@ final class FightStep_Properties extends PropertyBasedSpec {
 
   property("player chooses to fight and wins") {}
 
-	property("player chooses to fight and loses") {}
-	
-	property("repeats a question until receiving a valid answer") {
-		import gameprogress._
-		import index.validIndex
+  property("player chooses to fight and loses") {}
 
-		forAll { (gp: GameProgress, idx: Index) => 
-			
-		}
-	}
+  property("repeats a question until receiving a valid answer") {
+    import gameprogress._
+    import index.validIndex
+    import other.smallInt
+    import other.arbitraryTag
+
+    implicit val a1: Arbitrary[Tag[1, String]] = arbitraryTag(genValidOption)
+    implicit val a2: Arbitrary[Tag[2, String]] = arbitraryTag(Gen.alphaNumStr)
+
+    forAll {
+      (
+        gp: GameProgress,
+        idx: Index,
+        repetitions: Int,
+        validOption: Tag[1, String],
+        invalidOption: Tag[2, String]
+      ) =>
+        val options = List.fill[String](repetitions)(invalidOption) ++ List[String](validOption)
+
+        val answers = Map(
+          giveOrder -> options
+        )
+
+        val actualMessages = new FightStep[MessageInteractionWaitF]
+          .play(gp, idx)
+          .foldMap(messageInteractionWaitInterpreter)
+          .runS(WriteMessageTrack.of(answers))
+          .map(_.indexedMessages)
+          .value
+    }
+  }
 
   private def report(character: String, city: String, devicePower: Power): String =
     s"\nCommander $character, we are getting closer to the Terraform Device of $city.\n" +
@@ -56,4 +82,7 @@ final class FightStep_Properties extends PropertyBasedSpec {
   private def locationAlreadySaved(city: String): String =
     s"\nGood to see $city being rebuilt after the destruction of the Terraform Device!\n" +
       "Life is slowly getting back to normal!\n"
+
+  private def genValidOption: Gen[String] =
+    Gen.oneOf("F", "f", "R", "r")
 }
