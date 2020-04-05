@@ -1,8 +1,6 @@
 package joguin.game.progress
 
-import java.io.File
-import java.nio.charset.StandardCharsets._
-
+import better.files.File
 import cats.implicits._
 import cats.~>
 import io.circe.generic.auto._
@@ -11,7 +9,6 @@ import io.circe.syntax._
 import joguin.Lazy
 import joguin.Recovery
 import joguin.game.progress.GameProgressRepositoryF._
-import org.apache.commons.io.FileUtils
 
 /** GameProgressRepositoryF root interpreter to any F that uses a file for persistence */
 final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) extends (GameProgressRepositoryF ~> F) {
@@ -41,19 +38,19 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
     }
 
   private def mkdirs: F[Unit] =
-    Lazy[F].lift(FileUtils.forceMkdirParent(file))
+    Lazy[F].lift(file.createFileIfNotExists(createParents = true)).map(_ => ())
 
   private def writeToFile(gameProgress: GameProgress): F[Boolean] =
     Recovery[F]
       .pure(gameProgress)
       .map(_.asJson.noSpaces)
-      .flatMap(json => Lazy[F].lift(FileUtils.write(file, json, UTF_8)))
+      .flatMap(json => Lazy[F].lift(file.overwrite(json)))
       .map(_ => true)
       .handleError(_ => false)
 
   private def readFile: F[Option[GameProgress]] =
     Lazy[F]
-      .lift(FileUtils.readFileToString(file, UTF_8))
+      .lift(file.contentAsString)
       .map(jawn.decode[GameProgress])
       .map(_.toOption)
 }

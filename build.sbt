@@ -2,18 +2,19 @@ name := "joguin2"
 version := "2.0"
 scalaVersion := "2.13.1"
 
-val catsV = "2.1.0"
-val catsEffectV = "2.0.0"
-val refinedV = "0.9.10"
+val catsV = "2.1.1"
+val catsEffectV = "2.1.2"
+val refinedV = "0.9.13"
 val commonsIoV = "2.6"
-val circeV = "0.12.3"
+val circeV = "0.13.0"
 val betterMonadicForV = "0.3.1"
 val kindProjectorV = "0.10.3"
-val scalaTestV = "3.1.0"
-val scalatestPlusScalaCheckV = "3.1.0.1"
-val scalaCheckShapelessV = "1.2.3"
+val scalaTestV = "3.1.1"
+val scalatestPlusScalaCheckV = "3.1.1.1"
+val scalaCheckShapelessV = "1.2.5"
 val catsScalaCheckV = "0.2.0"
-val monocleV = "2.0.1"
+val monocleV = "2.0.4"
+val betterFilesV = "3.8.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -49,8 +50,6 @@ libraryDependencies ++= Seq(
 
   "eu.timepit" %% "refined" % refinedV,
 
-  "commons-io" % "commons-io" % commonsIoV,
-  
   "io.circe" %% "circe-core" % circeV,
   "io.circe" %% "circe-generic" % circeV,
   "io.circe" %% "circe-parser" % circeV,
@@ -58,6 +57,8 @@ libraryDependencies ++= Seq(
 	
 	"com.github.julien-truffaut"  %%  "monocle-core" % monocleV,
 	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
+
+  "com.github.pathikrit" %% "better-files" % betterFilesV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
 
