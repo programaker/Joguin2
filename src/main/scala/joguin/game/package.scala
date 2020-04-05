@@ -1,7 +1,6 @@
 package joguin
 
-import java.io.File
-
+import better.files.File
 import cats.data.EitherK
 import cats.free.Free
 import cats.free.Free.pure
@@ -41,7 +40,7 @@ package object game {
 
   /** GameF composite interpreter to any F */
   def gameInterpreter[F[_]: Recovery: Lazy](saveProgressFile: String): GameF ~> F = {
-    val file = new File(saveProgressFile)
+    val file = File(saveProgressFile)
 
     //The interpreter composition was written this way (with variables)
     //to match the Coproduct composition (see the types above) and

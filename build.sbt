@@ -14,6 +14,7 @@ val scalatestPlusScalaCheckV = "3.1.1.1"
 val scalaCheckShapelessV = "1.2.5"
 val catsScalaCheckV = "0.2.0"
 val monocleV = "2.0.4"
+val betterFilesV = "3.8.0"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
@@ -49,8 +50,6 @@ libraryDependencies ++= Seq(
 
   "eu.timepit" %% "refined" % refinedV,
 
-  "commons-io" % "commons-io" % commonsIoV,
-  
   "io.circe" %% "circe-core" % circeV,
   "io.circe" %% "circe-generic" % circeV,
   "io.circe" %% "circe-parser" % circeV,
@@ -58,6 +57,8 @@ libraryDependencies ++= Seq(
 	
 	"com.github.julien-truffaut"  %%  "monocle-core" % monocleV,
 	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
+
+  "com.github.pathikrit" %% "better-files" % betterFilesV,
 
   "org.scalatest" %% "scalatest" % scalaTestV % "test",
 
