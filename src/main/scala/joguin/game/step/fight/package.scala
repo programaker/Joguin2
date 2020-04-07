@@ -1,6 +1,5 @@
 package joguin.game.step
 
-import eu.timepit.refined.W
 import eu.timepit.refined.boolean.Or
 import eu.timepit.refined.generic.Equal
 import eu.timepit.refined.refineV
@@ -12,7 +11,7 @@ import joguin.playerinteraction.message.MessageSource.FightMessageSource
 package object fight {
   type LocalizedFightMessageSource = LocalizedMessageSource[FightMessageSource.type]
 
-  type FightOptionR = Equal[W.`"f"`.T] Or Equal[W.`"r"`.T]
+  type FightOptionR = Equal["f"] Or Equal["r"]
 
   def parseFightOption(s: String): Option[FightOption] =
     refineV[FightOptionR](s.toLowerCase).toOption

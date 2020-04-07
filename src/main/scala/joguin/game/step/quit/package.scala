@@ -1,7 +1,6 @@
 package joguin.game.step
 
 import cats.free.Free
-import eu.timepit.refined.W
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress.GameProgress
@@ -12,7 +11,7 @@ import joguin.playerinteraction.message.MessageSource.QuitMessageSource
 import joguin.playerinteraction.message.MessageSource.QuitMessageSource._
 
 package object quit {
-  type QuitOptionR = MatchesRegex[W.`"""^[yn]$"""`.T]
+  type QuitOptionR = MatchesRegex["^[yn]$"]
 
   def playQuitStep[F[_]](gameProgress: GameProgress)(implicit env: QuitStepEnv[F]): Free[F, GameStep] = {
     import env._

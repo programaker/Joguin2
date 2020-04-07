@@ -1,6 +1,5 @@
 package joguin.game.step
 
-import eu.timepit.refined.W
 import eu.timepit.refined.auto._
 import eu.timepit.refined.boolean.Or
 import eu.timepit.refined.generic.Equal
@@ -15,7 +14,7 @@ import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
 package object explore {
   type LocalizedExploreMessageSource = LocalizedMessageSource[ExploreMessageSource.type]
 
-  type ExploreOptionR = MatchesRegex[W.`"""^[1-9][0-9]*$"""`.T] Or Equal[W.`"q"`.T]
+  type ExploreOptionR = MatchesRegex["^[1-9][0-9]*$"] Or Equal["q"]
 
   def parseExploreOption(s: String, invasionCount: Count): Option[ExploreOption] =
     refineV[ExploreOptionR](s.toLowerCase).toOption

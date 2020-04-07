@@ -1,7 +1,6 @@
 import cats.Eq
 import cats.MonadError
 import cats.implicits._
-import eu.timepit.refined.W
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.boolean.Not
@@ -10,7 +9,7 @@ import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 
 package object joguin {
-  type NonBlankString = MinSize[W.`1`.T] And Not[MatchesRegex[W.`"""^\\s+$"""`.T]]
+  type NonBlankString = MinSize[1] And Not[MatchesRegex["""^\s+$"""]]
 
   type NameR = NonBlankString
   type Name = String Refined NameR
