@@ -4,7 +4,6 @@ import cats.free.Free
 import cats.free.Free._
 import cats.free.Free.pure
 import cats.implicits._
-import eu.timepit.refined.W
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
@@ -20,8 +19,8 @@ import joguin.playerinteraction.message.MessagesOps
 package object showintro {
   type LocalizedShowIntroMessageSource = LocalizedMessageSource[ShowIntroMessageSource.type]
 
-  type ShowIntroOptionR = MatchesRegex[W.`"""^[nqr]$"""`.T]
-  type ShowIntroOptionNoRestoreR = MatchesRegex[W.`"""^[nq]$"""`.T]
+  type ShowIntroOptionR = MatchesRegex["^[nqr]$"]
+  type ShowIntroOptionNoRestoreR = MatchesRegex["^[nq]$"]
 
   def playShowIntroStep[F[_]](implicit env: ShowIntroStepEnv[F]): Free[F, GameStep] = {
     import env._
