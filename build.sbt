@@ -16,32 +16,6 @@ val catsScalaCheckV = "0.2.0"
 val monocleV = "2.0.4"
 val betterFilesV = "3.8.0"
 
-resolvers += Resolver.sonatypeRepo("releases")
-
-addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV)
-addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV)
-
-scalacOptions ++= Seq(
-  "-encoding", "utf8",
-  "-feature",
-  "-explaintypes",
-  "-deprecation",
-  
-  "-language:experimental.macros",
-  "-language:existentials",
-  "-language:higherKinds",
-  "-language:implicitConversions",
-
-  "-Ywarn-dead-code",
-  "-Ywarn-value-discard", 
-  "-Ywarn-unused:imports",
-  "-Ywarn-unused:implicits",
-  "-Ywarn-unused:locals",
-  "-Ywarn-unused:params",
-  "-Ywarn-unused:patvars",
-  "-Ywarn-unused:privates"
-)
-
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsV,
   "org.typelevel" %% "cats-free" % catsV,
@@ -69,6 +43,11 @@ libraryDependencies ++= Seq(
   "io.chrisdavenport" %% "cats-scalacheck" % catsScalaCheckV % "test"
 )
 
+val compilerPlugins = Seq(
+  "com.olegpy" %% "better-monadic-for" % betterMonadicForV,
+  "org.typelevel" %% "kind-projector" % kindProjectorV
+)
+
 wartremoverWarnings ++= Warts.allBut(
   Wart.Recursion,
   Wart.Nothing,
@@ -77,4 +56,26 @@ wartremoverWarnings ++= Warts.allBut(
   Wart.StringPlusAny
 )
 
+scalacOptions ++= Seq(
+  "-encoding", "utf8",
+  "-feature",
+  "-explaintypes",
+  "-deprecation",
+
+  "-language:experimental.macros",
+  "-language:existentials",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+
+  "-Ywarn-dead-code",
+  "-Ywarn-value-discard",
+  "-Ywarn-unused:imports",
+  "-Ywarn-unused:implicits",
+  "-Ywarn-unused:locals",
+  "-Ywarn-unused:params",
+  "-Ywarn-unused:patvars",
+  "-Ywarn-unused:privates"
+)
+
+compilerPlugins.map(addCompilerPlugin)
 mainClass in assembly := Some("joguin.JoguinApplication")
