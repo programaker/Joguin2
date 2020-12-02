@@ -1,6 +1,6 @@
 package joguin.game.step.explore
 
-import cats.implicits.showInterpolator
+import cats.syntax.show._
 import eu.timepit.refined._
 import eu.timepit.refined.cats._
 import joguin.earth.city.City
