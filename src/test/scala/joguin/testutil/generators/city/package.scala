@@ -6,7 +6,7 @@ import joguin.testutil.generators.country._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.cats.implicits._
-import cats.implicits._
+import cats.syntax.apply._
 
 package object city {
   implicit val validCity: Arbitrary[City] = Arbitrary(genValidCity)

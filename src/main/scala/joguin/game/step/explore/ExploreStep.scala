@@ -2,7 +2,7 @@ package joguin.game.step.explore
 
 import cats.free.Free
 import cats.free.Free._
-import cats.implicits._
+import cats.syntax.foldable._
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import joguin.IdxSeq

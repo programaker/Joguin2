@@ -8,7 +8,7 @@ import joguin.testutil.generators.gender.genGender
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.cats.implicits._
-import cats.implicits._
+import cats.syntax.apply._
 
 package object maincharacter {
   implicit val mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)

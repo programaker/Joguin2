@@ -1,6 +1,6 @@
 import cats.Eq
 import cats.MonadError
-import cats.implicits._
+import cats.syntax.eq._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.boolean.Not

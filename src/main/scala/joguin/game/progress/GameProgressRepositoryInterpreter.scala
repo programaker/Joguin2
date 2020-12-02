@@ -1,7 +1,9 @@
 package joguin.game.progress
 
 import better.files.File
-import cats.implicits._
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+import cats.syntax.applicativeError._
 import cats.~>
 import io.circe.generic.auto._
 import io.circe.jawn

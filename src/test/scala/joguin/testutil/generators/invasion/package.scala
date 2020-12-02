@@ -1,6 +1,6 @@
 package joguin.testutil.generators
 
-import cats.implicits._
+import cats.syntax.apply._
 import joguin.IdxSeq
 import joguin.alien.invasion.Invasion
 import joguin.alien.terraformdevice.TerraformDevice
