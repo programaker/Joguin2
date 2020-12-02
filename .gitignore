@@ -2,6 +2,7 @@
 .bloop
 .metals
 .vscode
+.bsp
 target
 saved-game
 project/metals.sbt

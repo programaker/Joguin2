@@ -1,4 +1,11 @@
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.5")
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.10")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.2")
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
+val WartRemoverV = "2.4.13"
+val SbtDependencyUpdatesV = "1.2.2"
+val SbtScalaFmtV = "2.4.2"
+val SbtAssemblyV = "0.15.0"
+
+Seq(
+  "org.wartremover" % "sbt-wartremover" % WartRemoverV,
+  "org.jmotor.sbt" % "sbt-dependency-updates" % SbtDependencyUpdatesV,
+  "org.scalameta" % "sbt-scalafmt" % SbtScalaFmtV,
+  "com.eed3si9n" % "sbt-assembly" % SbtAssemblyV
+).map(addSbtPlugin)

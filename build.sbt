@@ -1,62 +1,75 @@
-name := "joguin2"
-version := "2.0"
-scalaVersion := "2.13.1"
+val ScalaV = "2.13.4"
+val JoguinV = "2.0"
 
-val catsV = "2.1.1"
-val catsEffectV = "2.1.2"
-val refinedV = "0.9.13"
-val commonsIoV = "2.6"
-val circeV = "0.13.0"
-val betterMonadicForV = "0.3.1"
-val kindProjectorV = "0.10.3"
-val scalaTestV = "3.1.1"
-val scalatestPlusScalaCheckV = "3.1.1.1"
-val scalaCheckShapelessV = "1.2.5"
-val catsScalaCheckV = "0.2.0"
-val monocleV = "2.0.4"
-val betterFilesV = "3.8.0"
+val CatsV = "2.3.0"
+val CatsEffectV = "2.3.0"
+val RefinedV = "0.9.18"
+val CirceV = "0.13.0"
+val BetterMonadicForV = "0.3.1"
+val KindProjectorV = "0.10.3"
+val ScalaTestV = "3.2.3"
+val ScalatestPlusScalaCheckV = "3.1.1.1"
+val ScalaCheckShapelessV = "1.2.5"
+val CatsScalaCheckV = "0.3.0"
+val MonocleV = "2.1.0"
+val BetterFilesV = "3.9.1"
 
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % catsV,
-  "org.typelevel" %% "cats-free" % catsV,
+lazy val root = (project in file(".")).settings(
+  organization := "com.github.programaker",
+  name := "joguin2",
+  version := JoguinV,
+  scalaVersion := ScalaV,
 
-  "org.typelevel" %% "cats-effect" % catsEffectV,
+  libraryDependencies ++= Seq(
+    "org.typelevel" %% "cats-core" % CatsV,
+    "org.typelevel" %% "cats-free" % CatsV,
 
-  "eu.timepit" %% "refined" % refinedV,
+    "org.typelevel" %% "cats-effect" % CatsEffectV,
 
-  "io.circe" %% "circe-core" % circeV,
-  "io.circe" %% "circe-generic" % circeV,
-  "io.circe" %% "circe-parser" % circeV,
-	"io.circe" %% "circe-refined" % circeV,
-	
-	"com.github.julien-truffaut"  %%  "monocle-core" % monocleV,
-	"com.github.julien-truffaut"  %%  "monocle-macro" % monocleV,
+    "eu.timepit" %% "refined" % RefinedV,
+    "eu.timepit" %% "refined-cats" % RefinedV,
 
-  "com.github.pathikrit" %% "better-files" % betterFilesV,
+    "io.circe" %% "circe-core" % CirceV,
+    "io.circe" %% "circe-generic" % CirceV,
+    "io.circe" %% "circe-parser" % CirceV,
+    "io.circe" %% "circe-refined" % CirceV,
 
-  "org.scalatest" %% "scalatest" % scalaTestV % "test",
+    "com.github.julien-truffaut" %% "monocle-core" % MonocleV,
+    "com.github.julien-truffaut" %% "monocle-macro" % MonocleV,
 
-  "org.scalatestplus" %% "scalacheck-1-14" % scalatestPlusScalaCheckV % "test",
+    "com.github.pathikrit" %% "better-files" % BetterFilesV,
 
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % scalaCheckShapelessV % "test",
+    "org.scalatest" %% "scalatest" % ScalaTestV % "test",
+    "org.scalatestplus" %% "scalacheck-1-14" % ScalatestPlusScalaCheckV % "test",
+    "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % ScalaCheckShapelessV % "test",
+    "io.chrisdavenport" %% "cats-scalacheck" % CatsScalaCheckV % "test"
+  ),
 
-  "io.chrisdavenport" %% "cats-scalacheck" % catsScalaCheckV % "test"
+  Seq(
+    "org.typelevel" %% "kind-projector" % KindProjectorV,
+    "com.olegpy" %% "better-monadic-for" % BetterMonadicForV
+  ).map(addCompilerPlugin)
 )
 
-val compilerPlugins = Seq(
-  "com.olegpy" %% "better-monadic-for" % betterMonadicForV,
-  "org.typelevel" %% "kind-projector" % kindProjectorV
+ThisBuild / wartremoverErrors ++= Seq(
+  Wart.FinalCaseClass,
+  Wart.Throw,
+  Wart.Return
 )
-
-wartremoverWarnings ++= Warts.allBut(
+ThisBuild / wartremoverWarnings ++= Warts.allBut(
   Wart.Recursion,
-  Wart.Nothing,
   Wart.ImplicitParameter,
   Wart.Any,
-  Wart.StringPlusAny
+  Wart.Nothing,
+  Wart.ImplicitConversion,
+  Wart.Overloading,
+  Wart.PlatformDefault
 )
 
-scalacOptions ++= Seq(
+// disable Wartremover in console. Not only it's unnecessary but also cause error in Scala 2.13.2+
+Compile / console / scalacOptions := (console / scalacOptions).value.filterNot(_.contains("wartremover"))
+
+ThisBuild / scalacOptions ++= Seq(
   "-encoding", "utf8",
   "-feature",
   "-explaintypes",
@@ -71,11 +84,13 @@ scalacOptions ++= Seq(
   "-Ywarn-value-discard",
   "-Ywarn-unused:imports",
   "-Ywarn-unused:implicits",
+  "-Ywarn-unused:explicits",
   "-Ywarn-unused:locals",
   "-Ywarn-unused:params",
   "-Ywarn-unused:patvars",
-  "-Ywarn-unused:privates"
+  "-Ywarn-unused:privates",
+
+  "-Ymacro-annotations"
 )
 
-compilerPlugins.map(addCompilerPlugin)
 mainClass in assembly := Some("joguin.JoguinApplication")
