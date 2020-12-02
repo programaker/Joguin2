@@ -1,6 +1,6 @@
 package joguin.game.step.createcharacter
 
-import cats.implicits.showInterpolator
+import cats.syntax.show._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.cats._
