@@ -1,5 +1,7 @@
 package joguin.game.step.fight
 
+import cats.implicits.showInterpolator
+import eu.timepit.refined.cats._
 import joguin.alien.Power
 import joguin.earth.maincharacter.Experience
 import joguin.testutil.PropertyBasedSpec
@@ -53,9 +55,9 @@ final class FightStep_Properties extends PropertyBasedSpec {
   }
 
   private def report(character: String, city: String, devicePower: Power): String =
-    s"\nCommander $character, we are getting closer to the Terraform Device of $city.\n" +
+    show"\nCommander $character, we are getting closer to the Terraform Device of $city.\n" +
       "It is huge! Soon its automatic defense system will detect us and start to attack!\n" +
-      s"According to our analysis, the defense power of this Device is $devicePower.\n"
+      show"According to our analysis, the defense power of this Device is $devicePower.\n"
 
   private val giveOrder = "\nWhat are your orders? - (F)ight, (R)etreat:\n"
 
@@ -72,15 +74,15 @@ final class FightStep_Properties extends PropertyBasedSpec {
   private def earthWon(xp: Experience): String =
     "\nCongratulations! Thanks to your command, our army has destroyed the Terraform Device!\n" +
       "Go ahead and save more cities!\n" +
-      s"You have now $xp experience points.\n"
+      show"You have now $xp experience points.\n"
 
   private def aliensWon(city: String, xp: Experience): String =
     "\nOur army was defeated! This Terraform Device is too powerful!\n" +
-      s"Retreat for now and try to save $city another time.\n" +
-      s"You have now $xp experience points.\n"
+      show"Retreat for now and try to save $city another time.\n" +
+      show"You have now $xp experience points.\n"
 
   private def locationAlreadySaved(city: String): String =
-    s"\nGood to see $city being rebuilt after the destruction of the Terraform Device!\n" +
+    show"\nGood to see $city being rebuilt after the destruction of the Terraform Device!\n" +
       "Life is slowly getting back to normal!\n"
 
   private def genValidOption: Gen[String] =
