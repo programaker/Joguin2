@@ -1,6 +1,7 @@
 package joguin.playerinteraction.wait
 
-import cats.implicits._
+import cats.syntax.flatMap._
+import cats.syntax.applicativeError._
 import cats.~>
 import joguin.Lazy
 import joguin.Recovery

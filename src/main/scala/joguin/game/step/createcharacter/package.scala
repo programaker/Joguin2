@@ -2,7 +2,7 @@ package joguin.game.step
 
 import cats.free.Free
 import cats.free.Free._
-import cats.implicits._
+import cats.syntax.traverse._
 import eu.timepit.refined.auto._
 import joguin.alien.MaxPower
 import joguin.alien.MinPower

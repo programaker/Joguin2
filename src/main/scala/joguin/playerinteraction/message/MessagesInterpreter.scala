@@ -6,8 +6,9 @@ import java.util.ResourceBundle
 import java.util.ResourceBundle.getBundle
 
 import cats.Monad
-import cats.implicits._
 import cats.~>
+import cats.syntax.functor._
+import cats.syntax.flatMap._
 import joguin.Lazy
 import joguin.playerinteraction.message.MessageSource._
 import joguin.playerinteraction.message.MessagesF._

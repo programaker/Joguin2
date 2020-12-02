@@ -3,7 +3,8 @@ package joguin.game.step
 import cats.free.Free
 import cats.free.Free._
 import cats.free.Free.pure
-import cats.implicits._
+import cats.syntax.apply._
+import cats.syntax.flatMap._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
