@@ -1,6 +1,6 @@
 package joguin.game.step.fight
 
-import cats.implicits.showInterpolator
+import cats.syntax.show._
 import eu.timepit.refined.cats._
 import joguin.alien.Power
 import joguin.earth.maincharacter.Experience
