@@ -1,6 +1,8 @@
 package joguin.game.step.explore
 
+import cats.implicits.showInterpolator
 import eu.timepit.refined._
+import eu.timepit.refined.cats._
 import joguin.earth.city.City
 import joguin.game.progress.GameProgress
 import joguin.game.progress.Index
@@ -208,13 +210,13 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   private val exploreStepInterpreter = exploreStepTestInterpreter()
 
   private def invadedCityMessage(index: Int, city: City): String =
-    s"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
+    show"$index. \uD83D\uDC7D ${city.name} - ${city.country}\n"
 
   private def savedCityMessage(index: Int, city: City): String =
-    s"$index. \uD83C\uDF0D ${city.name} - ${city.country}\n"
+    show"$index. \uD83C\uDF0D ${city.name} - ${city.country}\n"
 
   private def whereToGo(lastCity: Int): String =
-    s"\nWhere do you want to go? - (1) to ($lastCity), (Q)uit:\n"
+    show"\nWhere do you want to go? - (1) to ($lastCity), (Q)uit:\n"
 
   private val errorInvalidOption =
     "Invalid option\n"

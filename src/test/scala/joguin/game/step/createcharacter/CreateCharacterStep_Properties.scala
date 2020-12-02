@@ -1,7 +1,9 @@
 package joguin.game.step.createcharacter
 
+import cats.implicits.showInterpolator
 import eu.timepit.refined.auto._
 import eu.timepit.refined.refineV
+import eu.timepit.refined.cats._
 import joguin.Name
 import joguin.earth.maincharacter.Age
 import joguin.earth.maincharacter.Gender
@@ -152,7 +154,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
   private val errorInvalidAge = "Invalid age. You must be at least 18 to defend Earth\n"
 
   private def characterCreated(name: Name): String =
-    s"\nWelcome, commander $name! Now, you must bring our forces\n" +
+    show"\nWelcome, commander $name! Now, you must bring our forces\n" +
       "to the invaded cities and take them back from the Zorblaxians.\n" +
       "Destroy the Terraform Devices and save all life on Earth!\n"
 
