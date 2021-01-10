@@ -11,7 +11,7 @@ import joguin.playerinteraction.message.MessageSource.QuitMessageSource
 import joguin.playerinteraction.message.MessageSource.QuitMessageSource._
 
 package object quit {
-  type QuitOptionR = MatchesRegex["^[yn]$"]
+  type QuitOptionR = MatchesRegex["^[ynYN]$"]
 
   def playQuitStep[F[_]](gameProgress: GameProgress)(implicit env: QuitStepEnv[F]): Free[F, GameStep] = {
     import env._
@@ -31,8 +31,8 @@ package object quit {
   }
 
   private def parseQuitOption(s: String): Option[QuitOption] =
-    refineV[QuitOptionR](s.toLowerCase).toOption.map(_.value match {
-      case "y" => Yes
-      case "n" => No
+    refineV[QuitOptionR](s).toOption.map(_.value match {
+      case "y" | "Y" => Yes
+      case "n" | "N" => No
     })
 }

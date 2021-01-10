@@ -1,9 +1,9 @@
 val ScalaV = "2.13.4"
 val JoguinV = "2.0"
 
-val CatsV = "2.3.0"
-val CatsEffectV = "2.3.0"
-val RefinedV = "0.9.18"
+val CatsV = "2.3.1"
+val CatsEffectV = "2.3.1"
+val RefinedV = "0.9.20"
 val CirceV = "0.13.0"
 val BetterMonadicForV = "0.3.1"
 val KindProjectorV = "0.10.3"
@@ -63,7 +63,9 @@ ThisBuild / wartremoverWarnings ++= Warts.allBut(
   Wart.Nothing,
   Wart.ImplicitConversion,
   Wart.Overloading,
-  Wart.PlatformDefault
+  Wart.JavaSerializable,
+  Wart.Serializable,
+  Wart.Product
 )
 
 // disable Wartremover in console. Not only it's unnecessary but also cause error in Scala 2.13.2+
