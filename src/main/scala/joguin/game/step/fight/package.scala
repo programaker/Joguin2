@@ -11,12 +11,12 @@ import joguin.playerinteraction.message.MessageSource.FightMessageSource
 package object fight {
   type LocalizedFightMessageSource = LocalizedMessageSource[FightMessageSource.type]
 
-  type FightOptionR = Equal["f"] Or Equal["r"]
+  type FightOptionR = Equal["f"] Or Equal["r"] Or Equal["F"] Or Equal["R"]
 
   def parseFightOption(s: String): Option[FightOption] =
-    refineV[FightOptionR](s.toLowerCase).toOption
+    refineV[FightOptionR](s).toOption
       .map(_.value match {
-        case "f" => FightAliens
-        case "r" => Retreat
+        case "f" | "F" => FightAliens
+        case "r" | "R" => Retreat
       })
 }

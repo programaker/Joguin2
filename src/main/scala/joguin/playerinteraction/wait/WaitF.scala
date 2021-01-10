@@ -7,7 +7,7 @@ import joguin.playerinteraction.wait.WaitF.WaitFor
 
 import scala.concurrent.duration.FiniteDuration
 
-sealed abstract class WaitF[A] extends Product with Serializable
+sealed trait WaitF[A]
 
 object WaitF {
   final case class WaitFor(duration: FiniteDuration) extends WaitF[Unit]

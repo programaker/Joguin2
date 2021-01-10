@@ -1,6 +1,6 @@
 package joguin.game.step.showintro
 
-sealed abstract class ShowIntroOption extends Product with Serializable
+sealed trait ShowIntroOption
 
 object ShowIntroOption {
   case object NewGame extends ShowIntroOption

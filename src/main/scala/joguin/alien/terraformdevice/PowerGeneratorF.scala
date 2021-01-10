@@ -6,7 +6,7 @@ import cats.free.Free.inject
 import joguin.alien.Power
 import joguin.alien.terraformdevice.PowerGeneratorF.GeneratePower
 
-sealed abstract class PowerGeneratorF[A] extends Product with Serializable
+sealed trait PowerGeneratorF[A]
 
 object PowerGeneratorF {
   final case class GeneratePower(min: Power, max: Power) extends PowerGeneratorF[Power]

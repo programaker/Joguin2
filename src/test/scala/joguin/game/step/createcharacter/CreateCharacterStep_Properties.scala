@@ -14,6 +14,7 @@ import joguin.game.progress.allInvasionsDefeated
 import joguin.game.progress.isInvasionDefeated
 import joguin.game.step.GameStep._
 import joguin.testutil.PropertyBasedSpec
+import joguin.testutil.genderToCode
 import joguin.testutil.generators._
 import joguin.testutil.generators.Tag
 import joguin.testutil.interpreter._
@@ -39,7 +40,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
       ) =>
         val answers: Map[String, List[String]] = Map(
           askName   -> List(name),
-          askGender -> List(gender.code),
+          askGender -> List(genderToCode(gender)),
           askAge    -> List(age.toString)
         )
 
@@ -73,7 +74,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
         val answers: Map[String, List[String]] = Map(
           askName   -> List(name),
-          askGender -> List(gender.code),
+          askGender -> List(genderToCode(gender)),
           askAge    -> List(age.toString)
         )
 
@@ -95,7 +96,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
 
   property("repeats a question to the player until receives a valid answer, informing the error") {
     import age._
-    import gender._
+    import gender.gender
     import name._
     import other.arbitraryTag
     import other.genSmallInt
@@ -113,7 +114,7 @@ final class CreateCharacterStep_Properties extends PropertyBasedSpec {
         invalidAge: Tag[2, Int]
       ) =>
         val names = List.fill(repetitions)(invalidName) ++ List(name.value)
-        val genders = List.fill(repetitions)(invalidName) ++ List(gender.code)
+        val genders = List.fill(repetitions)(invalidName) ++ List(genderToCode(gender))
         val ages = List.fill(repetitions)(invalidAge.toString) ++ List(age.toString)
 
         val answers = Map(

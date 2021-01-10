@@ -20,8 +20,8 @@ import joguin.playerinteraction.message.MessagesOps
 package object showintro {
   type LocalizedShowIntroMessageSource = LocalizedMessageSource[ShowIntroMessageSource.type]
 
-  type ShowIntroOptionR = MatchesRegex["^[nqr]$"]
-  type ShowIntroOptionNoRestoreR = MatchesRegex["^[nq]$"]
+  type ShowIntroOptionR = MatchesRegex["^[nqrNQR]$"]
+  type ShowIntroOptionNoRestoreR = MatchesRegex["^[nqNQ]$"]
 
   def playShowIntroStep[F[_]](implicit env: ShowIntroStepEnv[F]): Free[F, GameStep] = {
     import env._
@@ -65,26 +65,23 @@ package object showintro {
   }
 
   private def parseShowIntroOption(s: String, hasSavedProgress: Boolean): Option[ShowIntroOption] = {
-    val sanitizedS = s.toLowerCase()
-
     val refAnswer =
       if (hasSavedProgress) {
-        refineV[ShowIntroOptionR](sanitizedS)
+        refineV[ShowIntroOptionR](s)
       } else {
-        refineV[ShowIntroOptionNoRestoreR](sanitizedS)
+        refineV[ShowIntroOptionNoRestoreR](s)
       }
 
     refAnswer.toOption.map(_.value match {
-      case "n" => NewGame
-      case "q" => QuitGame
-      case "r" => RestoreGame
+      case "n" | "N" => NewGame
+      case "q" | "Q" => QuitGame
+      case "r" | "R" => RestoreGame
     })
   }
 
   private def welcomeBack[F[_]](gp: GameProgress, src: LocalizedShowIntroMessageSource)(
     implicit m: MessagesOps[F]
   ): Free[F, GameStep] = {
-
     val name: String = CharacterNameField.get(gp)
     val experience: Int = ExperienceField.get(gp)
     m.getMessageFmt(src)(welcome_back, List(name, experience.toString)).map(_ => Explore(gp))

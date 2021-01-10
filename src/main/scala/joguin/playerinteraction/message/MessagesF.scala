@@ -7,7 +7,7 @@ import joguin.playerinteraction.message.MessagesF.GetLocalizedMessageSource
 import joguin.playerinteraction.message.MessagesF.GetMessage
 import joguin.playerinteraction.message.MessagesF.GetMessageFmt
 
-sealed abstract class MessagesF[A] extends Product with Serializable
+sealed trait MessagesF[A]
 
 object MessagesF {
   final case class GetLocalizedMessageSource[T <: MessageSource](source: T) extends MessagesF[LocalizedMessageSource[T]]

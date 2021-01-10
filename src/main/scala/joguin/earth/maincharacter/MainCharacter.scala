@@ -9,10 +9,9 @@ final case class MainCharacter(
   experience: Experience
 )
 
-sealed abstract class Gender(val code: String) extends Product with Serializable
-
+sealed trait Gender
 object Gender {
-  case object Female extends Gender("f")
-  case object Male extends Gender("m")
-  case object Other extends Gender("o")
+  case object Female extends Gender
+  case object Male extends Gender
+  case object Other extends Gender
 }

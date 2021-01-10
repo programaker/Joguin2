@@ -25,10 +25,10 @@ package object maincharacter {
       .toOption
 
   def parseGender(code: String): Option[Gender] =
-    code.toLowerCase match {
-      case Female.code => Some(Female)
-      case Male.code   => Some(Male)
-      case Other.code  => Some(Other)
-      case _           => None
+    code match {
+      case "f" | "F" => Some(Female)
+      case "m" | "M" => Some(Male)
+      case "o" | "O" => Some(Other)
+      case _         => None
     }
 }

@@ -6,7 +6,7 @@ import cats.free.Free._
 import joguin.playerinteraction.interaction.InteractionF.ReadAnswer
 import joguin.playerinteraction.interaction.InteractionF.WriteMessage
 
-sealed abstract class InteractionF[A] extends Product with Serializable
+sealed trait InteractionF[A]
 
 object InteractionF {
   final case class WriteMessage(message: String) extends InteractionF[Unit]

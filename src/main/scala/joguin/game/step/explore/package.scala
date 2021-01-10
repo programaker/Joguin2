@@ -14,12 +14,12 @@ import joguin.playerinteraction.message.MessageSource.ExploreMessageSource
 package object explore {
   type LocalizedExploreMessageSource = LocalizedMessageSource[ExploreMessageSource.type]
 
-  type ExploreOptionR = MatchesRegex["^[1-9][0-9]*$"] Or Equal["q"]
+  type ExploreOptionR = MatchesRegex["^[1-9][0-9]*$"] Or Equal["q"] Or Equal["Q"]
 
   def parseExploreOption(s: String, invasionCount: Count): Option[ExploreOption] =
-    refineV[ExploreOptionR](s.toLowerCase).toOption
+    refineV[ExploreOptionR](s).toOption
       .flatMap(_.value match {
-        case "q" =>
+        case "q" | "Q" =>
           Some(QuitGame)
         case index =>
           Some(index.toInt)

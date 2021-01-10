@@ -2,7 +2,7 @@ package joguin.game.step.explore
 
 import joguin.game.progress.Index
 
-sealed abstract class ExploreOption extends Product with Serializable
+sealed trait ExploreOption
 
 object ExploreOption {
   case object QuitGame extends ExploreOption

@@ -6,7 +6,7 @@ import cats.free.Free._
 import joguin.IdxSeq
 import joguin.earth.city.CityRepositoryF.FindAllCities
 
-sealed abstract class CityRepositoryF[A] extends Product with Serializable
+sealed trait CityRepositoryF[A]
 
 object CityRepositoryF {
   case object FindAllCities extends CityRepositoryF[IdxSeq[City]]

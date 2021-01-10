@@ -2,7 +2,7 @@ package joguin.playerinteraction.message
 
 import java.util.Locale
 
-sealed abstract class MessageSource extends Product with Serializable {
+sealed trait MessageSource {
   type Key
 }
 
@@ -10,7 +10,7 @@ object MessageSource {
   case object CreateCharacterMessageSource extends MessageSource {
     type Key = CreateCharacterKey
 
-    sealed abstract class CreateCharacterKey extends Product with Serializable
+    sealed trait CreateCharacterKey
     case object create_character extends CreateCharacterKey
     case object inform_character_name extends CreateCharacterKey
     case object error_invalid_name extends CreateCharacterKey
@@ -24,7 +24,7 @@ object MessageSource {
   case object ExploreMessageSource extends MessageSource {
     type Key = ExploreKey
 
-    sealed abstract class ExploreKey extends Product with Serializable
+    sealed trait ExploreKey
     case object human_dominated_city extends ExploreKey
     case object alien_dominated_city extends ExploreKey
     case object mission_accomplished extends ExploreKey
@@ -35,7 +35,7 @@ object MessageSource {
   case object QuitMessageSource extends MessageSource {
     type Key = QuitKey
 
-    sealed abstract class QuitKey extends Product with Serializable
+    sealed trait QuitKey
     case object want_to_save_game extends QuitKey
     case object error_invalid_option extends QuitKey
   }
@@ -43,7 +43,7 @@ object MessageSource {
   case object ShowIntroMessageSource extends MessageSource {
     type Key = ShowIntroKey
 
-    sealed abstract class ShowIntroKey extends Product with Serializable
+    sealed trait ShowIntroKey
     case object intro extends ShowIntroKey
     case object start_with_resume extends ShowIntroKey
     case object start_no_resume extends ShowIntroKey
@@ -54,7 +54,7 @@ object MessageSource {
   case object FightMessageSource extends MessageSource {
     type Key = FightKey
 
-    sealed abstract class FightKey extends Product with Serializable
+    sealed trait FightKey
     case object city_already_saved extends FightKey
     case object report extends FightKey
     case object give_order extends FightKey
@@ -71,7 +71,7 @@ object MessageSource {
   case object SaveGameMessageSource extends MessageSource {
     type Key = SaveGameKey
 
-    sealed abstract class SaveGameKey extends Product with Serializable
+    sealed trait SaveGameKey
     case object save_game_success extends SaveGameKey
     case object save_game_error extends SaveGameKey
   }

@@ -5,7 +5,7 @@ import cats.free.Free
 import cats.free.Free._
 import joguin.game.progress.GameProgressRepositoryF._
 
-sealed abstract class GameProgressRepositoryF[A] extends Product with Serializable
+sealed trait GameProgressRepositoryF[A]
 
 object GameProgressRepositoryF {
   final case class Save(gameProgress: GameProgress) extends GameProgressRepositoryF[Boolean]

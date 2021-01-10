@@ -1,6 +1,6 @@
 package joguin.game.step.fight
 
-sealed abstract class FightOption extends Product with Serializable
+sealed trait FightOption
 
 object FightOption {
   case object FightAliens extends FightOption
