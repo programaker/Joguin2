@@ -15,7 +15,7 @@ object WaitF {
 
 final class WaitOps[F[_]](implicit i: InjectK[WaitF, F]) {
   def waitFor(duration: FiniteDuration): Free[F, Unit] =
-    inject(WaitFor(duration))
+    liftInject(WaitFor(duration))
 }
 
 object WaitOps {

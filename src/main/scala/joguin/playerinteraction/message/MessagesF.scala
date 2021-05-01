@@ -26,15 +26,15 @@ object MessagesF {
 
 final class MessagesOps[F[_]](implicit i: InjectK[MessagesF, F]) {
   def getLocalizedMessageSource[T <: MessageSource](source: T): Free[F, LocalizedMessageSource[T]] =
-    inject[MessagesF, F](GetLocalizedMessageSource(source))
+    liftInject[F].apply[MessagesF, LocalizedMessageSource[T]](GetLocalizedMessageSource(source))
 
   def getMessage[T <: MessageSource](source: LocalizedMessageSource[T])(key: T#Key): Free[F, String] =
-    inject[MessagesF, F](GetMessage(source, key))
+    liftInject[F].apply[MessagesF, String](GetMessage(source, key))
 
   def getMessageFmt[T <: MessageSource](
     source: LocalizedMessageSource[T]
   )(key: T#Key, args: List[String]): Free[F, String] =
-    inject[MessagesF, F](GetMessageFmt(source, key, args))
+    liftInject[F].apply[MessagesF, String](GetMessageFmt(source, key, args))
 }
 
 object MessagesOps {

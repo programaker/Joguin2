@@ -13,7 +13,7 @@ object CityRepositoryF {
 }
 
 final class CityRepositoryOps[F[_]](implicit i: InjectK[CityRepositoryF, F]) {
-  def findAllCities: Free[F, IdxSeq[City]] = inject(FindAllCities)
+  def findAllCities: Free[F, IdxSeq[City]] = liftInject(FindAllCities)
 }
 
 object CityRepositoryOps {

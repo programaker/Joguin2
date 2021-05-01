@@ -8,7 +8,7 @@ package object other {
   implicit val quitOption: Arbitrary[String] = Arbitrary(genQuitOption)
 
   def genSmallInt: Gen[Int] =
-    Gen.choose(min = 1, max = 10)
+    Gen.choose(min = 1, max = 100)
 
   def genQuitOption: Gen[String] =
     Gen.oneOf("q", "Q")

@@ -2,7 +2,7 @@ package joguin.alien.terraformdevice
 
 import cats.InjectK
 import cats.free.Free
-import cats.free.Free.inject
+import cats.free.Free.liftInject
 import joguin.alien.Power
 import joguin.alien.terraformdevice.PowerGeneratorF.GeneratePower
 
@@ -14,7 +14,7 @@ object PowerGeneratorF {
 
 final class PowerGeneratorOps[F[_]](implicit i: InjectK[PowerGeneratorF, F]) {
   def generatePower(min: Power, max: Power): Free[F, Power] =
-    inject(GeneratePower(min, max))
+    liftInject(GeneratePower(min, max))
 }
 
 object PowerGeneratorOps {

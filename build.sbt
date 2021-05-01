@@ -1,13 +1,14 @@
-val ScalaV = "2.13.4"
 val JoguinV = "2.0"
 
-val CatsV = "2.3.0"
-val CatsEffectV = "2.3.0"
-val RefinedV = "0.9.18"
+val ScalaV = "2.13.5"
+
+val CatsV = "2.6.0"
+val CatsEffectV = "3.1.0"
+val RefinedV = "0.9.24"
 val CirceV = "0.13.0"
 val BetterMonadicForV = "0.3.1"
 val KindProjectorV = "0.10.3"
-val ScalaTestV = "3.2.3"
+val ScalaTestV = "3.2.8"
 val ScalatestPlusScalaCheckV = "3.1.1.1"
 val ScalaCheckShapelessV = "1.2.5"
 val CatsScalaCheckV = "0.3.0"
@@ -93,4 +94,4 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ymacro-annotations"
 )
 
-mainClass in assembly := Some("joguin.JoguinApplication")
+assembly / mainClass := Some("joguin.JoguinApplication")

@@ -15,10 +15,10 @@ object InteractionF {
 
 final class InteractionOps[F[_]](implicit i: InjectK[InteractionF, F]) {
   def writeMessage(message: String): Free[F, Unit] =
-    inject(WriteMessage(message))
+    liftInject(WriteMessage(message))
 
   def readAnswer: Free[F, String] =
-    inject(ReadAnswer)
+    liftInject(ReadAnswer)
 }
 
 object InteractionOps {
