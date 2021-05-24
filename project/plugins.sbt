@@ -1,4 +1,4 @@
-val WartRemoverV = "2.4.13"
+val WartRemoverV = "2.4.15"
 val SbtDependencyUpdatesV = "1.2.2"
 val SbtScalaFmtV = "2.4.2"
 val SbtAssemblyV = "0.15.0"
