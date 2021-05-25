@@ -39,10 +39,7 @@ final class MessagesInterpreter[F[_]: Monad: Lazy] extends (MessagesF ~> F) {
       .map(format(_, args: _*))
 
   private def resourceBundle(params: (String, Locale)): F[ResourceBundle] =
-    Monad[F].pure(params).flatMap {
-      case (name, locale) =>
-        Lazy[F].lift(getBundle(name, locale))
-    }
+    Monad[F].pure(params).flatMap((name, locale) => Lazy[F].lift(getBundle(name, locale)))
 
   private def resourceBundleParams[T <: MessageSource](lms: LocalizedMessageSource[T]): (String, Locale) =
     (sourceName(lms.source), lms.locale)
