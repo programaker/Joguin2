@@ -23,6 +23,6 @@ package object alien {
     implicit p: PowerGeneratorOps[F]
   ): Free[F, Invasion] =
     p.generatePower(minPower, maxPower)
-      .map(TerraformDevice)
+      .map(TerraformDevice.apply)
       .map(Invasion(_, city, defeated = false))
 }
