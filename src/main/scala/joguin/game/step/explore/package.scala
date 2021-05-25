@@ -25,6 +25,6 @@ package object explore {
           Some(index.toInt)
             .flatMap(refineV[IndexR](_).toOption)
             .filter(_ <= invasionCount)
-            .map(GoToInvasion)
+            .map(GoToInvasion.apply)
       })
 }
