@@ -1,7 +1,7 @@
 package joguin.game.progress
 
 import eu.timepit.refined._
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import joguin.IdxSeq
 import joguin.alien.invasion.Invasion
 import joguin.earth.maincharacter.Experience
@@ -70,9 +70,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
     forAll { (mainCharacter: MainCharacter, invasions: IdxSeq[Invasion], xp: Experience, n: Int) =>
       val start = GameProgress(mainCharacter, invasions)
 
-      val gp1 = (1 to n).foldLeft(start) { (gp, _) =>
-        increaseMainCharacterExperience(gp, xp)
-      }
+      val gp1 = (1 to n).foldLeft(start)((gp, _) => increaseMainCharacterExperience(gp, xp))
 
       val startXp: Int = ExperienceField.get(start)
       val increasedXp: Int = ExperienceField.get(gp1)
@@ -89,9 +87,7 @@ final class GameProgress_Properties extends PropertyBasedSpec {
       val invasionCount = invasions.size
       val indexes = (1 to invasionCount).map(refineV[IndexR](_).getOrElse(1: Index))
 
-      val gp1 = indexes.foldLeft(start) { (gp, idx) =>
-        defeatInvasion(gp, idx)
-      }
+      val gp1 = indexes.foldLeft(start)((gp, idx) => defeatInvasion(gp, idx))
 
       allInvasionsDefeated(gp1) shouldBe true
       Inspectors.forAll(indexes)(idx => isInvasionDefeated(gp1, idx) shouldBe true)

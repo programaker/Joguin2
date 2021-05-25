@@ -1,7 +1,7 @@
 package joguin.game
 
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.numeric.NonNegative
 import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.refineV

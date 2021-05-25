@@ -2,7 +2,7 @@ package joguin.earth.city
 
 import cats.Monad
 import cats.~>
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import joguin.IdxSeq
 import joguin.earth.city.CityRepositoryF.FindAllCities
 

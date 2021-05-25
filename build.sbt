@@ -71,7 +71,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-source:3.0-migration",
   "-encoding", "utf8",
   "-deprecation",
-  "-explain"
+  "-explain",
+  "-language:implicitConversions"
 )
 
 assembly / mainClass := Some("joguin.JoguinApplication")

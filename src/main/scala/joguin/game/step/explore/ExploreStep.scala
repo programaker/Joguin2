@@ -4,7 +4,7 @@ import cats.free.Free
 import cats.free.Free._
 import cats.syntax.foldable._
 import eu.timepit.refined._
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import joguin.IdxSeq
 import joguin.alien.invasion._
 import joguin.game.progress.Count

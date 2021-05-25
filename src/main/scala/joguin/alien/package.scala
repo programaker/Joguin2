@@ -2,7 +2,7 @@ package joguin
 
 import cats.free.Free
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.numeric.Positive
 import joguin.alien.invasion.Invasion
 import joguin.alien.terraformdevice.PowerGeneratorOps

@@ -1,6 +1,6 @@
 package joguin.testutil.generators
 
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.refineV
 import joguin.alien.MaxPower
 import joguin.alien.MinPower

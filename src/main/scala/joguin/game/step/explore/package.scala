@@ -1,6 +1,6 @@
 package joguin.game.step
 
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.boolean.Or
 import eu.timepit.refined.generic.Equal
 import eu.timepit.refined.refineV

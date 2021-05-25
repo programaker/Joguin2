@@ -5,7 +5,7 @@ import cats.free.Free._
 import cats.free.Free.pure
 import cats.syntax.apply._
 import cats.syntax.flatMap._
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string.MatchesRegex
 import joguin.game.progress._

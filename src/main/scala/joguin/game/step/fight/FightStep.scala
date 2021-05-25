@@ -5,7 +5,7 @@ import cats.free.Free._
 import cats.syntax.eq._
 import cats.syntax.foldable._
 import eu.timepit.refined._
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import joguin.alien.invasion._
 import joguin.earth.maincharacter.ExperienceR
 import joguin.game.progress.Index

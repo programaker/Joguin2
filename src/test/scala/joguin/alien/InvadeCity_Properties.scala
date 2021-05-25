@@ -1,7 +1,7 @@
 package joguin.alien
 
 import cats.Id
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import joguin.alien.invasion._
 import joguin.alien.terraformdevice.PowerGeneratorF
 import joguin.alien.terraformdevice.PowerGeneratorInterpreter

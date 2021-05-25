@@ -4,7 +4,7 @@ import eu.timepit.refined.refineV
 import joguin.earth.maincharacter.Age
 import joguin.earth.maincharacter.AgeR
 import org.scalacheck.Gen
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import org.scalacheck.Arbitrary
 
 package object age {

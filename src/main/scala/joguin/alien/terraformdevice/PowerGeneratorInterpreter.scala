@@ -1,7 +1,7 @@
 package joguin.alien.terraformdevice
 
 import cats.~>
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.refineV
 import joguin.Lazy
 import joguin.alien.Power

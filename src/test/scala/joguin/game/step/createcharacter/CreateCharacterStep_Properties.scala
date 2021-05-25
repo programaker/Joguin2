@@ -1,7 +1,7 @@
 package joguin.game.step.createcharacter
 
 import cats.syntax.show._
-import eu.timepit.refined.auto._
+import joguin.refined.auto._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.cats._
 import joguin.Name
