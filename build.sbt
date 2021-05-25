@@ -1,18 +1,18 @@
 val JoguinV = "2.0"
 
-val ScalaV = "2.13.6"
+val ScalaV = "3.0.0"
 
 val CatsV = "2.6.1"
 val CatsEffectV = "3.1.1"
 val RefinedV = "0.9.25"
-val CirceV = "0.13.0"
+val CirceV = "0.14.0-M7"
 val BetterMonadicForV = "0.3.1"
-val KindProjectorV = "0.10.3"
+val KindProjectorV = "0.13.0"
 val ScalaTestV = "3.2.9"
-val ScalatestPlusScalaCheckV = "3.1.1.1"
-val ScalaCheckShapelessV = "1.2.5"
+val ScalatestPlusScalaCheckV = "3.2.9.0"
+val ScalaCheckShapelessV = "1.3.0"
 val CatsScalaCheckV = "0.3.0"
-val MonocleV = "2.1.0"
+val MonocleV = "3.0.0-M6"
 val BetterFilesV = "3.9.1"
 
 lazy val root = (project in file(".")).settings(
@@ -28,7 +28,6 @@ lazy val root = (project in file(".")).settings(
     "org.typelevel" %% "cats-effect" % CatsEffectV,
 
     "eu.timepit" %% "refined" % RefinedV,
-    "eu.timepit" %% "refined-cats" % RefinedV,
 
     "io.circe" %% "circe-core" % CirceV,
     "io.circe" %% "circe-generic" % CirceV,
@@ -38,18 +37,16 @@ lazy val root = (project in file(".")).settings(
     "com.github.julien-truffaut" %% "monocle-core" % MonocleV,
     "com.github.julien-truffaut" %% "monocle-macro" % MonocleV,
 
-    "com.github.pathikrit" %% "better-files" % BetterFilesV,
+    ("com.github.pathikrit" %% "better-files" % BetterFilesV).cross(CrossVersion.for3Use2_13),
 
     "org.scalatest" %% "scalatest" % ScalaTestV % "test",
-    "org.scalatestplus" %% "scalacheck-1-14" % ScalatestPlusScalaCheckV % "test",
-    "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % ScalaCheckShapelessV % "test",
-    "io.chrisdavenport" %% "cats-scalacheck" % CatsScalaCheckV % "test"
-  ),
-
-  Seq(
-    "org.typelevel" %% "kind-projector" % KindProjectorV,
-    "com.olegpy" %% "better-monadic-for" % BetterMonadicForV
-  ).map(addCompilerPlugin)
+    "org.scalatestplus" %% "scalacheck-1-15" % ScalatestPlusScalaCheckV % "test",
+    
+    ("com.github.alexarchambault" %% "scalacheck-shapeless_1.15" % ScalaCheckShapelessV % "test")
+      .cross(CrossVersion.for3Use2_13),
+    
+    ("io.chrisdavenport" %% "cats-scalacheck" % CatsScalaCheckV % "test").cross(CrossVersion.for3Use2_13)
+  )
 )
 
 ThisBuild / wartremoverErrors ++= Seq(
@@ -71,27 +68,10 @@ ThisBuild / wartremoverWarnings ++= Warts.allBut(
 Compile / console / scalacOptions := (console / scalacOptions).value.filterNot(_.contains("wartremover"))
 
 ThisBuild / scalacOptions ++= Seq(
+  "-source:3.0-migration",
   "-encoding", "utf8",
-  "-feature",
-  "-explaintypes",
   "-deprecation",
-
-  "-language:experimental.macros",
-  "-language:existentials",
-  "-language:higherKinds",
-  "-language:implicitConversions",
-
-  "-Ywarn-dead-code",
-  "-Ywarn-value-discard",
-  "-Ywarn-unused:imports",
-  "-Ywarn-unused:implicits",
-  "-Ywarn-unused:explicits",
-  "-Ywarn-unused:locals",
-  "-Ywarn-unused:params",
-  "-Ywarn-unused:patvars",
-  "-Ywarn-unused:privates",
-
-  "-Ymacro-annotations"
+  "-explain"
 )
 
 assembly / mainClass := Some("joguin.JoguinApplication")
