@@ -30,16 +30,16 @@ package object progress {
   val CharacterNameField: Lens[GameProgress, Name] = GenLens[GameProgress](_.mainCharacter.name)
   val InvasionsField: Lens[GameProgress, IdxSeq[Invasion]] = GenLens[GameProgress](_.invasions)
 
-  def InvasionFieldAtIndex(gp: GameProgress, idx: Index): InvasionsApplyOptional =
+  def InvasionFieldAtIndex(gp: GameProgress, index: Index): InvasionsApplyOptional =
     //1-based index, to match the invasion list as the player sees it
     //and also the player's input when select an invasion to fight
-    gp.invasions.focus().index(idx.value - 1)
+    gp.invasions.focus().index(index - 1)
 
-  def DefeatedFieldAtIndex(gp: GameProgress, idx: Index): DefeatedApplyOptional =
-    InvasionFieldAtIndex(gp, idx.value).composeLens(DefeatedField)
+  def DefeatedFieldAtIndex(gp: GameProgress, index: Index): DefeatedApplyOptional =
+    InvasionFieldAtIndex(gp, index).composeLens(DefeatedField)
 
   def invasionByIndex(gp: GameProgress, index: Index): Option[Invasion] =
-    InvasionFieldAtIndex(gp, index.value).getOption
+    InvasionFieldAtIndex(gp, index).getOption
 
   def isInvasionDefeated(gp: GameProgress, index: Index): Boolean =
     invasionByIndex(gp, index).exists(_.defeated)
@@ -53,5 +53,5 @@ package object progress {
     gp.invasions.forall(_.defeated)
 
   def defeatInvasion(gp: GameProgress, index: Index): GameProgress =
-    InvasionsField.set(DefeatedFieldAtIndex(gp, index.value).modify(_ => true))(gp)
+    InvasionsField.set(DefeatedFieldAtIndex(gp, index).modify(_ => true))(gp)
 }
