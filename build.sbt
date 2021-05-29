@@ -71,7 +71,6 @@ ThisBuild / scalacOptions ++= Seq(
   "-source:3.0-migration",
   "-encoding", "utf8",
   "-deprecation",
-  "-explain",
   "-language:implicitConversions"
 )
 
