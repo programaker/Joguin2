@@ -17,7 +17,7 @@ final class InvadeCity_Properties extends PropertyBasedSpec {
   property("invading a City produces an Invasion with a TerraformDevice, whose power is in given range") {
     import city._
 
-    forAll { city: City =>
+    forAll { (city: City) =>
       val invasion = invadeCity[PowerGeneratorF](city, minPower = 1000, maxPower = 20000)
         .foldMap(powerGeneratorInterpreter)
 

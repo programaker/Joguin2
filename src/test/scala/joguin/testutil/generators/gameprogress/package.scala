@@ -13,5 +13,5 @@ package object gameprogress {
     Arbitrary(genGameProgressStart)
 
   def genGameProgressStart: Gen[GameProgress] =
-    (genMainCharacter, genInvasionSeq(defeated = false)).mapN(GameProgress)
+    (genMainCharacter, genInvasionSeq(defeated = false)).mapN(GameProgress.apply)
 }

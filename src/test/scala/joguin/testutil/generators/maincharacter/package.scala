@@ -14,5 +14,5 @@ package object maincharacter {
   implicit val mainCharacter: Arbitrary[MainCharacter] = Arbitrary(genMainCharacter)
 
   def genMainCharacter: Gen[MainCharacter] =
-    (genValidName, genGender, genValidAge, genValidExperience).mapN(MainCharacter)
+    (genValidName, genGender, genValidAge, genValidExperience).mapN(MainCharacter.apply)
 }

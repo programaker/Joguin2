@@ -12,7 +12,7 @@ package object city {
   implicit val validCity: Arbitrary[City] = Arbitrary(genValidCity)
   implicit val invalidCity: Arbitrary[String] = Arbitrary(genInvalidCity)
 
-  def genValidCity: Gen[City] = (genValidName, genValidCountry).mapN(City)
+  def genValidCity: Gen[City] = (genValidName, genValidCountry).mapN(City.apply)
 
   def genInvalidCity: Gen[String] = genInvalidName
 }

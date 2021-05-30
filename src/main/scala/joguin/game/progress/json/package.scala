@@ -22,7 +22,10 @@ package object json {
     )
 
   def gameProgressFromDto(gpd: GameProgressDto): Either[String, GameProgress] =
-    ???
+    (
+      mainCharacterFromDto(gpd.mainCharacter),
+      gpd.invasions.traverse(invasionFromDto)
+    ).mapN(GameProgress.apply)
 
   private def makeMainCharacterDto(mc: MainCharacter): MainCharacterDto =
     MainCharacterDto(

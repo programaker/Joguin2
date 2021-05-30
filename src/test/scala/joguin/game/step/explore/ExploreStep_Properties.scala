@@ -115,7 +115,7 @@ final class ExploreStep_Properties extends PropertyBasedSpec {
   property("tells the player that the mission has been accomplished and the game has ended") {
     import gameprogress._
 
-    forAll { gp: GameProgress =>
+    forAll { (gp: GameProgress) =>
       val cities = gp.invasions.map(_.city)
       val i: Int = gp.invasions.size
       val firstMessage = 0

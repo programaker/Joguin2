@@ -12,6 +12,7 @@ import joguin.Lazy
 import joguin.Recovery
 import joguin.game.progress.GameProgressRepositoryF._
 import joguin.game.progress.json._
+import scala.util.chaining._
 
 /** GameProgressRepositoryF root interpreter to any F that uses a file for persistence */
 final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) extends (GameProgressRepositoryF ~> F) {
@@ -54,7 +55,10 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
   private def readFile: F[Option[GameProgress]] =
     Lazy[F]
       .lift(file.contentAsString)
+      .map { s => println(s">>> file = $s"); s }
       .map(jawn.decode[GameProgressDto])
+      .map { dto => println(s">>> dto = $dto"); dto }
       .map(_.flatMap(gameProgressFromDto))
+      .map { gp => println(s">>> progress = $gp"); gp }
       .map(_.toOption)
 }
