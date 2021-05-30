@@ -36,7 +36,7 @@ package object progress {
     gp.invasions.focus().index(index - 1)
 
   def DefeatedFieldAtIndex(gp: GameProgress, index: Index): DefeatedApplyOptional =
-    InvasionFieldAtIndex(gp, index).composeLens(DefeatedField)
+    InvasionFieldAtIndex(gp, index).andThen(DefeatedField)
 
   def invasionByIndex(gp: GameProgress, index: Index): Option[Invasion] =
     InvasionFieldAtIndex(gp, index).getOption
@@ -46,12 +46,12 @@ package object progress {
 
   def increaseMainCharacterExperience(gp: GameProgress, experiencePoints: Experience): GameProgress =
     refineV[ExperienceR](ExperienceField.get(gp) + experiencePoints)
-      .map(ExperienceField.set(_)(gp))
+      .map(ExperienceField.replace(_)(gp))
       .getOrElse(gp)
 
   def allInvasionsDefeated(gp: GameProgress): Boolean =
     gp.invasions.forall(_.defeated)
 
   def defeatInvasion(gp: GameProgress, index: Index): GameProgress =
-    InvasionsField.set(DefeatedFieldAtIndex(gp, index).modify(_ => true))(gp)
+    InvasionsField.replace(DefeatedFieldAtIndex(gp, index).modify(_ => true))(gp)
 }
