@@ -11,6 +11,7 @@ import io.circe.syntax._
 import joguin.Lazy
 import joguin.Recovery
 import joguin.game.progress.GameProgressRepositoryF._
+import joguin.game.progress.json._
 
 /** GameProgressRepositoryF root interpreter to any F that uses a file for persistence */
 final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) extends (GameProgressRepositoryF ~> F) {
@@ -44,7 +45,7 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
 
   private def writeToFile(gameProgress: GameProgress): F[Boolean] =
     Recovery[F]
-      .pure(gameProgress)
+      .pure(makeGameProgressDto(gameProgress))
       .map(_.asJson.noSpaces)
       .flatMap(json => Lazy[F].lift(file.overwrite(json)))
       .map(_ => true)
@@ -53,6 +54,7 @@ final class GameProgressRepositoryInterpreter[F[_]: Recovery: Lazy](file: File) 
   private def readFile: F[Option[GameProgress]] =
     Lazy[F]
       .lift(file.contentAsString)
-      .map(jawn.decode[GameProgress])
+      .map(jawn.decode[GameProgressDto])
+      .map(_.flatMap(gameProgressFromDto))
       .map(_.toOption)
 }
