@@ -4,7 +4,7 @@ val ScalaV = "3.0.0"
 
 val CatsV = "2.6.1"
 val CatsEffectV = "3.1.1"
-val RefinedV = "0.9.25"
+val RefinedV = "0.9.26"
 val CirceV = "0.14.1"
 val BetterMonadicForV = "0.3.1"
 val KindProjectorV = "0.13.0"
